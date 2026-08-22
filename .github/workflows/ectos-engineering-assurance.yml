@@ -243,8 +243,10 @@ jobs:
           d=json.load(open('evidence/NATIVE_PS51.json',encoding='utf-8-sig'))
           assert d['status']=='PASS', d
           x=d.get('details',{})
-          assert str(x.get('ps_edition','')).lower()=='desktop', x
-          assert str(x.get('powershell_version','')).startswith('5.1'), x
+          edition=x.get('edition',x.get('ps_edition',''))
+          version=x.get('actual_version',x.get('powershell_version',''))
+          assert str(edition).lower()=='desktop', x
+          assert str(version).startswith('5.1'), x
 
   ci_required_checks:
     name: ectos/ci-required-checks
