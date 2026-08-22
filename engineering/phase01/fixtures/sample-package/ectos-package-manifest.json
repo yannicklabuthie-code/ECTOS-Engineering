@@ -1,0 +1,28 @@
+{
+  "schema_id": "ECTOS_COMMON_PACKAGE_MANIFEST_V0",
+  "package_type": "SAMPLE",
+  "package_id": "ECTOS_DEV_SAMPLE_PACKAGE",
+  "version": "0.0.1",
+  "source_commit": "SAMPLE-NOT-A-GIT-COMMIT",
+  "build_id": "SELFQUAL-SAMPLE",
+  "package_hash": null,
+  "target_runtime": [
+    "WindowsPowerShell5.1"
+  ],
+  "supported_os": [
+    "Windows"
+  ],
+  "supported_powershell_version": [
+    "5.1"
+  ],
+  "entrypoint": "main.ps1",
+  "expected_output_contract": "ECTOS_SAMPLE_OK",
+  "side_effect_contract": "NONE",
+  "mutation_policy": "READ_ONLY",
+  "dependencies": [],
+  "test_profile": "ECTOS_DEV_MINIMUM_TEST_PROFILE_V01",
+  "qualification_profile": "SAMPLE_ONLY",
+  "install_profile": "PARSE_ENTRYPOINT",
+  "rollback_profile": "NONE",
+  "evidence_profile": "SELFQUAL_ONLY"
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_DEV_READINESS_V01",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "target",
+    "dev_ready",
+    "package_ready",
+    "qualification_ready",
+    "gate_status"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "ECTOS_DEV_READINESS_V01"
+    },
+    "target": {
+      "type": "string"
+    },
+    "dev_ready": {
+      "type": "boolean"
+    },
+    "package_ready": {
+      "type": "boolean"
+    },
+    "qualification_ready": {
+      "type": "boolean"
+    },
+    "gate_status": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_id": "ECTOS_DEV_TOOLCHAIN_PROFILE_V01",
+  "powershell": {
+    "native_ps51": "5.1",
+    "ps7_min": "7.4"
+  },
+  "PSScriptAnalyzer": {
+    "required": true,
+    "minimum": "1.22.0"
+  },
+  "Pester": {
+    "required": true,
+    "minimum": "6.0.0"
+  },
+  "hash": "SHA256",
+  "result_format": "ECTOS_DEV_GATE_RESULT_V01"
+}

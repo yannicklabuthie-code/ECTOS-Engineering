@@ -1,0 +1,28 @@
+{
+  "schema_id": "ECTOS_GITHUB_REQUIRED_CHECKS_V01",
+  "authoritative_branch": "main",
+  "checks": [
+    "ectos/parse",
+    "ectos/psscriptanalyzer",
+    "ectos/pester-unit",
+    "ectos/pester-contract",
+    "ectos/fixture-regression",
+    "ectos/package-manifest",
+    "ectos/package-install-load",
+    "ectos/hash-provenance",
+    "ectos/state-collision",
+    "ectos/native-ps51",
+    "ectos/ci-required-checks"
+  ],
+  "merge_policy": "NO_REQUIRED_CHECK_PASS_NO_MERGE",
+  "runner_labels": [
+    "self-hosted",
+    "Windows",
+    "X64",
+    "ectos-ps51"
+  ],
+  "retention_days": {
+    "test_results": 30,
+    "package_artifact": 30
+  }
+}

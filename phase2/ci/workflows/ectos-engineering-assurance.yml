@@ -1,0 +1,333 @@
+name: ECTOS Engineering Assurance
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ectos-engineering-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: ectos/prepare-native-evidence
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Assert native Windows PowerShell 5.1
+        shell: powershell
+        run: |
+          if ($PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1) {
+            throw "NATIVE_PS51_REQUIRED"
+          }
+          "RUNNER_WINDOWS=$([Environment]::OSVersion.VersionString)"
+          "RUNNER_PS51=$($PSVersionTable.PSVersion)"
+
+      - name: Bootstrap deterministic PowerShell tools
+        shell: powershell
+        run: |
+          $cache='C:\ECTOS_TOOLCACHE'
+          New-Item -ItemType Directory -Force -Path $cache | Out-Null
+          $env:PSModulePath=$cache+[IO.Path]::PathSeparator+$env:PSModulePath
+          if (-not (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue)) {
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser | Out-Null
+          }
+          if (-not (Get-Module -ListAvailable PSScriptAnalyzer | Where-Object Version -ge ([version]'1.25.0'))) {
+            Save-Module PSScriptAnalyzer -RequiredVersion 1.25.0 -Path $cache -Repository PSGallery -Force
+          }
+          if (-not (Get-Module -ListAvailable Pester | Where-Object Version -ge ([version]'6.1.0'))) {
+            Save-Module Pester -RequiredVersion 6.1.0 -Path $cache -Repository PSGallery -Force
+          }
+          $a=Get-Module -ListAvailable PSScriptAnalyzer | Sort-Object Version -Descending | Select-Object -First 1
+          $p=Get-Module -ListAvailable Pester | Sort-Object Version -Descending | Select-Object -First 1
+          if($a.Version -ne [version]'1.25.0'){throw "PSSCRIPTANALYZER_VERSION_MISMATCH=$($a.Version)"}
+          if($p.Version -ne [version]'6.1.0'){throw "PESTER_VERSION_MISMATCH=$($p.Version)"}
+          "PSSCRIPTANALYZER=$($a.Version)"
+          "PESTER=$($p.Version)"
+
+      - name: Run frozen Phase 0 + Phase 1 assurance
+        shell: powershell
+        run: |
+          $env:PSModulePath='C:\ECTOS_TOOLCACHE'+[IO.Path]::PathSeparator+$env:PSModulePath
+          .\phase2\ci\scripts\Invoke-ECTOSPhase01CIAssurance.ps1 `
+            -EngineeringRoot "${{ github.workspace }}\engineering\phase01" `
+            -TargetPackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package" `
+            -ResultsRoot "${{ runner.temp }}\ectos-results"
+
+      - name: Write CI provenance
+        if: always()
+        shell: powershell
+        run: |
+          $results="${{ runner.temp }}\ectos-results"
+          if(-not(Test-Path $results)){New-Item -ItemType Directory -Force -Path $results|Out-Null}
+          .\phase2\ci\scripts\New-CIProvenance.ps1 `
+             -PackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package" `
+             -OutputPath (Join-Path $results 'CI_PROVENANCE.json')
+
+      - name: Upload native evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ectos-results
+          retention-days: 30
+          if-no-files-found: error
+
+  parse:
+    name: ectos/parse
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/PARSE.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  psscriptanalyzer:
+    name: ectos/psscriptanalyzer
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/PSSCRIPTANALYZER.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  pester_unit:
+    name: ectos/pester-unit
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/PESTER_UNIT.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  pester_contract:
+    name: ectos/pester-contract
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/PESTER_CONTRACT.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  fixture_regression:
+    name: ectos/fixture-regression
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/FIXTURE_REGRESSION.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  package_manifest:
+    name: ectos/package-manifest
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/PACKAGE_MANIFEST.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  package_install_load:
+    name: ectos/package-install-load
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/PACKAGE_INSTALL_LOAD.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  hash_provenance:
+    name: ectos/hash-provenance
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json, os
+          d=json.load(open('evidence/HASH_IDENTITY.json',encoding='utf-8-sig'))
+          p=json.load(open('evidence/CI_PROVENANCE.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+          assert p['commit_sha']==os.environ['GITHUB_SHA'], p
+
+  state_collision:
+    name: ectos/state-collision
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/STATE_COLLISION.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+
+  native_ps51:
+    name: ectos/native-ps51
+    needs: prepare
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: evidence
+      - shell: python
+        run: |
+          import json
+          d=json.load(open('evidence/NATIVE_PS51.json',encoding='utf-8-sig'))
+          assert d['status']=='PASS', d
+          x=d.get('details',{})
+          assert str(x.get('ps_edition','')).lower()=='desktop', x
+          assert str(x.get('powershell_version','')).startswith('5.1'), x
+
+  ci_required_checks:
+    name: ectos/ci-required-checks
+    needs:
+      - prepare
+      - parse
+      - psscriptanalyzer
+      - pester_unit
+      - pester_contract
+      - fixture_regression
+      - package_manifest
+      - package_install_load
+      - hash_provenance
+      - state_collision
+      - native_ps51
+    if: always()
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ectos-native-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ectos-results
+
+      - name: Materialize required check statuses
+        shell: powershell
+        run: |
+          $ci="${{ runner.temp }}\ectos-ci-status"
+          $states=[ordered]@{
+            'ectos/parse'='${{ needs.parse.result }}'
+            'ectos/psscriptanalyzer'='${{ needs.psscriptanalyzer.result }}'
+            'ectos/pester-unit'='${{ needs.pester_unit.result }}'
+            'ectos/pester-contract'='${{ needs.pester_contract.result }}'
+            'ectos/fixture-regression'='${{ needs.fixture_regression.result }}'
+            'ectos/package-manifest'='${{ needs.package_manifest.result }}'
+            'ectos/package-install-load'='${{ needs.package_install_load.result }}'
+            'ectos/hash-provenance'='${{ needs.hash_provenance.result }}'
+            'ectos/state-collision'='${{ needs.state_collision.result }}'
+            'ectos/native-ps51'='${{ needs.native_ps51.result }}'
+          }
+          $ok=$true
+          foreach($k in $states.Keys){
+            $s=if($states[$k] -eq 'success'){'PASS'}else{'FAIL'}
+            if($s -ne 'PASS'){$ok=$false}
+            .\phase2\ci\scripts\Write-CICheckResult.ps1 -CheckName $k -Status $s -OutputRoot $ci
+          }
+          .\phase2\ci\scripts\Write-CICheckResult.ps1 -CheckName 'ectos/ci-required-checks' -Status $(if($ok){'PASS'}else{'FAIL'}) -OutputRoot $ci
+
+      - name: Negative CI bypass test
+        shell: powershell
+        run: |
+          .\phase2\ci\scripts\Test-NegativeCIBypass.ps1 `
+             -Phase2Root "${{ github.workspace }}\phase2" `
+             -Phase01Results "${{ runner.temp }}\ectos-results" `
+             -TargetPackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package"
+
+      - name: Derive corrected global readiness V02
+        shell: powershell
+        run: |
+          .\phase2\ci\scripts\Get-ECTOSReadinessV02.ps1 `
+             -TargetPackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package" `
+             -ResultsRoot "${{ runner.temp }}\ectos-results" `
+             -CIStatusRoot "${{ runner.temp }}\ectos-ci-status"
+          if($LASTEXITCODE -ne 0){throw 'GLOBAL_QUALIFICATION_READY_NOT_REACHED'}
+
+      - name: Upload final CI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-ci-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/ectos-results
+            ${{ runner.temp }}/ectos-ci-status
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload package candidate
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-package-${{ github.sha }}-${{ github.run_id }}
+          path: engineering/phase01/fixtures/sample-package
+          retention-days: 30
+          if-no-files-found: error

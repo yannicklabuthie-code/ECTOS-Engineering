@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_DEV_GATE_RESULT_V01",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "gate_id",
+    "status",
+    "timestamp_utc",
+    "target",
+    "details"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "ECTOS_DEV_GATE_RESULT_V01"
+    },
+    "gate_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "SKIP",
+        "NOT_RUN"
+      ]
+    },
+    "timestamp_utc": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "details": {
+      "type": "object"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

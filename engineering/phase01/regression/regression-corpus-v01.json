@@ -1,0 +1,155 @@
+{
+  "schema_id": "ECTOS_DEV_REGRESSION_CORPUS_V01",
+  "cases": [
+    {
+      "defect_id": "REG-PS-PARSE",
+      "root_cause_class": "POWERSHELL_PARSE_FAILURE",
+      "earliest_gate": "PARSE",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-PS51-BIND",
+      "root_cause_class": "PS51_RUNTIME_DIFFERENCE",
+      "earliest_gate": "NATIVE_PS51",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-EMPTY-COLLECTION",
+      "root_cause_class": "EMPTY_COLLECTION_BINDING",
+      "earliest_gate": "PESTER_UNIT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-GENERIC-LIST",
+      "root_cause_class": "GENERIC_LIST_BINDING",
+      "earliest_gate": "PESTER_UNIT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ENUM",
+      "root_cause_class": "ENUM_ARGUMENT_BINDING",
+      "earliest_gate": "PESTER_UNIT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-REGEX",
+      "root_cause_class": "STRING_INTERPOLATION_REGEX_BOUNDARY",
+      "earliest_gate": "PESTER_UNIT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-AUTOVAR",
+      "root_cause_class": "AUTOMATIC_VARIABLE_COLLISION",
+      "earliest_gate": "PSSCRIPTANALYZER",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-SCOPE",
+      "root_cause_class": "PARAMETER_SCOPE_MISCLASSIFICATION",
+      "earliest_gate": "PESTER_CONTRACT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-LONGPATH",
+      "root_cause_class": "LONG_PATH_FAILURE",
+      "earliest_gate": "STATE_COLLISION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ZIP-NORMALIZE",
+      "root_cause_class": "ZIP_ENTRY_NORMALIZATION",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ZIP-CARD",
+      "root_cause_class": "ZIP_MEMBER_CARDINALITY",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ZIP-DUPE",
+      "root_cause_class": "DUPLICATE_ZIP_MEMBER",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ZIP-MISSING",
+      "root_cause_class": "MISSING_ZIP_MEMBER",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ZIP-CORRUPT",
+      "root_cause_class": "CORRUPT_ZIP",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-CSV-HEADER",
+      "root_cause_class": "CSV_HEADER_ONLY",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-CSV-PARSE",
+      "root_cause_class": "CSV_PARSE_FAILURE",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-ONE-RUN",
+      "root_cause_class": "ONE_RUN_GUARD_GAP",
+      "earliest_gate": "PESTER_CONTRACT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-OUTPUT-NS",
+      "root_cause_class": "OUTPUT_NAMESPACE_COLLISION",
+      "earliest_gate": "STATE_COLLISION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-EVIDENCE-NS",
+      "root_cause_class": "EVIDENCE_NAMESPACE_COLLISION",
+      "earliest_gate": "STATE_COLLISION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-SUCCESSOR-NS",
+      "root_cause_class": "SUCCESSOR_RUNTIME_NAMESPACE_COLLISION",
+      "earliest_gate": "STATE_COLLISION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-PRESTATE",
+      "root_cause_class": "PREEXISTING_RUNTIME_STATE_COLLISION",
+      "earliest_gate": "STATE_COLLISION",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-VERSION",
+      "root_cause_class": "SOURCE_EVIDENCE_VERSION_MISMATCH",
+      "earliest_gate": "PESTER_CONTRACT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-PROVENANCE",
+      "root_cause_class": "INTERNAL_PROVENANCE_VERSION_MISMATCH",
+      "earliest_gate": "PESTER_CONTRACT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-HARNESS",
+      "root_cause_class": "FACTORY_HARNESS_FALSE_FAIL",
+      "earliest_gate": "PESTER_CONTRACT",
+      "status": "BOUND_TO_BASELINE"
+    },
+    {
+      "defect_id": "REG-FIXTURE-EARLY",
+      "root_cause_class": "NEGATIVE_FIXTURE_EARLY_FAILURE",
+      "earliest_gate": "FIXTURE_REGRESSION",
+      "status": "BOUND_TO_BASELINE"
+    }
+  ]
+}

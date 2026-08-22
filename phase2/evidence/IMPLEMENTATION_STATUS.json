@@ -1,0 +1,12 @@
+{
+  "schema_id": "ECTOS_PHASE2_IMPLEMENTATION_STATUS_V01",
+  "phase2": "AUTHORIZED",
+  "github_platform": "FROZEN",
+  "github_actions": "FROZEN",
+  "repository_live_binding": "NOT_YET_EXECUTED",
+  "runner_live_registration": "NOT_YET_EXECUTED",
+  "workflow_live_execution": "NOT_YET_EXECUTED",
+  "readiness_schema_v02": "IMPLEMENTED",
+  "global_qualification_ready": "FALSE_PENDING_LIVE_CI",
+  "baseline_v04_zip_sha256": "3A948EF6DB3F44F7B8BF0AC9D563954E58F7C4045F3E4F1FD44450FA58483A49"
+}

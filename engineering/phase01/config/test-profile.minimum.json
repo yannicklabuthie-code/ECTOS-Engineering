@@ -1,0 +1,22 @@
+{
+  "profile_id": "ECTOS_DEV_MINIMUM_TEST_PROFILE_V01",
+  "required_for_dev_ready": [
+    "PARSE",
+    "PSSCRIPTANALYZER",
+    "PESTER_UNIT",
+    "PESTER_CONTRACT",
+    "REGRESSION"
+  ],
+  "required_for_package_ready": [
+    "PACKAGE_MANIFEST",
+    "PACKAGE_INSTALL_LOAD",
+    "HASH_IDENTITY"
+  ],
+  "required_for_qualification_ready": [
+    "NATIVE_PS51",
+    "FIXTURE_REGRESSION",
+    "STATE_COLLISION",
+    "CI_REQUIRED_CHECKS"
+  ],
+  "ps7_required_when_claimed": true
+}

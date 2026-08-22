@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_DEV_READINESS_V02",
+  "title": "ECTOS Dev Readiness V02",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "timestamp_utc",
+    "target",
+    "dev_ready",
+    "package_ready",
+    "pre_ci_local_assurance_ready",
+    "ci_required_checks_pass",
+    "qualification_ready_global",
+    "gate_status"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "ECTOS_DEV_READINESS_V02"
+    },
+    "timestamp_utc": {
+      "type": "string"
+    },
+    "target": {
+      "type": "string"
+    },
+    "ps7_required": {
+      "type": "boolean"
+    },
+    "dev_ready": {
+      "type": "boolean"
+    },
+    "package_ready": {
+      "type": "boolean"
+    },
+    "pre_ci_local_assurance_ready": {
+      "type": "boolean"
+    },
+    "ci_required_checks_pass": {
+      "type": "boolean"
+    },
+    "qualification_ready_global": {
+      "type": "boolean"
+    },
+    "gate_status": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "ci_required_check_status": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

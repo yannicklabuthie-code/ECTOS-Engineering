@@ -1,0 +1,5 @@
+param([Parameter(Mandatory)][string]$TargetPackageRoot,[Parameter(Mandatory)][string]$ResultsRoot)
+. (Join-Path $PSScriptRoot 'Common.ps1')
+$m=Join-Path $TargetPackageRoot 'ectos-package-manifest.json';$errors=@()
+if(-not(Test-Path -LiteralPath $m)){$errors+='manifest_missing'} else {try{$o=Get-Content -LiteralPath $m -Raw|ConvertFrom-Json}catch{$errors+='manifest_json_invalid'};if($o){foreach($n in 'schema_id','package_type','package_id','version','source_commit','build_id','target_runtime','supported_os','entrypoint','expected_output_contract','side_effect_contract','mutation_policy','test_profile','qualification_profile','install_profile','rollback_profile','evidence_profile'){if(-not ($o.PSObject.Properties.Name -contains $n) -or [string]::IsNullOrWhiteSpace([string]$o.$n)){$errors += "missing_or_empty:$n"}};if($o.schema_id -ne 'ECTOS_COMMON_PACKAGE_MANIFEST_V0'){$errors+='schema_id_mismatch'}}}
+$r=New-EctosGateResult 'PACKAGE_MANIFEST' $(if($errors.Count -eq 0){'PASS'}else{'FAIL'}) $TargetPackageRoot @{errors=$errors;manifest=$m};Write-EctosGateResult $r $ResultsRoot;if($r.status -eq 'FAIL'){exit 8}
