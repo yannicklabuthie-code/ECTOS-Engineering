@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Assert native Windows PowerShell 5.1
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           if ($PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1) {
             throw "NATIVE_PS51_REQUIRED"
@@ -32,7 +32,7 @@ jobs:
           "RUNNER_PS51=$($PSVersionTable.PSVersion)"
 
       - name: Bootstrap deterministic PowerShell tools
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           $cache='C:\ECTOS_TOOLCACHE'
           New-Item -ItemType Directory -Force -Path $cache | Out-Null
@@ -54,7 +54,7 @@ jobs:
           "PESTER=$($p.Version)"
 
       - name: Run frozen Phase 0 + Phase 1 assurance
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           $env:PSModulePath='C:\ECTOS_TOOLCACHE'+[IO.Path]::PathSeparator+$env:PSModulePath
           .\phase2\ci\scripts\Invoke-ECTOSPhase01CIAssurance.ps1 `
@@ -64,7 +64,7 @@ jobs:
 
       - name: Write CI provenance
         if: always()
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           $results="${{ runner.temp }}\ectos-results"
           if(-not(Test-Path $results)){New-Item -ItemType Directory -Force -Path $results|Out-Null}
@@ -272,7 +272,7 @@ jobs:
           path: ${{ runner.temp }}/ectos-results
 
       - name: Materialize required check statuses
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           $ci="${{ runner.temp }}\ectos-ci-status"
           $states=[ordered]@{
@@ -296,7 +296,7 @@ jobs:
           .\phase2\ci\scripts\Write-CICheckResult.ps1 -CheckName 'ectos/ci-required-checks' -Status $(if($ok){'PASS'}else{'FAIL'}) -OutputRoot $ci
 
       - name: Negative CI bypass test
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           .\phase2\ci\scripts\Test-NegativeCIBypass.ps1 `
              -Phase2Root "${{ github.workspace }}\phase2" `
@@ -304,7 +304,7 @@ jobs:
              -TargetPackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package"
 
       - name: Derive corrected global readiness V02
-        shell: powershell
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
         run: |
           .\phase2\ci\scripts\Get-ECTOSReadinessV02.ps1 `
              -TargetPackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package" `
