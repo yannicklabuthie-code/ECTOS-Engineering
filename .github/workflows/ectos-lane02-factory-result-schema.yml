@@ -15,8 +15,11 @@ jobs:
     runs-on: [self-hosted, Windows, X64, ectos-ps51]
     timeout-minutes: 15
     steps:
-      - name: Checkout
+      - name: Checkout clean unique qualification worktree
         uses: actions/checkout@v4
+        with:
+          path: ectos-lane02-qual-${{ github.run_id }}-${{ github.run_attempt }}
+          clean: true
 
       - name: Verify Lane 02 LF policy and canonical worktree identities
         shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
@@ -24,11 +27,11 @@ jobs:
           $ErrorActionPreference='Stop'
           Set-StrictMode -Version 2.0
           if ($PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1) { throw 'NATIVE_PS51_REQUIRED' }
-          $workspace='${{ github.workspace }}'
+          $workspace=Join-Path '${{ github.workspace }}' 'ectos-lane02-qual-${{ github.run_id }}-${{ github.run_attempt }}'
           $readerRel='lane02/factory-result-schema/01_SUCCESSOR/ECTOS_DEV_QF_TOOLING_FACTORY_DIAGNOSTIC_RESULT_SCHEMA_READER_V02.ps1'
           $selfqRel='lane02/factory-result-schema/02_SELFQUAL/RUN_ECTOS_DEV_QF_TOOLING_FACTORY_RESULT_SCHEMA_SUCCESSOR_SELFQUAL_V01.ps1'
-          $reader=Join-Path $workspace ($readerRel -replace '/','\')
-          $selfq=Join-Path $workspace ($selfqRel -replace '/','\')
+          $reader=Join-Path $workspace ($readerRel -replace '/','\\')
+          $selfq=Join-Path $workspace ($selfqRel -replace '/','\\')
           $out=Join-Path $env:RUNNER_TEMP 'ectos-lane02-factory-result-schema'
           New-Item -ItemType Directory -Force -Path $out | Out-Null
 
@@ -50,6 +53,9 @@ jobs:
           $readerBom=Get-BomState $reader
           $selfqBom=Get-BomState $selfq
           $preflight=[ordered]@{
+            REMATERIALIZATION_METHOD='CLEAN_UNIQUE_QUALIFICATION_CHECKOUT'
+            CHECKOUT_OR_WORKTREE_PATH_CLASS='UNIQUE_PER_RUN'
+            QUALIFICATION_WORKSPACE=$workspace
             GITATTRIBUTES_POLICY_PRESENT=[bool](Test-Path -LiteralPath (Join-Path $workspace '.gitattributes') -PathType Leaf)
             READER_GIT_CHECK_ATTR=$readerAttr
             SELFQUAL_GIT_CHECK_ATTR=$selfqAttr
@@ -61,9 +67,10 @@ jobs:
             SELFQUAL_CANONICAL_SHA256='A8809A6E95B36A89C69A4E6AD48441FB71ED497482033D2BC1429DEB710131F7'
             READER_BOM=$readerBom
             SELFQUAL_BOM=$selfqBom
+            PRODUCT_LOGIC_CHANGE=0
           }
           $preflightJson=$preflight | ConvertTo-Json -Depth 8
-          [IO.File]::WriteAllText((Join-Path $out 'ECTOS_LANE02_EOL_POLICY_PREFLIGHT_V01.json'),$preflightJson,(New-Object Text.UTF8Encoding($false)))
+          [IO.File]::WriteAllText((Join-Path $out 'ECTOS_LANE02_EOL_POLICY_PREFLIGHT_V02.json'),$preflightJson,(New-Object Text.UTF8Encoding($false)))
           $preflightJson
 
           if(-not $preflight.GITATTRIBUTES_POLICY_PRESENT){throw 'GITATTRIBUTES_POLICY_NOT_PRESENT'}
@@ -82,7 +89,8 @@ jobs:
         run: |
           $ErrorActionPreference='Stop'
           if ($PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1) { throw 'NATIVE_PS51_REQUIRED' }
-          $root='${{ github.workspace }}\lane02\factory-result-schema'
+          $workspace=Join-Path '${{ github.workspace }}' 'ectos-lane02-qual-${{ github.run_id }}-${{ github.run_attempt }}'
+          $root=Join-Path $workspace 'lane02\factory-result-schema'
           $reader=Join-Path $root '01_SUCCESSOR\ECTOS_DEV_QF_TOOLING_FACTORY_DIAGNOSTIC_RESULT_SCHEMA_READER_V02.ps1'
           $selfq=Join-Path $root '02_SELFQUAL\RUN_ECTOS_DEV_QF_TOOLING_FACTORY_RESULT_SCHEMA_SUCCESSOR_SELFQUAL_V01.ps1'
           if((Get-FileHash -LiteralPath $reader -Algorithm SHA256).Hash -ne '99EF3B6520922D34EF3BEDDA6E9D96B687246B245E95135AEAFCA12C040E90E3'){throw 'READER_SHA256_MISMATCH'}
@@ -97,7 +105,8 @@ jobs:
         run: |
           $ErrorActionPreference='Stop'
           Set-StrictMode -Version 2.0
-          $root='${{ github.workspace }}\lane02\factory-result-schema'
+          $workspace=Join-Path '${{ github.workspace }}' 'ectos-lane02-qual-${{ github.run_id }}-${{ github.run_attempt }}'
+          $root=Join-Path $workspace 'lane02\factory-result-schema'
           $reader=Join-Path $root '01_SUCCESSOR\ECTOS_DEV_QF_TOOLING_FACTORY_DIAGNOSTIC_RESULT_SCHEMA_READER_V02.ps1'
           $selfq=Join-Path $root '02_SELFQUAL\RUN_ECTOS_DEV_QF_TOOLING_FACTORY_RESULT_SCHEMA_SUCCESSOR_SELFQUAL_V01.ps1'
           foreach($p in @($reader,$selfq)){
@@ -133,6 +142,8 @@ jobs:
           $out=Join-Path $env:RUNNER_TEMP 'ectos-lane02-factory-result-schema'
           New-Item -ItemType Directory -Force -Path $out | Out-Null
           $evidence=[ordered]@{
+            REMATERIALIZATION_METHOD='CLEAN_UNIQUE_QUALIFICATION_CHECKOUT'
+            CHECKOUT_OR_WORKTREE_PATH_CLASS='UNIQUE_PER_RUN'
             SUCCESSOR_ID=[string]$r.SUCCESSOR_ID
             SUCCESSOR_VERSION=[string]$r.SUCCESSOR_VERSION
             SUCCESSOR_SHA256='99EF3B6520922D34EF3BEDDA6E9D96B687246B245E95135AEAFCA12C040E90E3'
@@ -140,6 +151,7 @@ jobs:
             PS51_EDITION=[string]$PSVersionTable.PSEdition
             PS51_VERSION=[string]$PSVersionTable.PSVersion
             PS51_PARSE_RESULT=[string]$r.PS51_PARSE_RESULT
+            SELFQUAL_RESULT=[string]$r.PS51_HOST_RESULT
             EARLY_FAIL_FIXTURE_RESULT=[string]$r.EARLY_FAIL_FIXTURE_RESULT
             SUCCESS_FIXTURE_RESULT=[string]$r.SUCCESS_FIXTURE_RESULT
             STRICTMODE_RESULT=[string]$r.STRICTMODE_RESULT
@@ -156,7 +168,7 @@ jobs:
             GLOBAL_PROJECT_HOLD=[string]$r.GLOBAL_PROJECT_HOLD
           }
           $json=$evidence | ConvertTo-Json -Depth 8
-          [IO.File]::WriteAllText((Join-Path $out 'ECTOS_LANE02_FACTORY_RESULT_SCHEMA_NATIVE_RESULT_V01.json'),$json,(New-Object Text.UTF8Encoding($false)))
+          [IO.File]::WriteAllText((Join-Path $out 'ECTOS_LANE02_FACTORY_RESULT_SCHEMA_NATIVE_RESULT_V02.json'),$json,(New-Object Text.UTF8Encoding($false)))
           $json
 
       - name: Upload Lane 02 native evidence
