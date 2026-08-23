@@ -312,7 +312,8 @@ jobs:
              -TargetPackageRoot "${{ github.workspace }}\engineering\phase01\fixtures\sample-package" `
              -ResultsRoot "${{ runner.temp }}\ectos-results" `
              -CIStatusRoot "${{ runner.temp }}\ectos-ci-status"
-          if($LASTEXITCODE -ne 0){throw 'GLOBAL_QUALIFICATION_READY_NOT_REACHED'}
+          $r=Get-Content "${{ runner.temp }}\ectos-results\READINESS_V02.json" -Raw | ConvertFrom-Json
+          if(-not $r.qualification_ready_global){throw 'GLOBAL_QUALIFICATION_READY_NOT_REACHED'}
 
       - name: Upload final CI evidence
         if: always()
