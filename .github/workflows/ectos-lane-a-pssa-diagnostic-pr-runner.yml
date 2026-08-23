@@ -1,0 +1,84 @@
+name: ECTOS Lane A PSScriptAnalyzer PS51 Diagnostic PR Runner
+
+on:
+  pull_request:
+    branches:
+      - lane-a/pssa-diagnostic-base-20260823
+    paths:
+      - 'lane-a/pssa-diagnostic-v01/**'
+      - '.github/workflows/ectos-lane-a-pssa-diagnostic-v01.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  lane_a_pssa_diagnostic:
+    name: ectos/lane-a-pssa-ps51-diagnostic-v01
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reconstruct exact authorized package
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          if ($PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1) {
+            throw 'NATIVE_PS51_REQUIRED'
+          }
+          $root = Join-Path '${{ runner.temp }}' 'ectos-lane-a-pssa-diag-v01'
+          New-Item -ItemType Directory -Force -Path $root | Out-Null
+          $chunks = @(Get-ChildItem '${{ github.workspace }}\lane-a\pssa-diagnostic-v01\package\chunk_*.b64' | Sort-Object Name)
+          if($chunks.Count -ne 12){throw "CHUNK_COUNT_MISMATCH=$($chunks.Count)"}
+          $b64 = -join ($chunks | ForEach-Object { (Get-Content $_.FullName -Raw).Trim() })
+          $bytes = [Convert]::FromBase64String($b64)
+          $zip = Join-Path $root 'candidate-v06.zip'
+          [IO.File]::WriteAllBytes($zip,$bytes)
+          $sha = (Get-FileHash $zip -Algorithm SHA256).Hash.ToUpperInvariant()
+          if($sha -ne '205D3D95A02F7569D7C913D0C9007FFA8D42CBBB26CC26A42F20C76054EAA8F5'){
+            throw "PACKAGE_SHA_MISMATCH=$sha"
+          }
+          $pkg = Join-Path $root 'package'
+          Expand-Archive -LiteralPath $zip -DestinationPath $pkg -Force
+          "RUNNER_WINDOWS=$([Environment]::OSVersion.VersionString)"
+          "RUNNER_PS51=$($PSVersionTable.PSVersion)"
+          "PACKAGE_SHA256=$sha"
+
+      - name: Execute authorized diagnostic
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $root = Join-Path '${{ runner.temp }}' 'ectos-lane-a-pssa-diag-v01'
+          $pkg = Join-Path $root 'package'
+          $diag = Join-Path $pkg '01_DIAGNOSTIC\RUN_ECTOS_DEV_PSSCRIPTANALYZER_PS51_QUALIFICATION_DIAGNOSTIC_V01_CANDIDATE_V06.ps1'
+          $target = Join-Path $pkg '02_INPUT\ECTOS_V1_ASSEMBLY_DATASET_CAPTURE_V03.ps1'
+          $diagSha = (Get-FileHash $diag -Algorithm SHA256).Hash.ToUpperInvariant()
+          $targetSha = (Get-FileHash $target -Algorithm SHA256).Hash.ToUpperInvariant()
+          if($diagSha -ne '1BA3BE512A236AAEBB4425BC901EE791FEF64BE3152BCF6CCE35C97699B0676D'){
+            throw "DIAGNOSTIC_SHA_MISMATCH=$diagSha"
+          }
+          if($targetSha -ne '1C00FA28C51D5A9FEB6CF178C436ADB0331508261A81E1446F29DD7C6EF78B8B'){
+            throw "TARGET_SHA_MISMATCH=$targetSha"
+          }
+          $env:PSModulePath = 'C:\ECTOS_TOOLCACHE' + [IO.Path]::PathSeparator + $env:PSModulePath
+          $evidence = Join-Path $root 'evidence'
+          $stdout = Join-Path $root 'DIAGNOSTIC_STDOUT_V01.txt'
+          & $diag -TargetPath $target -EvidenceRoot $evidence 2>&1 | Tee-Object -FilePath $stdout
+          $postSha = (Get-FileHash $target -Algorithm SHA256).Hash.ToUpperInvariant()
+          if($postSha -ne '1C00FA28C51D5A9FEB6CF178C436ADB0331508261A81E1446F29DD7C6EF78B8B'){
+            throw "TARGET_MUTATION_DETECTED=$postSha"
+          }
+          $return = Join-Path $evidence 'ECTOS_DEV_PSSCRIPTANALYZER_PS51_QUALIFICATION_DIAGNOSTIC_RETURN_V01.txt'
+          if(-not(Test-Path -LiteralPath $return -PathType Leaf)){
+            throw 'DIAGNOSTIC_RETURN_MISSING'
+          }
+          Get-Content -LiteralPath $return
+
+      - name: Upload Lane A diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-lane-a-pssa-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ectos-lane-a-pssa-diag-v01
+          retention-days: 30
+          if-no-files-found: error
