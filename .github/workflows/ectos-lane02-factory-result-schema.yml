@@ -1,0 +1,110 @@
+name: ECTOS Lane 02 Factory Result Schema Native PS51
+
+on:
+  pull_request:
+    branches:
+      - lane02/factory-result-schema-base-20260823
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  lane02_factory_result_schema:
+    name: ectos/lane02-factory-result-schema-native-ps51
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify native PS51 and exact successor identities
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          if ($PSVersionTable.PSEdition -ne 'Desktop' -or $PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1) { throw 'NATIVE_PS51_REQUIRED' }
+          $root='${{ github.workspace }}\lane02\factory-result-schema'
+          $reader=Join-Path $root '01_SUCCESSOR\ECTOS_DEV_QF_TOOLING_FACTORY_DIAGNOSTIC_RESULT_SCHEMA_READER_V02.ps1'
+          $selfq=Join-Path $root '02_SELFQUAL\RUN_ECTOS_DEV_QF_TOOLING_FACTORY_RESULT_SCHEMA_SUCCESSOR_SELFQUAL_V01.ps1'
+          if((Get-FileHash -LiteralPath $reader -Algorithm SHA256).Hash -ne '99EF3B6520922D34EF3BEDDA6E9D96B687246B245E95135AEAFCA12C040E90E3'){throw 'READER_SHA256_MISMATCH'}
+          if((Get-FileHash -LiteralPath $selfq -Algorithm SHA256).Hash -ne 'A8809A6E95B36A89C69A4E6AD48441FB71ED497482033D2BC1429DEB710131F7'){throw 'SELFQUAL_SHA256_MISMATCH'}
+          'NATIVE_PS51_HOST=PASS'
+          'PS51_VERSION='+[string]$PSVersionTable.PSVersion
+          'READER_SHA256=99EF3B6520922D34EF3BEDDA6E9D96B687246B245E95135AEAFCA12C040E90E3'
+          'SELFQUAL_SHA256=A8809A6E95B36A89C69A4E6AD48441FB71ED497482033D2BC1429DEB710131F7'
+
+      - name: Parse and execute Lane 02 selfqual
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          Set-StrictMode -Version 2.0
+          $root='${{ github.workspace }}\lane02\factory-result-schema'
+          $reader=Join-Path $root '01_SUCCESSOR\ECTOS_DEV_QF_TOOLING_FACTORY_DIAGNOSTIC_RESULT_SCHEMA_READER_V02.ps1'
+          $selfq=Join-Path $root '02_SELFQUAL\RUN_ECTOS_DEV_QF_TOOLING_FACTORY_RESULT_SCHEMA_SUCCESSOR_SELFQUAL_V01.ps1'
+          foreach($p in @($reader,$selfq)){
+            $t=$null; $e=$null
+            [void][System.Management.Automation.Language.Parser]::ParseFile($p,[ref]$t,[ref]$e)
+            if(@($e).Count -ne 0){ throw ('PS51_PARSE_FAIL='+$p) }
+          }
+          $raw=& $selfq -ReaderPath $reader | Out-String
+          $r=$raw | ConvertFrom-Json
+          $required=[ordered]@{
+            PS51_HOST_RESULT='PASS'
+            PS51_PARSE_RESULT='PASS'
+            EARLY_FAIL_FIXTURE_RESULT='PASS'
+            SUCCESS_FIXTURE_RESULT='PASS'
+            STRICTMODE_RESULT='PASS'
+            OPTIONAL_FIELD_HANDLING_RESULT='PASS'
+            MANDATORY_REGRESSION='PASS'
+            SUCCESS_ONLY_FIELD_ASSUMPTION_DEFECT='CLOSED'
+            ROOT_CAUSE_OF_ATTEMPT01_EXTENT='NOT_ESTABLISHED'
+            GLOBAL_PROJECT_HOLD='NO'
+          }
+          foreach($k in $required.Keys){
+            $prop=@($r.PSObject.Properties | Where-Object {$_.Name -ceq $k})
+            if($prop.Count -ne 1){throw ('RESULT_FIELD_MISSING='+$k)}
+            if([string]$prop[0].Value -cne [string]$required[$k]){throw ('RESULT_FIELD_MISMATCH='+$k+'='+[string]$prop[0].Value)}
+          }
+          if([int]$r.VALUE_SYNTHESIS_COUNT -ne 0){throw 'VALUE_SYNTHESIS_COUNT_NONZERO'}
+          if([int]$r.ROOT_CAUSE_FABRICATION_COUNT -ne 0){throw 'ROOT_CAUSE_FABRICATION_COUNT_NONZERO'}
+          if([int]$r.REAL_PRODUCT_EXECUTION_COUNT -ne 0){throw 'REAL_PRODUCT_EXECUTION_COUNT_NONZERO'}
+          if([int]$r.REAL_V03_EXECUTION_COUNT -ne 0){throw 'REAL_V03_EXECUTION_COUNT_NONZERO'}
+          if([int]$r.V03_MUTATION_COUNT -ne 0){throw 'V03_MUTATION_COUNT_NONZERO'}
+          if([int]$r.PROTECTED_ARTIFACT_MUTATION_COUNT -ne 0){throw 'PROTECTED_ARTIFACT_MUTATION_COUNT_NONZERO'}
+          $out=Join-Path $env:RUNNER_TEMP 'ectos-lane02-factory-result-schema'
+          New-Item -ItemType Directory -Force -Path $out | Out-Null
+          $evidence=[ordered]@{
+            SUCCESSOR_ID=[string]$r.SUCCESSOR_ID
+            SUCCESSOR_VERSION=[string]$r.SUCCESSOR_VERSION
+            SUCCESSOR_SHA256='99EF3B6520922D34EF3BEDDA6E9D96B687246B245E95135AEAFCA12C040E90E3'
+            SELFQUAL_SHA256='A8809A6E95B36A89C69A4E6AD48441FB71ED497482033D2BC1429DEB710131F7'
+            PS51_EDITION=[string]$PSVersionTable.PSEdition
+            PS51_VERSION=[string]$PSVersionTable.PSVersion
+            PS51_PARSE_RESULT=[string]$r.PS51_PARSE_RESULT
+            EARLY_FAIL_FIXTURE_RESULT=[string]$r.EARLY_FAIL_FIXTURE_RESULT
+            SUCCESS_FIXTURE_RESULT=[string]$r.SUCCESS_FIXTURE_RESULT
+            STRICTMODE_RESULT=[string]$r.STRICTMODE_RESULT
+            OPTIONAL_FIELD_HANDLING_RESULT=[string]$r.OPTIONAL_FIELD_HANDLING_RESULT
+            VALUE_SYNTHESIS_COUNT=[int]$r.VALUE_SYNTHESIS_COUNT
+            ROOT_CAUSE_FABRICATION_COUNT=[int]$r.ROOT_CAUSE_FABRICATION_COUNT
+            MANDATORY_REGRESSION=[string]$r.MANDATORY_REGRESSION
+            SUCCESS_ONLY_FIELD_ASSUMPTION_DEFECT=[string]$r.SUCCESS_ONLY_FIELD_ASSUMPTION_DEFECT
+            ROOT_CAUSE_OF_ATTEMPT01_EXTENT=[string]$r.ROOT_CAUSE_OF_ATTEMPT01_EXTENT
+            REAL_PRODUCT_EXECUTION_COUNT=[int]$r.REAL_PRODUCT_EXECUTION_COUNT
+            REAL_V03_EXECUTION_COUNT=[int]$r.REAL_V03_EXECUTION_COUNT
+            V03_MUTATION_COUNT=[int]$r.V03_MUTATION_COUNT
+            PROTECTED_ARTIFACT_MUTATION_COUNT=[int]$r.PROTECTED_ARTIFACT_MUTATION_COUNT
+            GLOBAL_PROJECT_HOLD=[string]$r.GLOBAL_PROJECT_HOLD
+          }
+          $json=$evidence | ConvertTo-Json -Depth 8
+          [IO.File]::WriteAllText((Join-Path $out 'ECTOS_LANE02_FACTORY_RESULT_SCHEMA_NATIVE_RESULT_V01.json'),$json,(New-Object Text.UTF8Encoding($false)))
+          $json
+
+      - name: Upload Lane 02 native evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-lane02-factory-result-schema-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ectos-lane02-factory-result-schema
+          retention-days: 30
+          if-no-files-found: error
