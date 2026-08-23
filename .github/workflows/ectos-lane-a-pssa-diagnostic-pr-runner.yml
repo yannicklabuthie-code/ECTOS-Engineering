@@ -29,8 +29,12 @@ jobs:
           }
           $root = Join-Path '${{ runner.temp }}' 'ectos-lane-a-pssa-diag-v01'
           New-Item -ItemType Directory -Force -Path $root | Out-Null
-          $chunks = @(Get-ChildItem '${{ github.workspace }}\lane-a\pssa-diagnostic-v01\package\chunk_*.b64' | Sort-Object Name)
-          if($chunks.Count -ne 12){throw "CHUNK_COUNT_MISMATCH=$($chunks.Count)"}
+          $chunks = @(
+            Get-ChildItem '${{ github.workspace }}\lane-a\pssa-diagnostic-v01\package\chunk_*.b64' |
+              Where-Object { $_.Name -ne 'chunk_01.b64' } |
+              Sort-Object Name
+          )
+          if($chunks.Count -ne 15){throw "CHUNK_COUNT_MISMATCH=$($chunks.Count)"}
           $b64 = -join ($chunks | ForEach-Object { (Get-Content $_.FullName -Raw).Trim() })
           $bytes = [Convert]::FromBase64String($b64)
           $zip = Join-Path $root 'candidate-v06.zip'
