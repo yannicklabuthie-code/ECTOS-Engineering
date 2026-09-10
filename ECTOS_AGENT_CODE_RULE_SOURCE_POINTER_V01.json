@@ -1,0 +1,19 @@
+{
+  "pointer_id": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V01",
+  "status": "CURRENT",
+  "repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "branch": "main",
+  "scope": "POWERSHELL_CODE_RULE_SOURCE",
+  "default_powershell_profile": "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+  "agent_consumption_contract": "profiles/powershell/ECTOS_AGENT_CONSUMPTION_CONTRACT_V01.json",
+  "bootstrap_instruction": "AGENTS.md",
+  "pre_generation_consumption": "MANDATORY",
+  "agent_memory_only": "INSUFFICIENT",
+  "chat_prompt_only": "INSUFFICIENT",
+  "post_generation_assurance": "MANDATORY_WHERE_APPLICABLE",
+  "owner_first_parse": "PROHIBITED",
+  "owner_first_startability_test": "PROHIBITED",
+  "owner_first_basic_defect_discovery": "PROHIBITED",
+  "future_factory_role": "CONSUMER_AND_ENFORCER",
+  "factory_is_rule_source": false
+}
