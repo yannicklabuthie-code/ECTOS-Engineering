@@ -1,0 +1,10 @@
+{
+  "manifest_id":"ECTOS_POWERSHELL_PS51_RULESET_MANIFEST_V01",
+  "ruleset_version":"V01",
+  "ruleset_sha256":"2FD86D22587B2E694FC62C3B734DED1A7430831BFC0E34B5C176327012907525",
+  "rule_count":10,
+  "active_rule_ids":["PS51-R001","PS51-R002","PS51-R003","PS51-R004","PS51-R005","PS51-R006","PS51-R007","PS51-R008","PS51-R009","PS51-R010"],
+  "profile":"profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+  "agent_consumption_contract":"profiles/powershell/ECTOS_AGENT_CONSUMPTION_CONTRACT_V01.json",
+  "currentness_state":"CURRENT"
+}

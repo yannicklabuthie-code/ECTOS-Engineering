@@ -1,0 +1,15 @@
+{
+  "fixture_catalog_id":"ECTOS_PS51_POSITIVE_FIXTURES_V01",
+  "cases":[
+    {"fixture_id":"PS51-R001-POS","rule_id":"PS51-R001","expected":"PASS","sample":"Write-Output \"${Name}:\""},
+    {"fixture_id":"PS51-R002-POS","rule_id":"PS51-R002","expected":"PASS","sample":"$value = $null; if ($ok) { $value = \"A\" } else { $value = \"B\" }"},
+    {"fixture_id":"PS51-R003-POS","rule_id":"PS51-R003","expected":"PASS","sample":"param([string]$Root); if (-not $Root) { $Root = $PSScriptRoot }"},
+    {"fixture_id":"PS51-R004-POS","rule_id":"PS51-R004","expected":"PASS","sample":"try { Get-ChildItem -LiteralPath $Root -ErrorAction Stop } catch { throw \"PATH_ENUMERATION_NOT_COMPLETE\" }"},
+    {"fixture_id":"PS51-R005-POS","rule_id":"PS51-R005","expected":"PASS","sample":"SCAN_SCOPE=PRODUCT_SOURCE_ONLY; EXCLUDE=RULES,DETECTORS,FIXTURES"},
+    {"fixture_id":"PS51-R006-POS","rule_id":"PS51-R006","expected":"PASS","sample":"$processIdValue = 42"},
+    {"fixture_id":"PS51-R007-POS","rule_id":"PS51-R007","expected":"PASS","sample":"$items = @($InputItems); if ($items.Count -eq 0) { return @() }"},
+    {"fixture_id":"PS51-R008-POS","rule_id":"PS51-R008","expected":"PASS","sample":"$normalized = @($GenericList)"},
+    {"fixture_id":"PS51-R009-POS","rule_id":"PS51-R009","expected":"PASS","sample":"[MyEnum]$mode = [MyEnum]::Safe"},
+    {"fixture_id":"PS51-R010-POS","rule_id":"PS51-R010","expected":"PASS","sample":"$escaped = [regex]::Escape($Name); $pattern = \"^${escaped}:$\""}
+  ]
+}

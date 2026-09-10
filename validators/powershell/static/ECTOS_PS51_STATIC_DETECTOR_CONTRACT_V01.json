@@ -1,0 +1,8 @@
+{
+  "validator_id":"ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01",
+  "type":"STATIC_CONTRACT",
+  "input":["product_source_roots","current_ruleset","forbidden_patterns"],
+  "scope_exclusions":["rules/","fixtures/","validators/"],
+  "requirements":["parse_source_text_without_execution","evaluate_rule_detection_methods","emit_rule_id_and_evidence_location","fail_build_when_active_build_blocking_rule_matches"],
+  "self_reference_isolation_required":true
+}

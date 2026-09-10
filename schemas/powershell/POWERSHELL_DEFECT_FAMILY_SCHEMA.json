@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_POWERSHELL_DEFECT_FAMILY_SCHEMA_V01",
+  "type":"object",
+  "required":["catalog_id","catalog_version","families"],
+  "properties":{
+    "catalog_id":{"const":"ECTOS_POWERSHELL_DEFECT_FAMILY_CATALOG"},
+    "catalog_version":{"type":"string"},
+    "families":{"type":"array","items":{"type":"object","required":["defect_family_id","rule_id","source","status"]}}
+  }
+}

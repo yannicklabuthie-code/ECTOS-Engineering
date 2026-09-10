@@ -1,0 +1,9 @@
+{
+  "validator_id":"ECTOS_PS51_REGRESSION_CONTRACT_V01",
+  "type":"REGRESSION_CONTRACT",
+  "positive_fixture_catalog":"fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json",
+  "negative_fixture_catalog":"fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json",
+  "rule_coverage_required":true,
+  "negative_must_fail_at_declared_rule":true,
+  "positive_must_not_trigger_declared_rule":true
+}

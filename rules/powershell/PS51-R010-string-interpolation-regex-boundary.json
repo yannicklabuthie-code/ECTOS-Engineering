@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R010",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "STRING_INTERPOLATION_REGEX_BOUNDARY",
+  "title": "String interpolation / regex boundary defect",
+  "description": "Interpolated strings used in regex construction can alter token boundaries or escaping semantics.",
+  "bad_pattern": {
+    "type": "contract_test",
+    "pattern": "string_interpolation_regex_boundary"
+  },
+  "approved_pattern": {
+    "guidance": "Use explicit escaping and construct regex fragments with deliberate boundaries."
+  },
+  "detection_method": {
+    "type": "contract_test",
+    "pattern": "string_interpolation_regex_boundary"
+  },
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R010",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R010",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "engineering/phase01/regression/regression-corpus-v01.json",
+    "evidence_id": "REG-REGEX"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

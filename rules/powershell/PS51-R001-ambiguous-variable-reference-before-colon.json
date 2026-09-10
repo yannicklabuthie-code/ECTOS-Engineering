@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R001",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "AMBIGUOUS_VARIABLE_REFERENCE_BEFORE_COLON",
+  "title": "Ambiguous variable reference before colon",
+  "description": "Interpolated variable immediately followed by a colon can be parsed as a scoped/drive-qualified variable reference.",
+  "bad_pattern": {
+    "type": "regex",
+    "pattern": "\\$[A-Za-z_][A-Za-z0-9_]*:"
+  },
+  "approved_pattern": {
+    "guidance": "Use braced variable interpolation before a literal colon, e.g. \"${Name}:\"."
+  },
+  "detection_method": {
+    "type": "regex",
+    "pattern": "\\$[A-Za-z_][A-Za-z0-9_]*:"
+  },
+  "severity": "BLOCKER",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R001",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R001",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md",
+    "evidence_id": "RULE_FAMILY_01"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

@@ -1,0 +1,14 @@
+{
+  "profile_id":"ECTOS_POWERSHELL_PS51_PROFILE",
+  "profile_version":"V01",
+  "language":"POWERSHELL",
+  "target_os":"WINDOWS",
+  "target_runtime":"WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "ruleset_version":"V01",
+  "ruleset_sha256":"2FD86D22587B2E694FC62C3B734DED1A7430831BFC0E34B5C176327012907525",
+  "profile_sha256_scope":"SHA256(canonical JSON UTF-8 of this object with profile_sha256 omitted; sorted keys; separators=(',',':'))",
+  "currentness_state":"CURRENT",
+  "required_inputs":["standards/powershell/POWERSHELL_5_1_CODING_STANDARD.md","standards/powershell/POWERSHELL_FORBIDDEN_PATTERNS.json","standards/powershell/POWERSHELL_APPROVED_PATTERNS.md","standards/powershell/POWERSHELL_ERROR_CATALOG.json","rules/powershell/PS51-R001-ambiguous-variable-reference-before-colon.json","rules/powershell/PS51-R002-ps51-inline-if-as-expression.json","rules/powershell/PS51-R003-ps51-context-sensitive-default-parameter-path.json","rules/powershell/PS51-R004-long-path-protected-tree-resolution-failure.json","rules/powershell/PS51-R005-self-referential-static-scan-false-positive.json","rules/powershell/PS51-R006-automatic-variable-collision.json","rules/powershell/PS51-R007-empty-collection-binding.json","rules/powershell/PS51-R008-generic-list-binding.json","rules/powershell/PS51-R009-enum-argument-binding.json","rules/powershell/PS51-R010-string-interpolation-regex-boundary.json"],
+  "required_post_generation_gates":["STATIC_DETECTION","NATIVE_WINDOWS_PS51_PARSE","PSSCRIPTANALYZER","PESTER_WHERE_APPLICABLE","REGRESSION_FIXTURES","ENTRYPOINT_STARTABILITY","PACKAGE_LOAD_WHERE_APPLICABLE","EXACT_BYTE_HANDOFF_WHERE_APPLICABLE"],
+  "profile_sha256":"4B9A8830292CC811B141B4DAE91F2B816A3448921EE3B3ED25DA412C17A78625"
+}
