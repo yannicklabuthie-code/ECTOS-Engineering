@@ -6,7 +6,7 @@ def h(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest().upper()
 def rebuild(parts_glob,out,expected):
     parts=sorted(Path('.').glob(parts_glob))
     if not parts: raise SystemExit('NO_BASE64_PARTS:'+parts_glob)
-    text=''.join(p.read_text(encoding='ascii') for p in parts)
+    text=''.join(''.join(p.read_text(encoding='ascii').split()) for p in parts)
     data=base64.b64decode(text,validate=True)
     Path(out).parent.mkdir(parents=True,exist_ok=True); Path(out).write_bytes(data)
     actual=h(out)
