@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R004",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "LONG_PATH_PROTECTED_TREE_RESOLUTION_FAILURE",
+  "title": "Long path / protected tree path resolution failure",
+  "description": "Enumeration or path resolution can fail on long paths or protected trees and must fail closed rather than silently omit state.",
+  "bad_pattern": {
+    "type": "runtime_condition",
+    "pattern": "path_enumeration_or_resolution_error"
+  },
+  "approved_pattern": {
+    "guidance": "Use explicit error handling, record unreachable paths, and fail closed when complete traversal is required."
+  },
+  "detection_method": {
+    "type": "runtime_condition",
+    "pattern": "path_enumeration_or_resolution_error"
+  },
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R004",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R004",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md",
+    "evidence_id": "RULE_FAMILY_04"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

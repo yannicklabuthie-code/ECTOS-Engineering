@@ -1,0 +1,19 @@
+{
+  "contract_id":"ECTOS_AGENT_POWERSHELL_RULESET_CONSUMPTION_V01",
+  "selector":{"language":"POWERSHELL","target_runtime":"WINDOWS_POWERSHELL_DESKTOP_5_1","engineering_profile":"ECTOS_POWERSHELL_PS51_PROFILE"},
+  "retrieve":{
+    "coding_standard":"standards/powershell/POWERSHELL_5_1_CODING_STANDARD.md",
+    "rule_set":["rules/powershell/PS51-R001-ambiguous-variable-reference-before-colon.json","rules/powershell/PS51-R002-ps51-inline-if-as-expression.json","rules/powershell/PS51-R003-ps51-context-sensitive-default-parameter-path.json","rules/powershell/PS51-R004-long-path-protected-tree-resolution-failure.json","rules/powershell/PS51-R005-self-referential-static-scan-false-positive.json","rules/powershell/PS51-R006-automatic-variable-collision.json","rules/powershell/PS51-R007-empty-collection-binding.json","rules/powershell/PS51-R008-generic-list-binding.json","rules/powershell/PS51-R009-enum-argument-binding.json","rules/powershell/PS51-R010-string-interpolation-regex-boundary.json"],
+    "forbidden_patterns":"standards/powershell/POWERSHELL_FORBIDDEN_PATTERNS.json",
+    "approved_patterns":"standards/powershell/POWERSHELL_APPROVED_PATTERNS.md",
+    "defect_catalog":"standards/powershell/POWERSHELL_ERROR_CATALOG.json",
+    "runtime_requirements":"standards/powershell/POWERSHELL_RUNTIME_COMPATIBILITY.md",
+    "validation_requirements":["validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json","validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json","validators/powershell/regression/ECTOS_PS51_REGRESSION_CONTRACT_V01.json"],
+    "regression_fixtures":["fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json","fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json"],
+    "handoff_requirements":"standards/powershell/POWERSHELL_5_1_CODING_STANDARD.md#exact-byte-principle"
+  },
+  "pre_generation":["IDENTIFY_TARGET_POWERSHELL_VERSION","IDENTIFY_TARGET_OS","LOAD_CURRENT_GOVERNED_PROFILE","VERIFY_PROFILE_SHA256","LOAD_CURRENT_RULE_SET","VERIFY_RULESET_SHA256","LOAD_FORBIDDEN_PATTERNS","LOAD_APPROVED_PATTERNS","LOAD_HISTORICAL_DEFECT_FAMILIES"],
+  "agent_ruleset_consumption":"MANDATORY",
+  "agent_memory_only":"INSUFFICIENT",
+  "chat_prompt_only":"INSUFFICIENT"
+}

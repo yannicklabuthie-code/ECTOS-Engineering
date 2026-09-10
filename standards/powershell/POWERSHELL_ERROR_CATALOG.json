@@ -1,0 +1,16 @@
+{
+  "catalog_id": "ECTOS_POWERSHELL_DEFECT_FAMILY_CATALOG",
+  "catalog_version": "V01",
+  "families": [
+    {"defect_family_id":"AMBIGUOUS_VARIABLE_REFERENCE_BEFORE_COLON","rule_id":"PS51-R001","source":{"source":"sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md","evidence_id":"RULE_FAMILY_01"},"status":"ACTIVE"},
+    {"defect_family_id":"PS51_INLINE_IF_AS_EXPRESSION","rule_id":"PS51-R002","source":{"source":"sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md","evidence_id":"RULE_FAMILY_02"},"status":"ACTIVE"},
+    {"defect_family_id":"PS51_CONTEXT_SENSITIVE_DEFAULT_PARAMETER_PATH","rule_id":"PS51-R003","source":{"source":"sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md","evidence_id":"RULE_FAMILY_03"},"status":"ACTIVE"},
+    {"defect_family_id":"LONG_PATH_PROTECTED_TREE_RESOLUTION_FAILURE","rule_id":"PS51-R004","source":{"source":"sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md","evidence_id":"RULE_FAMILY_04"},"status":"ACTIVE"},
+    {"defect_family_id":"SELF_REFERENTIAL_STATIC_SCAN_FALSE_POSITIVE","rule_id":"PS51-R005","source":{"source":"sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md","evidence_id":"RULE_FAMILY_05"},"status":"ACTIVE"},
+    {"defect_family_id":"AUTOMATIC_VARIABLE_COLLISION","rule_id":"PS51-R006","source":{"source":"engineering/phase01/regression/regression-corpus-v01.json","evidence_id":"REG-AUTOVAR"},"status":"ACTIVE"},
+    {"defect_family_id":"EMPTY_COLLECTION_BINDING","rule_id":"PS51-R007","source":{"source":"engineering/phase01/regression/regression-corpus-v01.json","evidence_id":"REG-EMPTY-COLLECTION"},"status":"ACTIVE"},
+    {"defect_family_id":"GENERIC_LIST_BINDING","rule_id":"PS51-R008","source":{"source":"engineering/phase01/regression/regression-corpus-v01.json","evidence_id":"REG-GENERIC-LIST"},"status":"ACTIVE"},
+    {"defect_family_id":"ENUM_ARGUMENT_BINDING","rule_id":"PS51-R009","source":{"source":"engineering/phase01/regression/regression-corpus-v01.json","evidence_id":"REG-ENUM"},"status":"ACTIVE"},
+    {"defect_family_id":"STRING_INTERPOLATION_REGEX_BOUNDARY","rule_id":"PS51-R010","source":{"source":"engineering/phase01/regression/regression-corpus-v01.json","evidence_id":"REG-REGEX"},"status":"ACTIVE"}
+  ]
+}

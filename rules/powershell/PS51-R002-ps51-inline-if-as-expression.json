@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R002",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "PS51_INLINE_IF_AS_EXPRESSION",
+  "title": "PowerShell 5.1 inline if used as expression",
+  "description": "Windows PowerShell 5.1 does not support using an if statement as a value-producing inline expression in expression position.",
+  "bad_pattern": {
+    "type": "ast_contract",
+    "pattern": "if_statement_in_expression_context"
+  },
+  "approved_pattern": {
+    "guidance": "Assign the conditional result using a statement block before consuming the value."
+  },
+  "detection_method": {
+    "type": "ast_contract",
+    "pattern": "if_statement_in_expression_context"
+  },
+  "severity": "BLOCKER",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R002",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R002",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md",
+    "evidence_id": "RULE_FAMILY_02"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

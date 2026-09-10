@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R005",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "SELF_REFERENTIAL_STATIC_SCAN_FALSE_POSITIVE",
+  "title": "Self-referential static scan false positive",
+  "description": "A scanner can falsely match its own forbidden-pattern definitions or fixtures when scan scope is not isolated.",
+  "bad_pattern": {
+    "type": "scope_contract",
+    "pattern": "scanner_scope_includes_rule_or_fixture_sources"
+  },
+  "approved_pattern": {
+    "guidance": "Scan only declared product-source roots and exclude rule definitions, detector source, and fixtures unless explicitly testing them."
+  },
+  "detection_method": {
+    "type": "scope_contract",
+    "pattern": "scanner_scope_includes_rule_or_fixture_sources"
+  },
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R005",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R005",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md",
+    "evidence_id": "RULE_FAMILY_05"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

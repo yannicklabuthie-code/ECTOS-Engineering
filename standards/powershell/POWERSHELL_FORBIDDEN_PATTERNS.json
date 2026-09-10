@@ -1,0 +1,17 @@
+{
+  "catalog_id": "ECTOS_POWERSHELL_FORBIDDEN_PATTERNS",
+  "version": "V01",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "patterns": [
+    {"rule_id":"PS51-R001","defect_family_id":"AMBIGUOUS_VARIABLE_REFERENCE_BEFORE_COLON","detection_method":{"type":"regex","pattern":"\\$[A-Za-z_][A-Za-z0-9_]*:"},"build_blocking":true},
+    {"rule_id":"PS51-R002","defect_family_id":"PS51_INLINE_IF_AS_EXPRESSION","detection_method":{"type":"ast_contract","pattern":"if_statement_in_expression_context"},"build_blocking":true},
+    {"rule_id":"PS51-R003","defect_family_id":"PS51_CONTEXT_SENSITIVE_DEFAULT_PARAMETER_PATH","detection_method":{"type":"ast_contract","pattern":"parameter_default_references_PSScriptRoot"},"build_blocking":true},
+    {"rule_id":"PS51-R004","defect_family_id":"LONG_PATH_PROTECTED_TREE_RESOLUTION_FAILURE","detection_method":{"type":"runtime_condition","pattern":"path_enumeration_or_resolution_error"},"build_blocking":true},
+    {"rule_id":"PS51-R005","defect_family_id":"SELF_REFERENTIAL_STATIC_SCAN_FALSE_POSITIVE","detection_method":{"type":"scope_contract","pattern":"scanner_scope_includes_rule_or_fixture_sources"},"build_blocking":true},
+    {"rule_id":"PS51-R006","defect_family_id":"AUTOMATIC_VARIABLE_COLLISION","detection_method":{"type":"ast_contract","pattern":"declared_symbol_matches_automatic_variable"},"build_blocking":true},
+    {"rule_id":"PS51-R007","defect_family_id":"EMPTY_COLLECTION_BINDING","detection_method":{"type":"contract_test","pattern":"empty_collection_binding"},"build_blocking":true},
+    {"rule_id":"PS51-R008","defect_family_id":"GENERIC_LIST_BINDING","detection_method":{"type":"contract_test","pattern":"generic_list_binding"},"build_blocking":true},
+    {"rule_id":"PS51-R009","defect_family_id":"ENUM_ARGUMENT_BINDING","detection_method":{"type":"contract_test","pattern":"enum_argument_binding"},"build_blocking":true},
+    {"rule_id":"PS51-R010","defect_family_id":"STRING_INTERPOLATION_REGEX_BOUNDARY","detection_method":{"type":"contract_test","pattern":"string_interpolation_regex_boundary"},"build_blocking":true}
+  ]
+}

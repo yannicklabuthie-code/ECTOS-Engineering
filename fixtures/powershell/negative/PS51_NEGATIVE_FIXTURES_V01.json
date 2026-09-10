@@ -1,0 +1,15 @@
+{
+  "fixture_catalog_id":"ECTOS_PS51_NEGATIVE_FIXTURES_V01",
+  "cases":[
+    {"fixture_id":"PS51-R001-NEG","rule_id":"PS51-R001","expected":"FAIL","sample":"Write-Output \"$Name:\""},
+    {"fixture_id":"PS51-R002-NEG","rule_id":"PS51-R002","expected":"FAIL","sample":"$value = if ($ok) { \"A\" } else { \"B\" }"},
+    {"fixture_id":"PS51-R003-NEG","rule_id":"PS51-R003","expected":"FAIL","sample":"param([string]$Root = (Join-Path $PSScriptRoot \"data\"))"},
+    {"fixture_id":"PS51-R004-NEG","rule_id":"PS51-R004","expected":"FAIL","sample":"Get-ChildItem -LiteralPath $Root -ErrorAction SilentlyContinue"},
+    {"fixture_id":"PS51-R005-NEG","rule_id":"PS51-R005","expected":"FAIL","sample":"SCAN_SCOPE=REPOSITORY_ROOT"},
+    {"fixture_id":"PS51-R006-NEG","rule_id":"PS51-R006","expected":"FAIL","sample":"$PID = 42"},
+    {"fixture_id":"PS51-R007-NEG","rule_id":"PS51-R007","expected":"FAIL","sample":"$first = $InputItems | Select-Object -First 1"},
+    {"fixture_id":"PS51-R008-NEG","rule_id":"PS51-R008","expected":"FAIL","sample":"Invoke-Target -Items $GenericList"},
+    {"fixture_id":"PS51-R009-NEG","rule_id":"PS51-R009","expected":"FAIL","sample":"$mode = \"Safe\""},
+    {"fixture_id":"PS51-R010-NEG","rule_id":"PS51-R010","expected":"FAIL","sample":"$pattern = \"^$Name:$\""}
+  ]
+}

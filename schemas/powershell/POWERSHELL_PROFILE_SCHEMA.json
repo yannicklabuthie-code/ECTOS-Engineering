@@ -1,0 +1,20 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_POWERSHELL_PROFILE_SCHEMA_V01",
+  "type":"object",
+  "required":["profile_id","profile_version","language","target_os","target_runtime","ruleset_version","ruleset_sha256","profile_sha256_scope","profile_sha256","currentness_state","required_inputs","required_post_generation_gates"],
+  "properties":{
+    "profile_id":{"const":"ECTOS_POWERSHELL_PS51_PROFILE"},
+    "profile_version":{"type":"string"},
+    "language":{"const":"POWERSHELL"},
+    "target_os":{"const":"WINDOWS"},
+    "target_runtime":{"const":"WINDOWS_POWERSHELL_DESKTOP_5_1"},
+    "ruleset_version":{"type":"string"},
+    "ruleset_sha256":{"type":"string","pattern":"^[A-F0-9]{64}$"},
+    "profile_sha256_scope":{"type":"string"},
+    "profile_sha256":{"type":"string","pattern":"^[A-F0-9]{64}$"},
+    "currentness_state":{"enum":["CURRENT","HISTORICAL","SUPERSEDED","PARTIAL","NOT_PROVEN"]},
+    "required_inputs":{"type":"array"},
+    "required_post_generation_gates":{"type":"array"}
+  }
+}

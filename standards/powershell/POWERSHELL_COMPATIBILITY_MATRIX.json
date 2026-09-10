@@ -1,0 +1,14 @@
+{
+  "matrix_id": "ECTOS_POWERSHELL_COMPATIBILITY_MATRIX_V01",
+  "profiles": [
+    {
+      "profile": "ECTOS_POWERSHELL_PS51_PROFILE",
+      "os": "WINDOWS",
+      "psedition": "DESKTOP",
+      "version": "5.1",
+      "native_proof_required": true,
+      "powershell_7_substitution_allowed": false,
+      "non_windows_substitution_allowed": false
+    }
+  ]
+}

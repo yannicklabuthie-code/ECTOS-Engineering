@@ -1,0 +1,7 @@
+{
+  "validator_id":"ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01",
+  "type":"NATIVE_RUNTIME_CONTRACT",
+  "required_environment":{"os":"WINDOWS","psedition":"Desktop","version_prefix":"5.1"},
+  "required_checks":["native_parse_zero_errors","entrypoint_startability_where_applicable","capture_exit_code_stdout_stderr","capture_timeout_and_working_directory","capture_output_sha256_where_applicable"],
+  "substitution":{"powershell_7":false,"non_windows":false}
+}

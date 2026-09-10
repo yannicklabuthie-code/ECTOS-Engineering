@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R003",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "PS51_CONTEXT_SENSITIVE_DEFAULT_PARAMETER_PATH",
+  "title": "Unsafe context-sensitive default parameter/path initialization",
+  "description": "Context-sensitive values such as $PSScriptRoot must not be relied upon in unsafe default parameter initialization constructs.",
+  "bad_pattern": {
+    "type": "ast_contract",
+    "pattern": "parameter_default_references_PSScriptRoot"
+  },
+  "approved_pattern": {
+    "guidance": "Resolve context-sensitive paths inside the executable body after parameter binding."
+  },
+  "detection_method": {
+    "type": "ast_contract",
+    "pattern": "parameter_default_references_PSScriptRoot"
+  },
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R003",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R003",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "sources/powershell/ECTOS_MAIN_AUTHORITY_INITIAL_RULE_FAMILIES_V01.md",
+    "evidence_id": "RULE_FAMILY_03"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

@@ -1,0 +1,33 @@
+{
+  "rule_id": "PS51-R009",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "defect_family_id": "ENUM_ARGUMENT_BINDING",
+  "title": "Enum argument binding defect",
+  "description": "Enum-valued arguments can fail or coerce unexpectedly when the interface contract is ambiguous.",
+  "bad_pattern": {
+    "type": "contract_test",
+    "pattern": "enum_argument_binding"
+  },
+  "approved_pattern": {
+    "guidance": "Use explicit enum types/values and validate accepted and rejected values."
+  },
+  "detection_method": {
+    "type": "contract_test",
+    "pattern": "enum_argument_binding"
+  },
+  "severity": "MEDIUM",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/positive/PS51_POSITIVE_FIXTURES_V01.json#PS51-R009",
+  "negative_fixture": "fixtures/powershell/negative/PS51_NEGATIVE_FIXTURES_V01.json#PS51-R009",
+  "static_detector": "validators/powershell/static/ECTOS_PS51_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/native/ECTOS_PS51_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "historical_source": {
+    "source": "engineering/phase01/regression/regression-corpus-v01.json",
+    "evidence_id": "REG-ENUM"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}
