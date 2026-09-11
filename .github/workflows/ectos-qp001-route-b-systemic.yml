@@ -1,0 +1,126 @@
+name: ECTOS QP001 Route B Systemic Remediation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ectos-qp001-route-b-systemic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  qp001_route_b_systemic_prerun:
+    name: ectos/qp001-route-b-systemic-prerun
+    if: github.head_ref == 'qp001-route-b-exact-windows-evidence-v01'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact PR/tested bytes
+        uses: actions/checkout@v4
+      - name: Decode exact systemic candidate bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/qp001-systemic-root/.github/workflows" "${RUNNER_TEMP}/qp001-prerun"
+          python - <<'PY2'
+          import base64, pathlib, zipfile
+          parts=sorted(pathlib.Path('phase2/ci').glob('qp001-route-b-systemic-candidate-v01.zip.b64.part*'))
+          assert parts
+          data=''.join(''.join(p.read_text(encoding='ascii').split()) for p in parts)
+          zpath=pathlib.Path(__import__('os').environ['RUNNER_TEMP'])/'qp001-systemic-candidate.zip'
+          zpath.write_bytes(base64.b64decode(data, validate=True))
+          root=pathlib.Path(__import__('os').environ['RUNNER_TEMP'])/'qp001-systemic-root'
+          with zipfile.ZipFile(zpath) as z:
+              assert z.testzip() is None
+              z.extractall(root)
+          PY2
+          cp .github/workflows/ectos-qp001-route-b-systemic.yml "${RUNNER_TEMP}/qp001-systemic-root/.github/workflows/ectos-qp001-route-b-systemic.yml"
+      - name: Systemic pre-run gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="${RUNNER_TEMP}/qp001-systemic-root"
+          python -m py_compile \
+            "$ROOT/phase2/ci/scripts/Rehydrate-ECTOSQP001RouteBTargets.py" \
+            "$ROOT/phase2/ci/scripts/Capture-ECTOSQP001WindowsEvidence.py" \
+            "$ROOT/phase2/ci/scripts/Test-ECTOSExactTargetWindowsAssurance.py" \
+            "$ROOT/phase2/ci/scripts/Preflight-ECTOSQP001RouteBSystemic.py"
+          python "$ROOT/phase2/ci/scripts/Preflight-ECTOSQP001RouteBSystemic.py" \
+            --repo-root "$ROOT" --results-root "${RUNNER_TEMP}/qp001-prerun"
+          python "$ROOT/phase2/ci/scripts/Test-ECTOSExactTargetWindowsAssurance.py" \
+            --repo-root "$ROOT" --output "${RUNNER_TEMP}/qp001-prerun/RB_D01_D14_SYSTEMIC_REGRESSION.json"
+      - name: Upload systemic pre-run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-qp001-route-b-prerun-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/qp001-prerun
+          retention-days: 30
+          if-no-files-found: error
+
+  qp001_route_b_windows_capture:
+    name: ectos/qp001-route-b-windows-capture
+    needs: qp001_route_b_systemic_prerun
+    if: needs.qp001_route_b_systemic_prerun.result == 'success'
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 40
+    steps:
+      - name: Checkout exact PR/tested bytes
+        uses: actions/checkout@v4
+      - name: Decode exact systemic candidate bundle
+        shell: cmd
+        run: >-
+          python -c "import base64,pathlib,zipfile,os; ps=sorted(pathlib.Path(r'phase2/ci').glob('qp001-route-b-systemic-candidate-v01.zip.b64.part*')); assert ps; d=''.join(''.join(p.read_text(encoding='ascii').split()) for p in ps); z=pathlib.Path(os.environ['RUNNER_TEMP'])/'qp001-systemic-candidate.zip'; z.write_bytes(base64.b64decode(d,validate=True)); r=pathlib.Path(os.environ['RUNNER_TEMP'])/'qp001-systemic-root'; r.mkdir(parents=True,exist_ok=True); q=zipfile.ZipFile(z); assert q.testzip() is None; q.extractall(r)"
+      - name: Rehydrate exact bound QP-001 artifacts
+        shell: cmd
+        run: >-
+          python "%RUNNER_TEMP%\qp001-systemic-root\phase2\ci\scripts\Rehydrate-ECTOSQP001RouteBTargets.py"
+          --output-root "%RUNNER_TEMP%\qp001-route-b-targets"
+          --evidence-root "%RUNNER_TEMP%\qp001-route-b-evidence\materialization"
+      - name: Capture exact QP-001 Windows evidence
+        shell: cmd
+        run: >-
+          python "%RUNNER_TEMP%\qp001-systemic-root\phase2\ci\scripts\Capture-ECTOSQP001WindowsEvidence.py"
+          --target-package "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_TRUST_ROOT_RUNNER_V02_FULL_SYSTEMIC_CLOSURE_RETURN_V01R1.zip"
+          --target-package-sha256 7E68F411D5D1B97B6236F894D8701083CE6F26987353E147DD1F1DF9E70652AD
+          --target-entrypoint 03_TRUST_ROOT_MATERIALIZATION_RUNNER_V02.py
+          --target-entrypoint-sha256 FA131133356698BCF93C37EF3BB647047AE8F46AC76647D1947CCEBEAF36A383
+          --validator-return "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_OPTION_B_V04_SPECIALIZED_VALIDATOR_CANDIDATE_V03_ENGINEERING_RETURN_V01.zip"
+          --validator-return-sha256 A296315798FDB6FDF3A76887C27D547BD5D1BF49F8DF5E2E3D07687A33A673F5
+          --workflow-path ".github\workflows\ectos-qp001-route-b-systemic.yml"
+          --results-root "%RUNNER_TEMP%\qp001-route-b-evidence\capture"
+          --base-sha "${{ github.event.pull_request.base.sha }}"
+          --pr-head-sha "${{ github.event.pull_request.head.sha }}"
+          --tested-sha "${{ github.sha }}"
+          --rfc8785-vector-file "%RUNNER_TEMP%\qp001-systemic-root\phase2\ci\fixtures\RFC8785_RFC_EDITOR_CONFORMANCE_V01.json"
+          --ed25519-vector-file "%RUNNER_TEMP%\qp001-systemic-root\phase2\ci\fixtures\ED25519_RFC8032_TEST_VECTOR_V01.json"
+      - name: Upload QP-001 Route B physical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-qp001-route-b-systemic-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/qp001-route-b-evidence
+          retention-days: 30
+          if-no-files-found: error
+
+  qp001_route_b_required_checks:
+    name: ectos/qp001-route-b-required-checks
+    needs: [qp001_route_b_systemic_prerun, qp001_route_b_windows_capture]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aggregate Route B required checks
+        shell: python
+        env:
+          PRERUN_RESULT: ${{ needs.qp001_route_b_systemic_prerun.result }}
+          WINDOWS_RESULT: ${{ needs.qp001_route_b_windows_capture.result }}
+        run: |
+          import json, os
+          state={"schema_id":"ECTOS_QP001_ROUTE_B_REQUIRED_CHECK_AGGREGATION_V01","prerun_result":os.environ["PRERUN_RESULT"],"windows_result":os.environ["WINDOWS_RESULT"]}
+          state["overall"]="PASS" if state["prerun_result"]=="success" and state["windows_result"]=="success" else "FAIL"
+          print(json.dumps(state,indent=2))
+          if state["overall"]!="PASS": raise SystemExit(1)
