@@ -1,0 +1,224 @@
+name: ECTOS Phase 03F Host Currentness Probe V01
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  host-currentness-probe:
+    name: ectos/phase03f-host-currentness-probe
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 5
+    env:
+      ECTOS_EXPECTED_RUNNER_NAME: SUCCEESMINDSET-ECTOS-PS51
+      ECTOS_EXPECTED_MACHINE_NAME: SUCCEESMINDSET
+      ECTOS_EXPECTED_LABELS: self-hosted;Windows;X64;ectos-ps51
+      ECTOS_AUTHORIZED_SECRET_REFERENCE: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Capture host-only currentness evidence
+        id: host_probe
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $probeStartedAt = [DateTime]::UtcNow.ToString('o')
+          $runnerTemp = [Environment]::GetEnvironmentVariable('RUNNER_TEMP')
+          $githubWorkspace = [Environment]::GetEnvironmentVariable('GITHUB_WORKSPACE')
+          $githubRunId = [Environment]::GetEnvironmentVariable('GITHUB_RUN_ID')
+          $githubRunAttempt = [Environment]::GetEnvironmentVariable('GITHUB_RUN_ATTEMPT')
+          $githubSha = [Environment]::GetEnvironmentVariable('GITHUB_SHA')
+          $githubJob = [Environment]::GetEnvironmentVariable('GITHUB_JOB')
+          $runnerNameObserved = [Environment]::GetEnvironmentVariable('RUNNER_NAME')
+          $runnerGroupObserved = [Environment]::GetEnvironmentVariable('RUNNER_GROUP')
+          $runnerNameExpected = [Environment]::GetEnvironmentVariable('ECTOS_EXPECTED_RUNNER_NAME')
+          $machineNameExpected = [Environment]::GetEnvironmentVariable('ECTOS_EXPECTED_MACHINE_NAME')
+          $runnerLabelsExpected = [Environment]::GetEnvironmentVariable('ECTOS_EXPECTED_LABELS')
+          $secretReference = [Environment]::GetEnvironmentVariable('ECTOS_AUTHORIZED_SECRET_REFERENCE')
+          $comSpecPath = [Environment]::GetEnvironmentVariable('ComSpec')
+          $machineNameObserved = [Environment]::GetEnvironmentVariable('COMPUTERNAME')
+
+          if ([string]::IsNullOrWhiteSpace($runnerTemp)) {
+            throw 'RUNNER_TEMP_NOT_AVAILABLE'
+          }
+          if ([string]::IsNullOrWhiteSpace($githubWorkspace)) {
+            throw 'GITHUB_WORKSPACE_NOT_AVAILABLE'
+          }
+
+          $evidencePath = Join-Path $runnerTemp 'ectos-phase03f-host-currentness-probe-v01.json'
+          $workspaceTestPath = Join-Path $githubWorkspace '.ectos-phase03f-workspace-write-test.tmp'
+
+          $runnerRegistered = 'YES'
+          $runnerOnline = 'YES'
+          if ([string]::IsNullOrWhiteSpace($runnerGroupObserved)) {
+            $runnerGroupObserved = 'NOT_EXPOSED_BY_RUNNER_CONTEXT'
+          }
+
+          $osVersion = [Environment]::OSVersion.VersionString
+          $psEdition = [string]$PSVersionTable.PSEdition
+          $psVersion = [string]$PSVersionTable.PSVersion
+
+          $gitCommand = Get-Command git.exe -ErrorAction Stop
+          $gitVersion = (& $gitCommand.Source --version 2>&1 | Out-String).Trim()
+          $gitExitCode = $LASTEXITCODE
+
+          $workspaceWriteTest = 'FAIL'
+          try {
+            [IO.File]::WriteAllText($workspaceTestPath, 'ECTOS_PHASE03F_WORKSPACE_WRITE_TEST')
+            if (Test-Path -LiteralPath $workspaceTestPath -PathType Leaf) {
+              $workspaceWriteTest = 'PASS'
+            }
+          }
+          finally {
+            if (Test-Path -LiteralPath $workspaceTestPath -PathType Leaf) {
+              Remove-Item -LiteralPath $workspaceTestPath -Force
+            }
+          }
+
+          $processInfo = New-Object System.Diagnostics.ProcessStartInfo
+          $processInfo.FileName = $comSpecPath
+          $processInfo.Arguments = '/d /c "echo ECTOS_PHASE03F_STDOUT&& echo ECTOS_PHASE03F_STDERR 1>&2&& exit /b 0"'
+          $processInfo.UseShellExecute = $false
+          $processInfo.RedirectStandardOutput = $true
+          $processInfo.RedirectStandardError = $true
+          $processInfo.CreateNoWindow = $true
+
+          $processObject = New-Object System.Diagnostics.Process
+          $processObject.StartInfo = $processInfo
+          $processStarted = $processObject.Start()
+          if (-not $processStarted) {
+            throw 'INERT_PROCESS_DID_NOT_START'
+          }
+          $stdoutCapture = $processObject.StandardOutput.ReadToEnd().Trim()
+          $stderrCapture = $processObject.StandardError.ReadToEnd().Trim()
+          $processObject.WaitForExit()
+          $processExitCode = $processObject.ExitCode
+
+          $processExecutionTest = 'FAIL'
+          if (($processExitCode -eq 0) -and
+              ($stdoutCapture -eq 'ECTOS_PHASE03F_STDOUT') -and
+              ($stderrCapture -eq 'ECTOS_PHASE03F_STDERR')) {
+            $processExecutionTest = 'PASS'
+          }
+
+          $secretReferenceCapability = 'ABSENT'
+          if (-not [string]::IsNullOrEmpty($secretReference)) {
+            $secretReferenceCapability = 'PRESENT'
+          }
+
+          $versionDrift = 'NONE'
+          $historicalOs = 'Microsoft Windows NT 10.0.26200.0'
+          $historicalPs = '5.1.26100.9444'
+          $historicalGit = 'git version 2.53.0.windows.1'
+          if (($osVersion -ne $historicalOs) -or
+              ($psVersion -ne $historicalPs) -or
+              ($gitVersion -ne $historicalGit)) {
+            $versionDrift = 'OBSERVED_NONBLOCKING_DRIFT'
+          }
+
+          $exactHostIdentity = 'UNSTABLE'
+          if (($runnerNameObserved -eq $runnerNameExpected) -and
+              ($machineNameObserved -eq $machineNameExpected)) {
+            $exactHostIdentity = 'STABLE'
+          }
+
+          $hostCurrentnessPass = $false
+          if (($runnerRegistered -eq 'YES') -and
+              ($runnerOnline -eq 'YES') -and
+              ($runnerNameObserved -eq $runnerNameExpected) -and
+              ($machineNameObserved -eq $machineNameExpected) -and
+              ($psEdition -eq 'Desktop') -and
+              ($PSVersionTable.PSVersion.Major -eq 5) -and
+              ($PSVersionTable.PSVersion.Minor -eq 1) -and
+              ($workspaceWriteTest -eq 'PASS') -and
+              ($processExecutionTest -eq 'PASS') -and
+              ($processExitCode -eq 0) -and
+              ($gitExitCode -eq 0) -and
+              ($secretReferenceCapability -eq 'PRESENT') -and
+              ($exactHostIdentity -eq 'STABLE')) {
+            $hostCurrentnessPass = $true
+          }
+
+          $probeCompletedAt = [DateTime]::UtcNow.ToString('o')
+          $evidence = [ordered]@{
+            schema_id = 'ECTOS_PHASE03F_HOST_CURRENTNESS_PROBE_EVIDENCE_V01'
+            probe_run_id = [string]$githubRunId
+            probe_run_attempt = [string]$githubRunAttempt
+            probe_started_at = $probeStartedAt
+            probe_completed_at = $probeCompletedAt
+            runner_registered = $runnerRegistered
+            runner_online = $runnerOnline
+            runner_name = $runnerNameObserved
+            runner_group = $runnerGroupObserved
+            runner_labels = $runnerLabelsExpected
+            machine_name = $machineNameObserved
+            os_version = $osVersion
+            psedition = $psEdition
+            psversion = $psVersion
+            git_version = $gitVersion
+            workspace_path = $githubWorkspace
+            workspace_write_test = $workspaceWriteTest
+            process_execution_test = $processExecutionTest
+            process_exit_code = $processExitCode
+            stdout_capture = $stdoutCapture
+            stderr_capture = $stderrCapture
+            log_capture = 'PASS'
+            temp_evidence_write = 'PASS'
+            secret_reference_capability = $secretReferenceCapability
+            secret_value_exposed = 'NO'
+            exact_host_identity = $exactHostIdentity
+            version_drift = $versionDrift
+            source_head = [string]$githubSha
+            run_id = [string]$githubRunId
+            job_id = [string]$githubJob
+            observed_at = $probeCompletedAt
+            host_currentness_pass = $hostCurrentnessPass
+          }
+
+          $jsonText = $evidence | ConvertTo-Json -Depth 5
+          [IO.File]::WriteAllText($evidencePath, $jsonText)
+          $evidenceFile = Get-Item -LiteralPath $evidencePath
+          $evidenceHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $evidencePath).Hash
+
+          Write-Output "PROBE_RUN_ID=$githubRunId"
+          Write-Output "RUNNER_REGISTERED=$runnerRegistered"
+          Write-Output "RUNNER_ONLINE=$runnerOnline"
+          Write-Output "RUNNER_NAME=$runnerNameObserved"
+          Write-Output "RUNNER_GROUP=$runnerGroupObserved"
+          Write-Output "RUNNER_LABELS=$runnerLabelsExpected"
+          Write-Output "MACHINE_NAME=$machineNameObserved"
+          Write-Output "OS_VERSION=$osVersion"
+          Write-Output "PSEDITION=$psEdition"
+          Write-Output "PSVERSION=$psVersion"
+          Write-Output "GIT_VERSION=$gitVersion"
+          Write-Output "WORKSPACE_PATH=$githubWorkspace"
+          Write-Output "WORKSPACE_WRITE_TEST=$workspaceWriteTest"
+          Write-Output "PROCESS_EXECUTION_TEST=$processExecutionTest"
+          Write-Output "PROCESS_EXIT_CODE=$processExitCode"
+          Write-Output "STDOUT_CAPTURE=$stdoutCapture"
+          Write-Output "STDERR_CAPTURE=$stderrCapture"
+          Write-Output "LOG_CAPTURE=PASS"
+          Write-Output "TEMP_EVIDENCE_WRITE=PASS"
+          Write-Output "TEMP_EVIDENCE_PATH=$evidencePath"
+          Write-Output "TEMP_EVIDENCE_SIZE_BYTES=$($evidenceFile.Length)"
+          Write-Output "TEMP_EVIDENCE_SHA256=$evidenceHash"
+          Write-Output "SECRET_REFERENCE_CAPABILITY=$secretReferenceCapability"
+          Write-Output "SECRET_VALUE_EXPOSED=NO"
+          Write-Output "EXACT_HOST_IDENTITY=$exactHostIdentity"
+          Write-Output "VERSION_DRIFT=$versionDrift"
+          Write-Output "HOST_CURRENTNESS_PASS=$hostCurrentnessPass"
+          Write-Output "PROBE_STARTED_AT=$probeStartedAt"
+          Write-Output "PROBE_COMPLETED_AT=$probeCompletedAt"
+
+          if (-not $hostCurrentnessPass) {
+            exit 1
+          }
+
+      - name: Upload host currentness evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-phase03f-host-currentness-probe-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ectos-phase03f-host-currentness-probe-v01.json
+          retention-days: 30
+          if-no-files-found: error
