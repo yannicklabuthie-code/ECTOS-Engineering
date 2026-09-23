@@ -1,0 +1,61 @@
+name: ECTOS Phase 03H Successor Native PS51 Assurance V01
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  successor-native-ps51-assurance:
+    name: ectos/phase03h-successor-native-ps51-assurance
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout exact assurance branch
+        uses: actions/checkout@v4
+
+      - name: Bind preexisting tool cache read-only
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $cache = 'C:\ECTOS_TOOLCACHE'
+          if (Test-Path -LiteralPath $cache -PathType Container) {
+            $env:PSModulePath = $cache + [IO.Path]::PathSeparator + $env:PSModulePath
+          }
+          if ($PSVersionTable.PSEdition -ne 'Desktop') {
+            throw 'BLOCKED_PSEDITION_NOT_DESKTOP'
+          }
+          if (($PSVersionTable.PSVersion.Major -ne 5) -or ($PSVersionTable.PSVersion.Minor -ne 1)) {
+            throw 'BLOCKED_WINDOWS_POWERSHELL_5_1_REQUIRED'
+          }
+          $module = @(Get-Module -ListAvailable -Name PSScriptAnalyzer | Where-Object { $_.Version -eq [version]'1.25.0' })
+          if ($module.Count -lt 1) {
+            throw 'BLOCKED_PSSCRIPTANALYZER_1_25_0_NOT_PRESENT'
+          }
+          Write-Output "PREEXISTING_TOOL_CACHE_READ_ONLY=YES"
+          Write-Output "PSSCRIPTANALYZER_VERSION=$($module[0].Version)"
+
+      - name: Execute bounded successor assurance harness
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $cache = 'C:\ECTOS_TOOLCACHE'
+          if (Test-Path -LiteralPath $cache -PathType Container) {
+            $env:PSModulePath = $cache + [IO.Path]::PathSeparator + $env:PSModulePath
+          }
+          & '.\engineering\phase03h\assurance\Invoke-Phase03HSuccessorAssuranceV01.ps1'
+          if ($LASTEXITCODE -ne 0) {
+            throw "BLOCKED_ASSURANCE_HARNESS_EXIT=$LASTEXITCODE"
+          }
+
+      - name: Upload assurance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-phase03h-successor-assurance-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ECTOS_PHASE03H_SUCCESSOR_ASSURANCE_V01.json
+          retention-days: 30
+          if-no-files-found: error
