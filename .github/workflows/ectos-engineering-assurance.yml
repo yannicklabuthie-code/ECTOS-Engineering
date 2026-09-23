@@ -334,3 +334,73 @@ jobs:
           path: engineering/phase01/fixtures/sample-package
           retention-days: 30
           if-no-files-found: error
+
+  qp001_route_b_windows_capture:
+    name: ectos/qp001-route-b-windows-capture
+    if: github.event_name == 'pull_request' && github.head_ref == 'qp001-route-b-exact-windows-evidence-v01'
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 40
+    steps:
+      - name: Checkout exact PR bytes
+        uses: actions/checkout@v4
+
+      - name: Static Python syntax validation
+        shell: cmd
+        run: >-
+          python -m py_compile
+          phase2\ci\scripts\Rehydrate-ECTOSQP001RouteBTargets.py
+          phase2\ci\scripts\Capture-ECTOSQP001WindowsEvidence.py
+          phase2\ci\scripts\Test-ECTOSExactTargetWindowsAssurance.py
+
+      - name: Rehydrate exact bound QP-001 artifacts
+        shell: cmd
+        run: >-
+          python phase2\ci\scripts\Rehydrate-ECTOSQP001RouteBTargets.py
+          --output-root "%RUNNER_TEMP%\qp001-route-b-targets"
+
+      - name: Wrong package hash must fail closed
+        shell: cmd
+        run: |
+          python phase2\ci\scripts\Capture-ECTOSQP001WindowsEvidence.py --target-package "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_TRUST_ROOT_RUNNER_V02_FULL_SYSTEMIC_CLOSURE_RETURN_V01R1.zip" --target-package-sha256 0000000000000000000000000000000000000000000000000000000000000000 --target-entrypoint 03_TRUST_ROOT_MATERIALIZATION_RUNNER_V02.py --target-entrypoint-sha256 FA131133356698BCF93C37EF3BB647047AE8F46AC76647D1947CCEBEAF36A383 --validator-return "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_OPTION_B_V04_SPECIALIZED_VALIDATOR_CANDIDATE_V03_ENGINEERING_RETURN_V01.zip" --validator-return-sha256 A296315798FDB6FDF3A76887C27D547BD5D1BF49F8DF5E2E3D07687A33A673F5 --workflow-path ".github\workflows\ectos-engineering-assurance.yml" --results-root "%RUNNER_TEMP%\qp001-neg-package"
+          if %ERRORLEVEL% EQU 0 exit /b 91
+          exit /b 0
+
+      - name: Wrong validator hash must fail closed
+        shell: cmd
+        run: |
+          python phase2\ci\scripts\Capture-ECTOSQP001WindowsEvidence.py --target-package "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_TRUST_ROOT_RUNNER_V02_FULL_SYSTEMIC_CLOSURE_RETURN_V01R1.zip" --target-package-sha256 7E68F411D5D1B97B6236F894D8701083CE6F26987353E147DD1F1DF9E70652AD --target-entrypoint 03_TRUST_ROOT_MATERIALIZATION_RUNNER_V02.py --target-entrypoint-sha256 FA131133356698BCF93C37EF3BB647047AE8F46AC76647D1947CCEBEAF36A383 --validator-return "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_OPTION_B_V04_SPECIALIZED_VALIDATOR_CANDIDATE_V03_ENGINEERING_RETURN_V01.zip" --validator-return-sha256 0000000000000000000000000000000000000000000000000000000000000000 --workflow-path ".github\workflows\ectos-engineering-assurance.yml" --results-root "%RUNNER_TEMP%\qp001-neg-validator"
+          if %ERRORLEVEL% EQU 0 exit /b 92
+          exit /b 0
+
+      - name: Wrong entrypoint hash must fail closed
+        shell: cmd
+        run: |
+          python phase2\ci\scripts\Capture-ECTOSQP001WindowsEvidence.py --target-package "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_TRUST_ROOT_RUNNER_V02_FULL_SYSTEMIC_CLOSURE_RETURN_V01R1.zip" --target-package-sha256 7E68F411D5D1B97B6236F894D8701083CE6F26987353E147DD1F1DF9E70652AD --target-entrypoint 03_TRUST_ROOT_MATERIALIZATION_RUNNER_V02.py --target-entrypoint-sha256 0000000000000000000000000000000000000000000000000000000000000000 --validator-return "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_OPTION_B_V04_SPECIALIZED_VALIDATOR_CANDIDATE_V03_ENGINEERING_RETURN_V01.zip" --validator-return-sha256 A296315798FDB6FDF3A76887C27D547BD5D1BF49F8DF5E2E3D07687A33A673F5 --workflow-path ".github\workflows\ectos-engineering-assurance.yml" --results-root "%RUNNER_TEMP%\qp001-neg-entrypoint"
+          if %ERRORLEVEL% EQU 0 exit /b 93
+          exit /b 0
+
+      - name: Capture exact QP-001 Windows evidence read-only
+        shell: cmd
+        run: >-
+          python phase2\ci\scripts\Capture-ECTOSQP001WindowsEvidence.py
+          --target-package "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_TRUST_ROOT_RUNNER_V02_FULL_SYSTEMIC_CLOSURE_RETURN_V01R1.zip"
+          --target-package-sha256 7E68F411D5D1B97B6236F894D8701083CE6F26987353E147DD1F1DF9E70652AD
+          --target-entrypoint 03_TRUST_ROOT_MATERIALIZATION_RUNNER_V02.py
+          --target-entrypoint-sha256 FA131133356698BCF93C37EF3BB647047AE8F46AC76647D1947CCEBEAF36A383
+          --validator-return "%RUNNER_TEMP%\qp001-route-b-targets\ECTOS_QP001_OPTION_B_V04_SPECIALIZED_VALIDATOR_CANDIDATE_V03_ENGINEERING_RETURN_V01.zip"
+          --validator-return-sha256 A296315798FDB6FDF3A76887C27D547BD5D1BF49F8DF5E2E3D07687A33A673F5
+          --workflow-path ".github\workflows\ectos-engineering-assurance.yml"
+          --results-root "%RUNNER_TEMP%\qp001-route-b-evidence"
+
+      - name: Upload QP-001 Route B physical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-qp001-route-b-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/qp001-route-b-evidence
+            ${{ runner.temp }}/qp001-neg-package
+            ${{ runner.temp }}/qp001-neg-validator
+            ${{ runner.temp }}/qp001-neg-entrypoint
+          retention-days: 30
+          if-no-files-found: error
