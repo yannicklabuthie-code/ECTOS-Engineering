@@ -23,7 +23,8 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $cache = 'C:\ECTOS_TOOLCACHE'
           if (Test-Path -LiteralPath $cache -PathType Container) {
-            $env:PSModulePath = $cache + [IO.Path]::PathSeparator + $env:PSModulePath
+            $currentModulePath = [Environment]::GetEnvironmentVariable('PSModulePath')
+            [Environment]::SetEnvironmentVariable('PSModulePath', ($cache + [IO.Path]::PathSeparator + $currentModulePath), 'Process')
           }
           if ($PSVersionTable.PSEdition -ne 'Desktop') {
             throw 'BLOCKED_PSEDITION_NOT_DESKTOP'
@@ -44,7 +45,8 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $cache = 'C:\ECTOS_TOOLCACHE'
           if (Test-Path -LiteralPath $cache -PathType Container) {
-            $env:PSModulePath = $cache + [IO.Path]::PathSeparator + $env:PSModulePath
+            $currentModulePath = [Environment]::GetEnvironmentVariable('PSModulePath')
+            [Environment]::SetEnvironmentVariable('PSModulePath', ($cache + [IO.Path]::PathSeparator + $currentModulePath), 'Process')
           }
           & '.\engineering\phase03h\assurance\Invoke-Phase03HSuccessorAssuranceV01.ps1'
           if ($LASTEXITCODE -ne 0) {
