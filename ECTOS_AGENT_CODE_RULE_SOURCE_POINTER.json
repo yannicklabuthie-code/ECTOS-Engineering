@@ -1,0 +1,6 @@
+{
+  "pointer_id": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER",
+  "status": "CURRENT_SELECTOR",
+  "current_pointer": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json",
+  "currentness_rule": "CURRENTNESS_IS_RESOLVED_BY_THIS_SELECTOR; predecessor embedded status is historical metadata and does not override this selector"
+}
