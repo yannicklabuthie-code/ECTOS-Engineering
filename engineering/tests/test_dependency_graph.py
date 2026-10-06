@@ -35,4 +35,15 @@ class DependencyGraphTests(unittest.TestCase):
             out=aggregate_graphs([p],"ECTOS_DEV")
             self.assertEqual(out["status"],"PASS"); self.assertEqual(out["package_count"],1)
 
+
+    def test_aggregate_keeps_failed_package_visible(self):
+        g=valid_graph(); g["closure"]["undeclared_dependency_count"]=1
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"failed.json"; p.write_text(json.dumps(g),encoding="utf-8")
+            out=aggregate_graphs([p],"ECTOS_DEV")
+        self.assertEqual(out["status"],"FAIL")
+        self.assertEqual(out["package_count"],1)
+        self.assertEqual(out["packages"][0]["dependency_graph_status"],"FAIL")
+        self.assertGreater(len(out["nodes"]),0)
+
 if __name__ == "__main__": unittest.main()

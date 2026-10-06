@@ -66,12 +66,19 @@ def aggregate_graphs(paths: list[Path], environment: str) -> dict[str, Any]:
     results=[]; packages=[]; nodes=[]; edges=[]
     for path in paths:
         graph=load_graph(path); result=validate_graph(graph); results.append({"path":str(path),**result})
-        if result["status"] != "PASS": continue
-        pkg=graph["package"]; packages.append(pkg); prefix=pkg["package_id"]+"::"
-        for node in graph["nodes"]:
-            n=dict(node); n["dependency_id"]=prefix+node["dependency_id"]; nodes.append(n)
-        for edge in graph["edges"]:
-            e=dict(edge); e["edge_id"]=prefix+edge["edge_id"]; e["from"]=prefix+edge["from"]; e["to"]=prefix+edge["to"]; edges.append(e)
+        pkg=graph.get("package") if isinstance(graph.get("package"),dict) else {}
+        if pkg:
+            pkg_view=dict(pkg); pkg_view["dependency_graph_status"]=result["status"]; packages.append(pkg_view)
+            prefix=(pkg.get("package_id") or path.stem)+"::"
+            for node in graph.get("nodes",[]):
+                if isinstance(node,dict) and node.get("dependency_id"):
+                    n=dict(node); n["dependency_id"]=prefix+node["dependency_id"]; nodes.append(n)
+            for edge in graph.get("edges",[]):
+                if isinstance(edge,dict) and edge.get("edge_id"):
+                    e=dict(edge); e["edge_id"]=prefix+edge["edge_id"]
+                    if edge.get("from"): e["from"]=prefix+edge["from"]
+                    if edge.get("to"): e["to"]=prefix+edge["to"]
+                    edges.append(e)
     return {"schema_id":"ECTOS_ENVIRONMENT_DEPENDENCY_GRAPH_V01","environment":environment,"package_count":len(packages),"package_validation_results":results,"packages":packages,"nodes":nodes,"edges":edges,"status":"PASS" if results and all(x["status"]=="PASS" for x in results) else "FAIL"}
 
 def main() -> int:
