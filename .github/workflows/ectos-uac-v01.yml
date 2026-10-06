@@ -27,6 +27,9 @@ jobs:
       - name: Run UAC regression suite
         run: python -m unittest discover -s uac/tests -v
 
+      - name: Run final systemic closure and bypass scan
+        run: python uac/systemic_closure.py
+
       - name: Prove default-deny registry
         shell: python
         run: |
