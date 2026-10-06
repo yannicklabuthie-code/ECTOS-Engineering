@@ -1,0 +1,28 @@
+{
+  "schema_id": "ECTOS_UAC_FUTURE_ACTOR_REGISTRATION_V01",
+  "default_new_actor_state": "DENY",
+  "default_new_repository_state": "DENY",
+  "canonical_admission_authority_repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "canonical_handoff_state": "PACKAGE_READY_FOR_HANDOFF",
+  "requirements_before_handoff": [
+    "ACTOR_REGISTERED_AND_ENABLED",
+    "SOURCE_REPOSITORY_REGISTERED_AND_ENABLED",
+    "ACTOR_BOUND_TO_SOURCE_REPOSITORY",
+    "ROUTE_REGISTERED_AND_ENABLED",
+    "QUALIFICATION_PASS",
+    "SYSTEMIC_ASSURANCE_PASS",
+    "NEGATIVE_CONTROLS_PASS",
+    "CIRCUIT_BREAKER_CLEAR",
+    "SIGNED_UAC_RECEIPT"
+  ],
+  "unregistered_actor_result": "DENY",
+  "unregistered_repository_result": "DENY",
+  "repository_actor_mismatch_result": "DENY",
+  "self_registration_allowed": false,
+  "self_admission_allowed": false,
+  "signing_key_distribution": "CENTRAL_ONLY_DO_NOT_COPY_TO_PRODUCER_REPOSITORIES",
+  "direct_producer_handoff_allowed": false,
+  "canonical_signing_execution_repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "new_repository_activation": "CENTRAL_REGISTRY_CHANGE_VIA_PROTECTED_PR_REQUIRED",
+  "new_actor_activation": "CENTRAL_REGISTRY_CHANGE_VIA_PROTECTED_PR_REQUIRED"
+}
