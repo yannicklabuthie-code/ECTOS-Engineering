@@ -248,6 +248,19 @@ jobs:
           assert str(edition).lower()=='desktop', x
           assert str(version).startswith('5.1'), x
 
+  uac_admission:
+    name: ectos/uac-admission
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run mandatory UAC admission controls
+        run: python -m unittest discover -s uac/tests -v
+
   ci_required_checks:
     name: ectos/ci-required-checks
     needs:
@@ -262,6 +275,7 @@ jobs:
       - hash_provenance
       - state_collision
       - native_ps51
+      - uac_admission
     if: always()
     runs-on: [self-hosted, Windows, X64, ectos-ps51]
     steps:
@@ -288,6 +302,7 @@ jobs:
             'ectos/hash-provenance'='${{ needs.hash_provenance.result }}'
             'ectos/state-collision'='${{ needs.state_collision.result }}'
             'ectos/native-ps51'='${{ needs.native_ps51.result }}'
+            'ectos/uac-admission'='${{ needs.uac_admission.result }}'
           }
           $ok=$true
           foreach($k in $states.Keys){
