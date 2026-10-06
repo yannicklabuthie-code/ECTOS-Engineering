@@ -1,0 +1,21 @@
+{
+  "schema_id": "ECTOS_GITHUB_GOVERNANCE_CONTRACT_V01",
+  "repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "ruleset_id": 22774725,
+  "ruleset_name": "Main",
+  "target": "branch",
+  "enforcement": "active",
+  "required_ref_include": [
+    "~DEFAULT_BRANCH"
+  ],
+  "required_status_check": "ectos/ci-required-checks",
+  "strict_required_status_checks_policy": true,
+  "required_rule_types": [
+    "pull_request",
+    "required_status_checks",
+    "non_fast_forward",
+    "deletion"
+  ],
+  "required_bypass_actor_count": 0,
+  "current_user_can_bypass_if_present": "never"
+}

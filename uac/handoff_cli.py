@@ -27,6 +27,7 @@ def main() -> int:
     issue.add_argument("--request", required=True)
     issue.add_argument("--output-dir", required=True)
     issue.add_argument("--commit-sha", required=True)
+    issue.add_argument("--governance-attestation", required=True)
     issue.add_argument("--signing-key-env", default="ECTOS_UAC_SIGNING_KEY")
 
     verify = sub.add_parser("verify")
@@ -34,6 +35,7 @@ def main() -> int:
     verify.add_argument("--manifest", required=True)
     verify.add_argument("--descriptor", required=True)
     verify.add_argument("--receipt", required=True)
+    verify.add_argument("--governance-attestation", required=True)
     verify.add_argument("--expected-commit-sha")
     verify.add_argument("--signing-key-env", default="ECTOS_UAC_SIGNING_KEY")
 
@@ -43,12 +45,12 @@ def main() -> int:
         if args.command == "issue":
             result = materialize_handoff(
                 Path(args.package), Path(args.manifest), Path(args.request),
-                Path(args.output_dir), key, args.commit_sha,
+                Path(args.output_dir), key, args.commit_sha, Path(args.governance_attestation),
             )
         else:
             result = verify_handoff(
                 Path(args.package), Path(args.manifest), Path(args.descriptor),
-                Path(args.receipt), key, args.expected_commit_sha,
+                Path(args.receipt), Path(args.governance_attestation), key, args.expected_commit_sha,
             )
         print(json.dumps(result, sort_keys=True))
         return 0

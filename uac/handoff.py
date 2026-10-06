@@ -51,6 +51,7 @@ def _validate_source_repository(request: Dict[str, Any], registry_path: Path) ->
 
 def materialize_handoff(package_path: Path, manifest_path: Path, request_path: Path,
                         output_dir: Path, signing_key: bytes, commit_sha: str,
+                        governance_attestation_path: Path,
                         registry_path: Path = DEFAULT_REGISTRY) -> Dict[str, Any]:
     if not signing_key:
         raise UACDenied("PRODUCTION_SIGNING_KEY_MISSING")
@@ -60,6 +61,8 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
         raise UACDenied("MANIFEST_NOT_FOUND")
     if not request_path.is_file():
         raise UACDenied("ADMISSION_REQUEST_NOT_FOUND")
+    if not governance_attestation_path.is_file():
+        raise UACDenied("GOVERNANCE_ATTESTATION_MISSING")
     if not isinstance(commit_sha, str) or len(commit_sha) < 7:
         raise UACDenied("COMMIT_SHA_INVALID")
 
@@ -67,6 +70,11 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
     manifest_sha = _sha256_file(manifest_path)
     request = _read_json(request_path)
     source_repository = _validate_source_repository(request, registry_path)
+    governance_attestation = _read_json(governance_attestation_path)
+    if governance_attestation.get("decision") != "PASS":
+        raise UACDenied("GOVERNANCE_ATTESTATION_NOT_PASS")
+    governance_attestation_sha = _sha256_file(governance_attestation_path)
+    request["governance_attestation_sha256"] = governance_attestation_sha
 
     if request.get("package_sha256", "").lower() != package_sha:
         raise UACDenied("PACKAGE_SHA256_BINDING_MISMATCH")
@@ -90,6 +98,8 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
         "manifest_sha256": manifest_sha,
         "source_commit_sha": commit_sha,
         "source_repository": source_repository,
+        "governance_attestation_sha256": governance_attestation_sha,
+        "governance_attestation_file": "GOVERNANCE_ATTESTATION.json",
         "receipt_id": payload["receipt_id"],
         "receipt_version": payload["receipt_version"],
         "receipt_issuer_id": payload["issuer_id"],
@@ -102,20 +112,28 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
     output_dir.mkdir(parents=True, exist_ok=True)
     receipt_path = output_dir / "UAC_RECEIPT.json"
     descriptor_path = output_dir / "HANDOFF_DESCRIPTOR.json"
+    governance_output_path = output_dir / "GOVERNANCE_ATTESTATION.json"
     _write_json(receipt_path, receipt)
     _write_json(descriptor_path, descriptor)
+    governance_output_path.write_bytes(governance_attestation_path.read_bytes())
 
     return descriptor
 
 
 def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Path,
-                   receipt_path: Path, signing_key: bytes,
+                   receipt_path: Path, governance_attestation_path: Path, signing_key: bytes,
                    expected_commit_sha: str | None = None) -> Dict[str, Any]:
     if not signing_key:
         raise UACDenied("PRODUCTION_SIGNING_KEY_MISSING")
 
     descriptor = _read_json(descriptor_path)
     receipt = _read_json(receipt_path)
+    if not governance_attestation_path.is_file():
+        raise UACDenied("GOVERNANCE_ATTESTATION_MISSING")
+    governance_attestation = _read_json(governance_attestation_path)
+    if governance_attestation.get("decision") != "PASS":
+        raise UACDenied("GOVERNANCE_ATTESTATION_NOT_PASS")
+    governance_attestation_sha = _sha256_file(governance_attestation_path)
 
     if descriptor.get("schema_id") != HANDOFF_SCHEMA:
         raise UACDenied("HANDOFF_SCHEMA_INVALID")
@@ -141,6 +159,10 @@ def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Pat
         raise UACDenied("HANDOFF_RECEIPT_ID_MISMATCH")
     if descriptor.get("source_repository") != payload.get("source_repository"):
         raise UACDenied("HANDOFF_SOURCE_REPOSITORY_BINDING_MISMATCH")
+    if descriptor.get("governance_attestation_sha256") != governance_attestation_sha:
+        raise UACDenied("HANDOFF_GOVERNANCE_ATTESTATION_TAMPERED")
+    if payload.get("governance_attestation_sha256") != governance_attestation_sha:
+        raise UACDenied("RECEIPT_GOVERNANCE_ATTESTATION_BINDING_MISMATCH")
 
     return {
         "decision": "ADMIT",
