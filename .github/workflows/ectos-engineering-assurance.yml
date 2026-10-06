@@ -248,6 +248,19 @@ jobs:
           assert str(edition).lower()=='desktop', x
           assert str(version).startswith('5.1'), x
 
+  dependency_closure:
+    name: ectos/dependency-closure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate mandatory package dependency graph
+        run: python engineering/dependency_graph.py validate engineering/phase01/fixtures/sample-package/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json
+
   uac_admission:
     name: ectos/uac-admission
     runs-on: ubuntu-latest
@@ -275,6 +288,7 @@ jobs:
       - hash_provenance
       - state_collision
       - native_ps51
+      - dependency_closure
       - uac_admission
     if: always()
     runs-on: [self-hosted, Windows, X64, ectos-ps51]
@@ -302,6 +316,7 @@ jobs:
             'ectos/hash-provenance'='${{ needs.hash_provenance.result }}'
             'ectos/state-collision'='${{ needs.state_collision.result }}'
             'ectos/native-ps51'='${{ needs.native_ps51.result }}'
+            'ectos/dependency-closure'='${{ needs.dependency_closure.result }}'
             'ectos/uac-admission'='${{ needs.uac_admission.result }}'
           }
           $ok=$true

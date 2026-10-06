@@ -26,6 +26,13 @@ def valid_request():
         "package_id": "PKG-V01",
         "package_sha256": SHA_A,
         "manifest_sha256": SHA_B,
+        "dependency_graph_sha256": SHA_A,
+        "dependency_closure": "PASS",
+        "undeclared_dependency_count": 0,
+        "unresolved_transitive_dependency_count": 0,
+        "untested_dependency_count": 0,
+        "implicit_environment_assumption_count": 0,
+        "unknown_blast_radius_edge_count": 0,
         "target": "ECTOS_ENGINEERING_REPOSITORY_PROMOTION",
         "action": "PROMOTE_CANDIDATE",
         "qualification_result": "PASS",
@@ -101,6 +108,26 @@ class TestUAC(unittest.TestCase):
     def test_bad_manifest_sha_denied(self):
         r = valid_request(); r["manifest_sha256"] = "xyz"
         self.assert_denied(r, "MANIFEST_SHA256_INVALID")
+
+    def test_missing_dependency_graph_denied(self):
+        r = valid_request(); del r["dependency_graph_sha256"]
+        self.assert_denied(r, "MISSING_FIELDS")
+
+    def test_bad_dependency_graph_sha_denied(self):
+        r = valid_request(); r["dependency_graph_sha256"] = "xyz"
+        self.assert_denied(r, "DEPENDENCY_GRAPH_SHA256_INVALID")
+
+    def test_dependency_closure_required(self):
+        r = valid_request(); r["dependency_closure"] = "FAIL"
+        self.assert_denied(r, "DEPENDENCY_CLOSURE_NOT_ACCEPTED")
+
+    def test_undeclared_dependency_denied(self):
+        r = valid_request(); r["undeclared_dependency_count"] = 1
+        self.assert_denied(r, "UNDECLARED_DEPENDENCY_COUNT_NOT_ZERO")
+
+    def test_implicit_environment_assumption_denied(self):
+        r = valid_request(); r["implicit_environment_assumption_count"] = 1
+        self.assert_denied(r, "IMPLICIT_ENVIRONMENT_ASSUMPTION_COUNT_NOT_ZERO")
 
     def test_wrong_target_receipt_denied(self):
         receipt = issue_receipt(valid_request(), KEY)
