@@ -29,6 +29,18 @@ class DependencyGraphTests(unittest.TestCase):
     def test_not_proven_node_fails(self):
         g=valid_graph(); g["nodes"][1]["currentness"]="NOT_PROVEN"
         self.assertEqual(validate_graph(g)["status"], "FAIL")
+    def test_superseded_node_fails(self):
+        g=valid_graph(); g["nodes"][1]["currentness"]="SUPERSEDED"
+        self.assertEqual(validate_graph(g)["status"], "FAIL")
+    def test_superseded_edge_fails(self):
+        g=valid_graph(); g["edges"][0]["currentness"]="SUPERSEDED"
+        self.assertEqual(validate_graph(g)["status"], "FAIL")
+    def test_invalid_node_type_fails(self):
+        g=valid_graph(); g["nodes"][1]["type"]="FREE_FORM_TYPE"
+        self.assertEqual(validate_graph(g)["status"], "FAIL")
+    def test_invalid_edge_type_fails(self):
+        g=valid_graph(); g["edges"][0]["type"]="FREE_FORM_EDGE"
+        self.assertEqual(validate_graph(g)["status"], "FAIL")
     def test_aggregate_preserves_packages(self):
         with tempfile.TemporaryDirectory() as td:
             p=Path(td)/"g.json"; p.write_text(json.dumps(valid_graph()),encoding="utf-8")
