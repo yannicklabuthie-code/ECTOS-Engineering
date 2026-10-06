@@ -57,6 +57,15 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Attest live GitHub governance before signing
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p governance
+          python .ectos-engineering/uac/github_governance.py \
+            --output governance/GOVERNANCE_ATTESTATION.json
+
       - name: Verify declared source repository matches admission request
         shell: python
         run: |
@@ -86,7 +95,8 @@ jobs:
             --manifest "candidate/${{ inputs.manifest_path }}" \
             --request "candidate/${{ inputs.request_path }}" \
             --output-dir handoff \
-            --commit-sha "${{ inputs.source_commit_sha }}"
+            --commit-sha "${{ inputs.source_commit_sha }}" \
+            --governance-attestation governance/GOVERNANCE_ATTESTATION.json
 
       - name: Re-verify exact handoff before publication
         shell: bash
@@ -98,6 +108,7 @@ jobs:
             --manifest "candidate/${{ inputs.manifest_path }}" \
             --descriptor handoff/HANDOFF_DESCRIPTOR.json \
             --receipt handoff/UAC_RECEIPT.json \
+            --governance-attestation handoff/GOVERNANCE_ATTESTATION.json \
             --expected-commit-sha "${{ inputs.source_commit_sha }}"
 
       - name: Assemble canonical handoff bundle
