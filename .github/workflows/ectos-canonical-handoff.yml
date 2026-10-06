@@ -1,0 +1,101 @@
+name: ECTOS Canonical Handoff
+
+on:
+  workflow_call:
+    inputs:
+      source_artifact_name:
+        required: true
+        type: string
+      package_path:
+        required: true
+        type: string
+      manifest_path:
+        required: true
+        type: string
+      request_path:
+        required: true
+        type: string
+      source_commit_sha:
+        required: true
+        type: string
+      handoff_artifact_name:
+        required: false
+        type: string
+        default: ectos-canonical-handoff
+    secrets:
+      ECTOS_UAC_SIGNING_KEY:
+        required: true
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  canonical_handoff:
+    name: ectos/canonical-handoff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout UAC control plane
+        uses: actions/checkout@v4
+        with:
+          repository: yannicklabuthie-code/ECTOS-Engineering
+          ref: main
+          path: .ectos-engineering
+
+      - name: Download exact candidate artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.source_artifact_name }}
+          path: candidate
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fail closed if production signing key is unavailable
+        shell: bash
+        env:
+          ECTOS_UAC_SIGNING_KEY: ${{ secrets.ECTOS_UAC_SIGNING_KEY }}
+        run: |
+          test -n "$ECTOS_UAC_SIGNING_KEY" || { echo 'PRODUCTION_SIGNING_KEY_MISSING'; exit 40; }
+
+      - name: Materialize signed canonical handoff
+        shell: bash
+        env:
+          ECTOS_UAC_SIGNING_KEY: ${{ secrets.ECTOS_UAC_SIGNING_KEY }}
+        run: |
+          mkdir -p handoff
+          python .ectos-engineering/uac/handoff_cli.py issue \
+            --package "candidate/${{ inputs.package_path }}" \
+            --manifest "candidate/${{ inputs.manifest_path }}" \
+            --request "candidate/${{ inputs.request_path }}" \
+            --output-dir handoff \
+            --commit-sha "${{ inputs.source_commit_sha }}"
+
+      - name: Re-verify exact handoff before publication
+        shell: bash
+        env:
+          ECTOS_UAC_SIGNING_KEY: ${{ secrets.ECTOS_UAC_SIGNING_KEY }}
+        run: |
+          python .ectos-engineering/uac/handoff_cli.py verify \
+            --package "candidate/${{ inputs.package_path }}" \
+            --manifest "candidate/${{ inputs.manifest_path }}" \
+            --descriptor handoff/HANDOFF_DESCRIPTOR.json \
+            --receipt handoff/UAC_RECEIPT.json \
+            --expected-commit-sha "${{ inputs.source_commit_sha }}"
+
+      - name: Assemble canonical handoff bundle
+        shell: bash
+        run: |
+          cp "candidate/${{ inputs.package_path }}" handoff/
+          cp "candidate/${{ inputs.manifest_path }}" handoff/
+          sha256sum handoff/* > handoff/HANDOFF_SHA256SUMS.txt
+
+      - name: Publish canonical handoff artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.handoff_artifact_name }}
+          path: handoff
+          if-no-files-found: error
+          retention-days: 30
