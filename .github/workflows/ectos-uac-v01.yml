@@ -1,0 +1,39 @@
+name: ECTOS UAC V01
+
+on:
+  push:
+    branches:
+      - main
+      - 'uac/**'
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  uac-negative-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run UAC regression suite
+        run: python -m unittest discover -s uac/tests -v
+
+      - name: Prove default-deny registry
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          registry = json.loads(Path('uac/config/registry.json').read_text(encoding='utf-8'))
+          assert registry['default_policy'] == 'DENY'
+          assert all(not cfg.get('can_self_admit', False) for cfg in registry['actors'].values())
+          print('UAC_DEFAULT_DENY=PASS')
+          print('UAC_SELF_ADMISSION_DISABLED=PASS')
