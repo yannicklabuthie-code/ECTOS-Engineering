@@ -12,6 +12,9 @@ on:
       manifest_path:
         required: true
         type: string
+      dependency_graph_path:
+        required: true
+        type: string
       request_path:
         required: true
         type: string
@@ -93,6 +96,7 @@ jobs:
           python .ectos-engineering/uac/handoff_cli.py issue \
             --package "candidate/${{ inputs.package_path }}" \
             --manifest "candidate/${{ inputs.manifest_path }}" \
+            --dependency-graph "candidate/${{ inputs.dependency_graph_path }}" \
             --request "candidate/${{ inputs.request_path }}" \
             --output-dir handoff \
             --commit-sha "${{ inputs.source_commit_sha }}" \
@@ -106,6 +110,7 @@ jobs:
           python .ectos-engineering/uac/handoff_cli.py verify \
             --package "candidate/${{ inputs.package_path }}" \
             --manifest "candidate/${{ inputs.manifest_path }}" \
+            --dependency-graph "candidate/${{ inputs.dependency_graph_path }}" \
             --descriptor handoff/HANDOFF_DESCRIPTOR.json \
             --receipt handoff/UAC_RECEIPT.json \
             --governance-attestation handoff/GOVERNANCE_ATTESTATION.json \
@@ -116,6 +121,7 @@ jobs:
         run: |
           cp "candidate/${{ inputs.package_path }}" handoff/
           cp "candidate/${{ inputs.manifest_path }}" handoff/
+          cp "candidate/${{ inputs.dependency_graph_path }}" handoff/
           sha256sum handoff/* > handoff/HANDOFF_SHA256SUMS.txt
 
       - name: Publish canonical handoff artifact

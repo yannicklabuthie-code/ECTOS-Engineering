@@ -20,7 +20,8 @@
     "qualification_profile",
     "install_profile",
     "rollback_profile",
-    "evidence_profile"
+    "evidence_profile",
+    "dependency_graph"
   ],
   "properties": {
     "schema_id": {
@@ -112,6 +113,10 @@
       "minLength": 1
     },
     "evidence_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dependency_graph": {
       "type": "string",
       "minLength": 1
     }

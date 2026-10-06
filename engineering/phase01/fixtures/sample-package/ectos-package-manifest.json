@@ -24,5 +24,6 @@
   "qualification_profile": "SAMPLE_ONLY",
   "install_profile": "PARSE_ENTRYPOINT",
   "rollback_profile": "NONE",
-  "evidence_profile": "SELFQUAL_ONLY"
+  "evidence_profile": "SELFQUAL_ONLY",
+  "dependency_graph": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json"
 }

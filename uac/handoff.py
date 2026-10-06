@@ -49,7 +49,7 @@ def _validate_source_repository(request: Dict[str, Any], registry_path: Path) ->
     return source_repository
 
 
-def materialize_handoff(package_path: Path, manifest_path: Path, request_path: Path,
+def materialize_handoff(package_path: Path, manifest_path: Path, dependency_graph_path: Path, request_path: Path,
                         output_dir: Path, signing_key: bytes, commit_sha: str,
                         governance_attestation_path: Path,
                         registry_path: Path = DEFAULT_REGISTRY) -> Dict[str, Any]:
@@ -59,6 +59,8 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
         raise UACDenied("PACKAGE_NOT_FOUND")
     if not manifest_path.is_file():
         raise UACDenied("MANIFEST_NOT_FOUND")
+    if not dependency_graph_path.is_file():
+        raise UACDenied("DEPENDENCY_GRAPH_NOT_FOUND")
     if not request_path.is_file():
         raise UACDenied("ADMISSION_REQUEST_NOT_FOUND")
     if not governance_attestation_path.is_file():
@@ -68,6 +70,7 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
 
     package_sha = _sha256_file(package_path)
     manifest_sha = _sha256_file(manifest_path)
+    dependency_graph_sha = _sha256_file(dependency_graph_path)
     request = _read_json(request_path)
     source_repository = _validate_source_repository(request, registry_path)
     governance_attestation = _read_json(governance_attestation_path)
@@ -80,6 +83,8 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
         raise UACDenied("PACKAGE_SHA256_BINDING_MISMATCH")
     if request.get("manifest_sha256", "").lower() != manifest_sha:
         raise UACDenied("MANIFEST_SHA256_BINDING_MISMATCH")
+    if request.get("dependency_graph_sha256", "").lower() != dependency_graph_sha:
+        raise UACDenied("DEPENDENCY_GRAPH_SHA256_BINDING_MISMATCH")
     if request.get("target") != HANDOFF_TARGET:
         raise UACDenied("HANDOFF_TARGET_INVALID")
     if request.get("action") != HANDOFF_ACTION:
@@ -96,6 +101,8 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
         "package_sha256": package_sha,
         "manifest_name": manifest_path.name,
         "manifest_sha256": manifest_sha,
+        "dependency_graph_name": dependency_graph_path.name,
+        "dependency_graph_sha256": dependency_graph_sha,
         "source_commit_sha": commit_sha,
         "source_repository": source_repository,
         "governance_attestation_sha256": governance_attestation_sha,
@@ -120,7 +127,7 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
     return descriptor
 
 
-def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Path,
+def verify_handoff(package_path: Path, manifest_path: Path, dependency_graph_path: Path, descriptor_path: Path,
                    receipt_path: Path, governance_attestation_path: Path, signing_key: bytes,
                    expected_commit_sha: str | None = None) -> Dict[str, Any]:
     if not signing_key:
@@ -142,10 +149,13 @@ def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Pat
 
     package_sha = _sha256_file(package_path)
     manifest_sha = _sha256_file(manifest_path)
+    dependency_graph_sha = _sha256_file(dependency_graph_path)
     if descriptor.get("package_sha256") != package_sha:
         raise UACDenied("HANDOFF_PACKAGE_TAMPERED")
     if descriptor.get("manifest_sha256") != manifest_sha:
         raise UACDenied("HANDOFF_MANIFEST_TAMPERED")
+    if descriptor.get("dependency_graph_sha256") != dependency_graph_sha:
+        raise UACDenied("HANDOFF_DEPENDENCY_GRAPH_TAMPERED")
     if expected_commit_sha is not None and descriptor.get("source_commit_sha") != expected_commit_sha:
         raise UACDenied("HANDOFF_COMMIT_MISMATCH")
 
@@ -155,6 +165,8 @@ def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Pat
         raise UACDenied("RECEIPT_PACKAGE_BINDING_MISMATCH")
     if payload.get("manifest_sha256") != manifest_sha:
         raise UACDenied("RECEIPT_MANIFEST_BINDING_MISMATCH")
+    if payload.get("dependency_graph_sha256") != dependency_graph_sha:
+        raise UACDenied("RECEIPT_DEPENDENCY_GRAPH_BINDING_MISMATCH")
     if descriptor.get("receipt_id") != payload.get("receipt_id"):
         raise UACDenied("HANDOFF_RECEIPT_ID_MISMATCH")
     if descriptor.get("source_repository") != payload.get("source_repository"):
@@ -170,4 +182,5 @@ def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Pat
         "receipt_id": verified["receipt_id"],
         "package_sha256": package_sha,
         "manifest_sha256": manifest_sha,
+        "dependency_graph_sha256": dependency_graph_sha,
     }

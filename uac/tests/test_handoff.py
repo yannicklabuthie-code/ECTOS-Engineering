@@ -18,7 +18,7 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def request_for(package: Path, manifest: Path):
+def request_for(package: Path, manifest: Path, graph: Path):
     return {
         "project": "ECTOS",
         "mission_id": "HANDOFF-TEST",
@@ -31,6 +31,13 @@ def request_for(package: Path, manifest: Path):
         "package_id": package.name,
         "package_sha256": sha256(package),
         "manifest_sha256": sha256(manifest),
+        "dependency_graph_sha256": sha256(graph),
+        "dependency_closure": "PASS",
+        "undeclared_dependency_count": 0,
+        "unresolved_transitive_dependency_count": 0,
+        "untested_dependency_count": 0,
+        "implicit_environment_assumption_count": 0,
+        "unknown_blast_radius_edge_count": 0,
         "target": "ECTOS_PACKAGE_HANDOFF",
         "action": "ISSUE_HANDOFF",
         "qualification_result": "PASS",
@@ -47,111 +54,124 @@ class TestCanonicalHandoff(unittest.TestCase):
     def setup_case(self, root: Path):
         package = root / "candidate.zip"
         manifest = root / "manifest.json"
+        graph = root / "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json"
         request = root / "request.json"
         output = root / "handoff"
         governance = root / "governance.json"
         package.write_bytes(b"canonical-package-v01")
         manifest.write_text('{"schema":"test"}\n', encoding="utf-8")
-        request.write_text(json.dumps(request_for(package, manifest)), encoding="utf-8")
+        graph.write_text(json.dumps({"schema_id":"ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01","package_id":"candidate.zip","package_version":"test","nodes":[],"edges":[],"closure":{"dependency_closure":"PASS","undeclared_dependency_count":0,"unresolved_transitive_dependency_count":0,"untested_dependency_count":0,"implicit_environment_assumption_count":0,"unknown_blast_radius_edge_count":0}}), encoding="utf-8")
+        request.write_text(json.dumps(request_for(package, manifest, graph)), encoding="utf-8")
         governance.write_text(json.dumps({"schema_id":"ECTOS_GITHUB_GOVERNANCE_ATTESTATION_V01","decision":"PASS"}), encoding="utf-8")
-        return package, manifest, request, output, governance
+        return package, manifest, graph, request, output, governance
 
     def test_positive_handoff(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
-            descriptor = materialize_handoff(package, manifest, request, output, KEY, "a" * 40, governance)
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
+            descriptor = materialize_handoff(package, manifest, graph, request, output, KEY, "a" * 40, governance)
             self.assertEqual(descriptor["state"], "PACKAGE_READY_FOR_HANDOFF")
             result = verify_handoff(
-                package, manifest, output / "HANDOFF_DESCRIPTOR.json",
+                package, manifest, graph, output / "HANDOFF_DESCRIPTOR.json",
                 output / "UAC_RECEIPT.json", output / "GOVERNANCE_ATTESTATION.json", KEY, "a" * 40,
             )
             self.assertEqual(result["decision"], "ADMIT")
 
     def test_modified_package_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
-            materialize_handoff(package, manifest, request, output, KEY, "b" * 40, governance)
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
+            materialize_handoff(package, manifest, graph, request, output, KEY, "b" * 40, governance)
             package.write_bytes(b"tampered")
             with self.assertRaises(UACDenied) as ctx:
-                verify_handoff(package, manifest, output / "HANDOFF_DESCRIPTOR.json",
+                verify_handoff(package, manifest, graph, output / "HANDOFF_DESCRIPTOR.json",
                                output / "UAC_RECEIPT.json", output / "GOVERNANCE_ATTESTATION.json", KEY)
             self.assertIn("HANDOFF_PACKAGE_TAMPERED", str(ctx.exception))
 
     def test_modified_manifest_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
-            materialize_handoff(package, manifest, request, output, KEY, "c" * 40, governance)
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
+            materialize_handoff(package, manifest, graph, request, output, KEY, "c" * 40, governance)
             manifest.write_text('{"schema":"tampered"}\n', encoding="utf-8")
             with self.assertRaises(UACDenied) as ctx:
-                verify_handoff(package, manifest, output / "HANDOFF_DESCRIPTOR.json",
+                verify_handoff(package, manifest, graph, output / "HANDOFF_DESCRIPTOR.json",
                                output / "UAC_RECEIPT.json", output / "GOVERNANCE_ATTESTATION.json", KEY)
             self.assertIn("HANDOFF_MANIFEST_TAMPERED", str(ctx.exception))
 
     def test_request_hash_mismatch_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
             data = json.loads(request.read_text(encoding="utf-8"))
             data["package_sha256"] = "0" * 64
             request.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaises(UACDenied) as ctx:
-                materialize_handoff(package, manifest, request, output, KEY, "d" * 40, governance)
+                materialize_handoff(package, manifest, graph, request, output, KEY, "d" * 40, governance)
             self.assertIn("PACKAGE_SHA256_BINDING_MISMATCH", str(ctx.exception))
 
     def test_missing_signing_key_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
             with self.assertRaises(UACDenied) as ctx:
-                materialize_handoff(package, manifest, request, output, b"", "e" * 40, governance)
+                materialize_handoff(package, manifest, graph, request, output, b"", "e" * 40, governance)
             self.assertIn("PRODUCTION_SIGNING_KEY_MISSING", str(ctx.exception))
 
     def test_unregistered_source_repository_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
             data = json.loads(request.read_text(encoding="utf-8"))
             data["source_repository"] = "unknown/rogue-repository"
             request.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaises(UACDenied) as ctx:
-                materialize_handoff(package, manifest, request, output, KEY, "9" * 40, governance)
+                materialize_handoff(package, manifest, graph, request, output, KEY, "9" * 40, governance)
             self.assertIn("SOURCE_REPOSITORY_NOT_REGISTERED", str(ctx.exception))
 
     def test_missing_source_repository_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
             data = json.loads(request.read_text(encoding="utf-8"))
             data.pop("source_repository")
             request.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaises(UACDenied) as ctx:
-                materialize_handoff(package, manifest, request, output, KEY, "8" * 40, governance)
+                materialize_handoff(package, manifest, graph, request, output, KEY, "8" * 40, governance)
             self.assertIn("SOURCE_REPOSITORY_MISSING", str(ctx.exception))
 
     def test_repository_actor_mismatch_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
             data = json.loads(request.read_text(encoding="utf-8"))
             data["actor"] = "ECTOS_MAIN_AUTHORITY"
             request.write_text(json.dumps(data), encoding="utf-8")
             with self.assertRaises(UACDenied) as ctx:
-                materialize_handoff(package, manifest, request, output, KEY, "7" * 40, governance)
+                materialize_handoff(package, manifest, graph, request, output, KEY, "7" * 40, governance)
             self.assertIn("SOURCE_REPOSITORY_ACTOR_NOT_REGISTERED", str(ctx.exception))
 
     def test_wrong_commit_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
-            materialize_handoff(package, manifest, request, output, KEY, "f" * 40, governance)
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
+            materialize_handoff(package, manifest, graph, request, output, KEY, "f" * 40, governance)
             with self.assertRaises(UACDenied) as ctx:
-                verify_handoff(package, manifest, output / "HANDOFF_DESCRIPTOR.json",
+                verify_handoff(package, manifest, graph, output / "HANDOFF_DESCRIPTOR.json",
                                output / "UAC_RECEIPT.json", output / "GOVERNANCE_ATTESTATION.json", KEY, "1" * 40)
             self.assertIn("HANDOFF_COMMIT_MISMATCH", str(ctx.exception))
 
     def test_governance_attestation_tamper_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:
-            package, manifest, request, output, governance = self.setup_case(Path(td))
-            materialize_handoff(package, manifest, request, output, KEY, "6" * 40, governance)
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
+            materialize_handoff(package, manifest, graph, request, output, KEY, "6" * 40, governance)
             (output / "GOVERNANCE_ATTESTATION.json").write_text(json.dumps({"decision":"PASS","tampered":True}), encoding="utf-8")
             with self.assertRaises(UACDenied) as ctx:
-                verify_handoff(package, manifest, output / "HANDOFF_DESCRIPTOR.json",
+                verify_handoff(package, manifest, graph, output / "HANDOFF_DESCRIPTOR.json",
                                output / "UAC_RECEIPT.json", output / "GOVERNANCE_ATTESTATION.json", KEY)
             self.assertIn("HANDOFF_GOVERNANCE_ATTESTATION_TAMPERED", str(ctx.exception))
+
+
+    def test_dependency_graph_tamper_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            package, manifest, graph, request, output, governance = self.setup_case(Path(td))
+            materialize_handoff(package, manifest, graph, request, output, KEY, "5" * 40, governance)
+            graph.write_text(json.dumps({"tampered": True}), encoding="utf-8")
+            with self.assertRaises(UACDenied) as ctx:
+                verify_handoff(package, manifest, graph, output / "HANDOFF_DESCRIPTOR.json",
+                               output / "UAC_RECEIPT.json", output / "GOVERNANCE_ATTESTATION.json", KEY)
+            self.assertIn("HANDOFF_DEPENDENCY_GRAPH_TAMPERED", str(ctx.exception))
 
 
 if __name__ == "__main__":
