@@ -4,9 +4,36 @@ This directory materializes the first physical ECTOS UAC control-plane implement
 
 ## Invariant
 
-No execution-relevant promotion is eligible unless a current UAC decision is `ADMIT` and a machine-verifiable receipt is issued for the exact actor, mission, package, manifest, target and action.
+No ECTOS-produced candidate may be promoted to handoff eligibility unless a current UAC decision is `ADMIT` and a machine-verifiable receipt is issued for the exact actor, mission, package, manifest, target and action.
 
 Default state is `DENY`.
+
+## Qualification boundary
+
+UAC qualifies only what ECTOS creates and controls:
+
+- source code produced by ECTOS;
+- package contents and structure;
+- package manifest and hashes;
+- declared dependencies;
+- declared interfaces and package contracts;
+- fixtures and regression tests;
+- documented compatibility claims;
+- handoff contract and exact candidate identity.
+
+UAC does **not** qualify the consumer environment itself. Cloud/GCP, Firebase, Cloud Run, AWS, Azure, Flutter consumer runtime and any other downstream environment are outside ECTOS package qualification scope.
+
+ECTOS may and must validate an external contract when the package declares that it supports that contract. This validates **our emitted interface/contract behavior**, not the provider environment.
+
+The terminal UAC boundary is:
+
+`PACKAGE_READY_FOR_HANDOFF`
+
+It is not:
+
+`TARGET_ENVIRONMENT_READY`
+
+The machine-readable scope is frozen in `uac/config/scope_contract.json` and regression-tested.
 
 ## Scope of this implementation
 
@@ -22,13 +49,13 @@ This implementation provides:
 - expiry and nonce binding;
 - replay prevention ledger;
 - receipt verification CLI;
-- negative regression tests.
+- package-scope and negative regression tests.
 
 ## Important boundary
 
-This repository remains the engineering rule source. UAC does not become universally non-bypassable until every external execution surface (Windows, Cloud/GCP, Firebase, GitHub mutation, Flutter deployment, Work and future execution targets) is routed through a UAC-enforcing broker or target-side verifier and direct credentials/routes are removed.
+This repository remains the engineering rule source. Repository promotion and package-handoff admission must be physically enforced before UAC closure can be claimed for ECTOS-produced artifacts.
 
-Therefore repository implementation alone MUST NOT be reported as global UAC closure.
+External runtime adaptation, deployment and runtime qualification remain the responsibility of the consuming environment and are not UAC qualification criteria.
 
 ## Commands
 
