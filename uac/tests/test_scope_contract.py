@@ -22,9 +22,12 @@ class TestUACScopeContract(unittest.TestCase):
         }
         self.assertTrue(required.issubset(set(SCOPE["external_environments_explicitly_out_of_scope"])))
 
-    def test_only_ectos_owned_promotion_target_is_registered(self):
+    def test_only_ectos_owned_promotion_and_handoff_targets_are_registered(self):
         targets = set(REGISTRY.get("targets", {}))
-        self.assertEqual(targets, {"ECTOS_ENGINEERING_REPOSITORY_PROMOTION"})
+        self.assertEqual(targets, {
+            "ECTOS_ENGINEERING_REPOSITORY_PROMOTION",
+            "ECTOS_PACKAGE_HANDOFF",
+        })
 
     def test_no_external_deploy_action_is_registered(self):
         actions = {a for route in REGISTRY.get("routes", []) for a in route.get("actions", [])}
