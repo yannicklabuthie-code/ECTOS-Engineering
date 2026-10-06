@@ -18,6 +18,9 @@ on:
       source_commit_sha:
         required: true
         type: string
+      source_repository:
+        required: true
+        type: string
       handoff_artifact_name:
         required: false
         type: string
@@ -33,6 +36,7 @@ permissions:
 jobs:
   canonical_handoff:
     name: ectos/canonical-handoff
+    if: github.repository == 'yannicklabuthie-code/ECTOS-Engineering'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout UAC control plane
@@ -52,6 +56,17 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      - name: Verify declared source repository matches admission request
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          request = json.loads(Path("candidate/${{ inputs.request_path }}").read_text(encoding="utf-8"))
+          declared = "${{ inputs.source_repository }}"
+          actual = request.get("source_repository")
+          if actual != declared:
+              raise SystemExit(f"SOURCE_REPOSITORY_DECLARATION_MISMATCH:{actual!r}!={declared!r}")
 
       - name: Fail closed if production signing key is unavailable
         shell: bash

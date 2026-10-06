@@ -2,37 +2,58 @@
   "schema_version": "ECTOS_UAC_REGISTRY_V01",
   "default_policy": "DENY",
   "actors": {
-    "ECTOS_MAIN_AUTHORITY": {"enabled": true, "can_self_admit": false},
-    "ECTOS_ENGINEERING_ASSURANCE": {"enabled": true, "can_self_admit": false},
-    "ECTOS_REPOSITORY_AGENT": {"enabled": true, "can_self_admit": false}
+    "ECTOS_MAIN_AUTHORITY": {
+      "enabled": true,
+      "can_self_admit": false
+    },
+    "ECTOS_ENGINEERING_ASSURANCE": {
+      "enabled": true,
+      "can_self_admit": false
+    },
+    "ECTOS_REPOSITORY_AGENT": {
+      "enabled": true,
+      "can_self_admit": false
+    }
   },
   "targets": {
-    "ECTOS_ENGINEERING_REPOSITORY_PROMOTION": {"enabled": true},
-    "ECTOS_PACKAGE_HANDOFF": {"enabled": true}
+    "ECTOS_ENGINEERING_REPOSITORY_PROMOTION": {
+      "enabled": true
+    },
+    "ECTOS_PACKAGE_HANDOFF": {
+      "enabled": true
+    }
   },
   "routes": [
     {
       "actor": "ECTOS_MAIN_AUTHORITY",
       "target": "ECTOS_ENGINEERING_REPOSITORY_PROMOTION",
-      "actions": ["PROMOTE_CANDIDATE"],
+      "actions": [
+        "PROMOTE_CANDIDATE"
+      ],
       "enabled": true
     },
     {
       "actor": "ECTOS_ENGINEERING_ASSURANCE",
       "target": "ECTOS_ENGINEERING_REPOSITORY_PROMOTION",
-      "actions": ["SUBMIT_ASSURANCE"],
+      "actions": [
+        "SUBMIT_ASSURANCE"
+      ],
       "enabled": true
     },
     {
       "actor": "ECTOS_REPOSITORY_AGENT",
       "target": "ECTOS_ENGINEERING_REPOSITORY_PROMOTION",
-      "actions": ["SUBMIT_REPOSITORY_GATE"],
+      "actions": [
+        "SUBMIT_REPOSITORY_GATE"
+      ],
       "enabled": true
     },
     {
       "actor": "ECTOS_REPOSITORY_AGENT",
       "target": "ECTOS_PACKAGE_HANDOFF",
-      "actions": ["ISSUE_HANDOFF"],
+      "actions": [
+        "ISSUE_HANDOFF"
+      ],
       "enabled": true
     }
   ],
@@ -44,5 +65,15 @@
     "rule_source_currentness": "PROVEN_CURRENT",
     "negative_controls": "PASS",
     "circuit_breaker_state": "CLEAR"
+  },
+  "source_repositories": {
+    "yannicklabuthie-code/ECTOS-Engineering": {
+      "enabled": true,
+      "actors": [
+        "ECTOS_REPOSITORY_AGENT"
+      ],
+      "handoff_authority": false,
+      "notes": "Canonical engineering control repository. Signing authority remains central UAC only."
+    }
   }
 }

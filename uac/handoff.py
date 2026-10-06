@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
-from uac_core import UACDenied, issue_receipt, verify_receipt
+from uac_core import DEFAULT_REGISTRY, UACDenied, issue_receipt, verify_receipt
 
 HANDOFF_SCHEMA = "ECTOS_CANONICAL_HANDOFF_V01"
 HANDOFF_STATE = "PACKAGE_READY_FOR_HANDOFF"
@@ -35,8 +35,23 @@ def _write_json(path: Path, data: Dict[str, Any]) -> None:
     tmp.replace(path)
 
 
+def _validate_source_repository(request: Dict[str, Any], registry_path: Path) -> str:
+    source_repository = request.get("source_repository")
+    if not isinstance(source_repository, str) or not source_repository:
+        raise UACDenied("SOURCE_REPOSITORY_MISSING")
+    registry = _read_json(registry_path)
+    repo_cfg = registry.get("source_repositories", {}).get(source_repository)
+    if not repo_cfg or not repo_cfg.get("enabled"):
+        raise UACDenied("SOURCE_REPOSITORY_NOT_REGISTERED")
+    actor = request.get("actor")
+    if actor not in repo_cfg.get("actors", []):
+        raise UACDenied("SOURCE_REPOSITORY_ACTOR_NOT_REGISTERED")
+    return source_repository
+
+
 def materialize_handoff(package_path: Path, manifest_path: Path, request_path: Path,
-                        output_dir: Path, signing_key: bytes, commit_sha: str) -> Dict[str, Any]:
+                        output_dir: Path, signing_key: bytes, commit_sha: str,
+                        registry_path: Path = DEFAULT_REGISTRY) -> Dict[str, Any]:
     if not signing_key:
         raise UACDenied("PRODUCTION_SIGNING_KEY_MISSING")
     if not package_path.is_file():
@@ -51,6 +66,7 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
     package_sha = _sha256_file(package_path)
     manifest_sha = _sha256_file(manifest_path)
     request = _read_json(request_path)
+    source_repository = _validate_source_repository(request, registry_path)
 
     if request.get("package_sha256", "").lower() != package_sha:
         raise UACDenied("PACKAGE_SHA256_BINDING_MISMATCH")
@@ -61,7 +77,7 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
     if request.get("action") != HANDOFF_ACTION:
         raise UACDenied("HANDOFF_ACTION_INVALID")
 
-    receipt = issue_receipt(request, signing_key)
+    receipt = issue_receipt(request, signing_key, registry_path=registry_path)
     verify_receipt(receipt, signing_key, HANDOFF_TARGET, HANDOFF_ACTION)
 
     payload = receipt["payload"]
@@ -73,6 +89,7 @@ def materialize_handoff(package_path: Path, manifest_path: Path, request_path: P
         "manifest_name": manifest_path.name,
         "manifest_sha256": manifest_sha,
         "source_commit_sha": commit_sha,
+        "source_repository": source_repository,
         "receipt_id": payload["receipt_id"],
         "receipt_version": payload["receipt_version"],
         "receipt_issuer_id": payload["issuer_id"],
@@ -122,6 +139,8 @@ def verify_handoff(package_path: Path, manifest_path: Path, descriptor_path: Pat
         raise UACDenied("RECEIPT_MANIFEST_BINDING_MISMATCH")
     if descriptor.get("receipt_id") != payload.get("receipt_id"):
         raise UACDenied("HANDOFF_RECEIPT_ID_MISMATCH")
+    if descriptor.get("source_repository") != payload.get("source_repository"):
+        raise UACDenied("HANDOFF_SOURCE_REPOSITORY_BINDING_MISMATCH")
 
     return {
         "decision": "ADMIT",

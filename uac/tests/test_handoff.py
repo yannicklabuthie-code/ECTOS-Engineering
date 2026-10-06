@@ -24,6 +24,7 @@ def request_for(package: Path, manifest: Path):
         "mission_id": "HANDOFF-TEST",
         "failure_family_id": "HANDOFF-TEST-FAMILY",
         "actor": "ECTOS_REPOSITORY_AGENT",
+        "source_repository": "yannicklabuthie-code/ECTOS-Engineering",
         "qualifier": "ECTOS_INDEPENDENT_QUALIFIER",
         "systemic_assurance_id": "ECTOS_SYSTEMIC_ASSURANCE",
         "admission_authority": "ECTOS_UAC_CONTROL_PLANE_V01",
@@ -100,6 +101,36 @@ class TestCanonicalHandoff(unittest.TestCase):
             with self.assertRaises(UACDenied) as ctx:
                 materialize_handoff(package, manifest, request, output, b"", "e" * 40)
             self.assertIn("PRODUCTION_SIGNING_KEY_MISSING", str(ctx.exception))
+
+    def test_unregistered_source_repository_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            package, manifest, request, output = self.setup_case(Path(td))
+            data = json.loads(request.read_text(encoding="utf-8"))
+            data["source_repository"] = "unknown/rogue-repository"
+            request.write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaises(UACDenied) as ctx:
+                materialize_handoff(package, manifest, request, output, KEY, "9" * 40)
+            self.assertIn("SOURCE_REPOSITORY_NOT_REGISTERED", str(ctx.exception))
+
+    def test_missing_source_repository_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            package, manifest, request, output = self.setup_case(Path(td))
+            data = json.loads(request.read_text(encoding="utf-8"))
+            data.pop("source_repository")
+            request.write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaises(UACDenied) as ctx:
+                materialize_handoff(package, manifest, request, output, KEY, "8" * 40)
+            self.assertIn("SOURCE_REPOSITORY_MISSING", str(ctx.exception))
+
+    def test_repository_actor_mismatch_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            package, manifest, request, output = self.setup_case(Path(td))
+            data = json.loads(request.read_text(encoding="utf-8"))
+            data["actor"] = "ECTOS_MAIN_AUTHORITY"
+            request.write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaises(UACDenied) as ctx:
+                materialize_handoff(package, manifest, request, output, KEY, "7" * 40)
+            self.assertIn("SOURCE_REPOSITORY_ACTOR_NOT_REGISTERED", str(ctx.exception))
 
     def test_wrong_commit_is_rejected(self):
         with tempfile.TemporaryDirectory() as td:

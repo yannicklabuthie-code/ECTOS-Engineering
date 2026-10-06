@@ -129,6 +129,7 @@ def issue_receipt(request: Dict[str, Any], signing_key: bytes, ttl_seconds: int 
         "systemic_assurance_id": request["systemic_assurance_id"],
         "target": request["target"],
         "action": request["action"],
+        "source_repository": request.get("source_repository"),
         "governance_currentness": request["governance_currentness"],
         "rule_source_currentness": request["rule_source_currentness"],
         "circuit_breaker_state": request["circuit_breaker_state"],
