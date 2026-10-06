@@ -1,0 +1,35 @@
+{
+  "schema_id": "ECTOS_COMMON_PACKAGE_MANIFEST_V0",
+  "package_type": "QUALIFICATION_FACTORY",
+  "package_id": "ECTOS_DEV_QUALIFICATION_FACTORY_PHASE0_PHASE1_MINIMUM_USEFUL_IMPLEMENTATION_PACKAGE_V05",
+  "version": "V05",
+  "source_commit": "f2f46a93fde94e5ac7bf8375b44a89182c80f9cb",
+  "build_id": "QF-V05-SYSTEMIC-DEPENDENCY-CLOSURE-B02",
+  "package_hash": null,
+  "target_runtime": [
+    "WindowsPowerShell5.1",
+    "Python>=3.12<4.0"
+  ],
+  "supported_os": [
+    "Windows"
+  ],
+  "supported_powershell_version": [
+    "5.1"
+  ],
+  "entrypoint": "00_CONTROL/RUN_ECTOS_QF_PHASE0_PHASE1_NATIVE_PS51_V05.ps1",
+  "expected_output_contract": "07_REPORTS/ECTOS_QF_CHANGE_RELEASE_OUTPUT_CONTRACT_V02.json",
+  "side_effect_contract": "INFRASTRUCTURE_SELFTEST_ONLY_NO_REAL_ECTOS_OS_MUTATION",
+  "mutation_policy": "NO_PREDECESSOR_MUTATION_ONE_SUCCESSOR_ONLY",
+  "dependencies": [
+    "01_PROJECT_FREEZE/CURRENT_ENGINEERING",
+    "01_PROJECT_FREEZE/CURRENT_UAC",
+    "WindowsPowerShell5.1",
+    "Python>=3.12<4.0"
+  ],
+  "dependency_graph": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json",
+  "test_profile": "QF_NATIVE_PS51_32_CASE_SELFTEST_PLUS_CURRENT_CONTROL_PLANE",
+  "qualification_profile": "FULL_SYSTEMIC_DEPENDENCY_CLOSURE",
+  "install_profile": "EXTRACT_AND_RUN_NATIVE_PS51",
+  "rollback_profile": "DISCARD_V05_RETAIN_FROZEN_V04",
+  "evidence_profile": "MANIFEST_DEPENDENCY_GRAPH_NATIVE_SELFTEST_UAC_HANDOFF"
+}
