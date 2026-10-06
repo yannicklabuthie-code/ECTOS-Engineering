@@ -12,6 +12,7 @@
     "ectos/hash-provenance",
     "ectos/state-collision",
     "ectos/native-ps51",
+    "ectos/uac-admission",
     "ectos/ci-required-checks"
   ],
   "merge_policy": "NO_REQUIRED_CHECK_PASS_NO_MERGE",
