@@ -7,7 +7,8 @@
     "ECTOS_REPOSITORY_AGENT": {"enabled": true, "can_self_admit": false}
   },
   "targets": {
-    "ECTOS_ENGINEERING_REPOSITORY_PROMOTION": {"enabled": true}
+    "ECTOS_ENGINEERING_REPOSITORY_PROMOTION": {"enabled": true},
+    "ECTOS_PACKAGE_HANDOFF": {"enabled": true}
   },
   "routes": [
     {
@@ -26,6 +27,12 @@
       "actor": "ECTOS_REPOSITORY_AGENT",
       "target": "ECTOS_ENGINEERING_REPOSITORY_PROMOTION",
       "actions": ["SUBMIT_REPOSITORY_GATE"],
+      "enabled": true
+    },
+    {
+      "actor": "ECTOS_REPOSITORY_AGENT",
+      "target": "ECTOS_PACKAGE_HANDOFF",
+      "actions": ["ISSUE_HANDOFF"],
       "enabled": true
     }
   ],
