@@ -21,6 +21,8 @@ Every node MUST include dependency_id, type, name, currentness, physical_evidenc
 
 Runtime/environment assumptions MUST be modeled as first-class nodes. They MUST NOT remain implicit in code.
 
+For an active package dependency graph, every active node and edge required for admission MUST have currentness = CURRENT. HISTORICAL, SUPERSEDED, NOT_PROVEN, or any unknown currentness value MUST block dependency closure when that dependency participates in the active package path. Node type, edge type, directness, status, and currentness MUST conform to the canonical schema enums; free-form structural types are prohibited.
+
 ## Mandatory closure counters
 A package is dependency-closed only when all are zero:
 - undeclared_dependency_count
