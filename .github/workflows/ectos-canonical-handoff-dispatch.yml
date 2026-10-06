@@ -1,0 +1,85 @@
+name: ECTOS Canonical Handoff Dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_ref:
+        description: Exact git ref containing the candidate handoff files
+        required: true
+        type: string
+      package_path:
+        required: true
+        type: string
+      manifest_path:
+        required: true
+        type: string
+      dependency_graph_path:
+        required: true
+        type: string
+      request_path:
+        required: true
+        type: string
+      source_commit_sha:
+        required: true
+        type: string
+      source_repository:
+        required: true
+        type: string
+      source_artifact_name:
+        required: false
+        default: ectos-candidate-handoff-input
+        type: string
+      handoff_artifact_name:
+        required: false
+        default: ectos-canonical-handoff
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  stage-exact-candidate:
+    name: ectos/stage-exact-candidate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact candidate ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.candidate_ref }}
+          fetch-depth: 1
+
+      - name: Verify exact candidate files exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "${{ inputs.package_path }}"
+          test -f "${{ inputs.manifest_path }}"
+          test -f "${{ inputs.dependency_graph_path }}"
+          test -f "${{ inputs.request_path }}"
+
+      - name: Publish exact candidate artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.source_artifact_name }}
+          path: |
+            ${{ inputs.package_path }}
+            ${{ inputs.manifest_path }}
+            ${{ inputs.dependency_graph_path }}
+            ${{ inputs.request_path }}
+          if-no-files-found: error
+          retention-days: 7
+
+  canonical-handoff:
+    needs: stage-exact-candidate
+    uses: ./.github/workflows/ectos-canonical-handoff.yml
+    with:
+      source_artifact_name: ${{ inputs.source_artifact_name }}
+      package_path: ${{ inputs.package_path }}
+      manifest_path: ${{ inputs.manifest_path }}
+      dependency_graph_path: ${{ inputs.dependency_graph_path }}
+      request_path: ${{ inputs.request_path }}
+      source_commit_sha: ${{ inputs.source_commit_sha }}
+      source_repository: ${{ inputs.source_repository }}
+      handoff_artifact_name: ${{ inputs.handoff_artifact_name }}
+    secrets: inherit
