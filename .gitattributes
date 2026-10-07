@@ -7,4 +7,6 @@
 /validators/powershell/identity/ECTOS_RULESET_WORKSPACE_IDENTITY_CONTRACT_V01.json text eol=lf
 /governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V02.md text eol=lf
 /schemas/qualification_center/v01/*.json text eol=lf
+/qualification_center/v01/**/*.ps1 text eol=lf
+/qualification_center/v01/**/*.psm1 text eol=lf
 /.gitattributes text eol=lf
