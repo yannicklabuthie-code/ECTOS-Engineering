@@ -1,9 +1,0 @@
-# Narrow code-rule source policy; deterministic LF checkout on governed identity sources.
-/rules/powershell/*.json text eol=lf
-/AGENTS.md text eol=lf
-/ECTOS_ENGINEERING_CODE_RULE_SOURCE.md text eol=lf
-/ECTOS_AGENT_CODE_RULE_SOURCE_POINTER.json text eol=lf
-/ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json text eol=lf
-/validators/powershell/identity/ECTOS_RULESET_WORKSPACE_IDENTITY_CONTRACT_V01.json text eol=lf
-/governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V02.md text eol=lf
-/.gitattributes text eol=lf
