@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QC_EXECUTION_RESULT_V01",
+  "type":"object","additionalProperties":false,
+  "required":["execution_id","run_id","start_time","end_time","process_id","exit_code","timeout_state","termination_state","stdout_sha256","stderr_sha256","raw_stdout_ref","raw_stderr_ref","created_outputs","observed_property","preliminary_result"],
+  "properties":{
+    "execution_id":{"type":"string","minLength":1},"run_id":{"type":"string","minLength":1},"start_time":{"type":"string","format":"date-time"},"end_time":{"type":"string","format":"date-time"},"process_id":{"type":["integer","null"],"minimum":0},
+    "exit_code":{"type":["integer","null"]},"timeout_state":{"enum":["NOT_TIMED_OUT","TIMED_OUT","NOT_PROVEN"]},"termination_state":{"type":"string","minLength":1},
+    "stdout_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"stderr_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"raw_stdout_ref":{"type":"string","minLength":1},"raw_stderr_ref":{"type":"string","minLength":1},
+    "created_outputs":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["path","sha256"],"properties":{"path":{"type":"string","minLength":1},"sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"}}}},
+    "observed_property":{"type":"string"},"preliminary_result":{"enum":["PASS","FAIL","BLOCKED","NOT_PROVEN","NOT_EXECUTED","NOT_APPLICABLE"]}
+  }
+}

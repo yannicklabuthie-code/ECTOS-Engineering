@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QH01_HANDOFF_V01",
+  "type":"object","additionalProperties":false,
+  "required":["handoff_id","target_package_id","target_package_sha256","qualification_contract_sha256","property_register_sha256","route_register_sha256","execution_return_sha256","evidence_bundle_sha256","defect_register_sha256","not_proven_register_sha256","qualifier_id","qualifier_version","qualifier_sha256","qualifier_trust_scope_id","platform_profile","qualification_profile","no_mutation_after_freeze"],
+  "properties":{
+    "handoff_id":{"type":"string","minLength":1},"target_package_id":{"type":"string","minLength":1},"target_package_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},
+    "qualification_contract_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"property_register_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"route_register_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},
+    "execution_return_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"evidence_bundle_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"defect_register_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"not_proven_register_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},
+    "qualifier_id":{"type":"string","minLength":1},"qualifier_version":{"type":"string","minLength":1},"qualifier_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"qualifier_trust_scope_id":{"type":"string","minLength":1},
+    "platform_profile":{"type":"string","minLength":1},"qualification_profile":{"type":"string","minLength":1},"no_mutation_after_freeze":{"const":true}
+  }
+}

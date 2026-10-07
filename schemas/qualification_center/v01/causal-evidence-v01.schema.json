@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QC_CAUSAL_EVIDENCE_V01",
+  "type":"object","additionalProperties":false,
+  "required":["property_id","control_id","execution_id","target_sha256","tool_sha256","script_sha256","host_id","runtime_id","run_id","test_id","fixture_id","mutation_id","issuer_id","authority_id","start_time","end_time","exit_code","expected_property","observed_property","raw_evidence_sha256","oracle_id","oracle_result","currentness_state","cross_receipt_id"],
+  "properties":{
+    "property_id":{"type":"string","minLength":1},"control_id":{"type":"string","minLength":1},"execution_id":{"type":"string","minLength":1},
+    "target_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"tool_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"script_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},
+    "host_id":{"type":"string","minLength":1},"runtime_id":{"type":"string","minLength":1},"run_id":{"type":"string","minLength":1},"test_id":{"type":"string","minLength":1},"fixture_id":{"type":["string","null"]},"mutation_id":{"type":["string","null"]},
+    "issuer_id":{"type":"string","minLength":1},"authority_id":{"type":"string","minLength":1},"start_time":{"type":"string","format":"date-time"},"end_time":{"type":"string","format":"date-time"},"exit_code":{"type":["integer","null"]},
+    "expected_property":{"type":"string","minLength":1},"observed_property":{"type":"string"},"raw_evidence_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"oracle_id":{"type":"string","minLength":1},
+    "oracle_result":{"enum":["PASS","FAIL","BLOCKED","NOT_PROVEN","NOT_EXECUTED","NOT_APPLICABLE"]},"currentness_state":{"enum":["CURRENT","HISTORICAL","SUPERSEDED","PARTIAL","NOT_PROVEN"]},"cross_receipt_id":{"type":"string","minLength":1}
+  }
+}

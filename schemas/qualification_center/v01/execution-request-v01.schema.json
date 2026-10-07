@@ -1,0 +1,13 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QC_EXECUTION_REQUEST_V01",
+  "type":"object","additionalProperties":false,
+  "required":["execution_id","property_id","control_id","test_id","target_id","target_sha256","tool_id","tool_sha256","script_id","script_sha256","fixture_id","mutation_id","oracle_id","host_id","runtime_id","command","arguments","working_directory","timeout_seconds","expected_exit","expected_output_contract"],
+  "properties":{
+    "execution_id":{"type":"string","minLength":1},"property_id":{"type":"string","minLength":1},"control_id":{"type":"string","minLength":1},"test_id":{"type":"string","minLength":1},
+    "target_id":{"type":"string","minLength":1},"target_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"tool_id":{"type":"string","minLength":1},"tool_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},
+    "script_id":{"type":"string","minLength":1},"script_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"fixture_id":{"type":["string","null"]},"mutation_id":{"type":["string","null"]},"oracle_id":{"type":"string","minLength":1},
+    "host_id":{"type":"string","minLength":1},"runtime_id":{"type":"string","minLength":1},"command":{"type":"string","minLength":1},"arguments":{"type":"array","items":{"type":"string"}},"working_directory":{"type":"string","minLength":1},
+    "timeout_seconds":{"type":"integer","minimum":1},"expected_exit":{"type":"array","items":{"type":"integer"},"minItems":1,"uniqueItems":true},"expected_output_contract":{"type":"string","minLength":1}
+  }
+}

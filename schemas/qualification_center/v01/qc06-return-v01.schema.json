@@ -1,0 +1,14 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QC06_INDEPENDENT_QUALIFICATION_RETURN_V01",
+  "type":"object","additionalProperties":false,
+  "required":["target_package_id","target_package_sha256","qualifier_id","qualifier_sha256","qualifier_trust_scope_id","qualification_contract_id","organizational_independence","logic_independence","data_independence","oracle_independence","shared_code_set","shared_test_logic_set","shared_fixture_set","shared_oracle_set","shared_data_source_set","independence_risk_register","independent_run_ledger","independent_property_results","new_defects","confirmed_defects","qualification_process_defects","objective_match","architectural_intent_match","invariant_match","prohibited_behavior_absence","constraint_relocation","architectural_substitution","final_state"],
+  "properties":{
+    "target_package_id":{"type":"string","minLength":1},"target_package_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"qualifier_id":{"type":"string","minLength":1},"qualifier_sha256":{"type":"string","pattern":"^[A-Fa-f0-9]{64}$"},"qualifier_trust_scope_id":{"type":"string","minLength":1},"qualification_contract_id":{"type":"string","minLength":1},
+    "organizational_independence":{"enum":["PASS","FAIL","NOT_PROVEN"]},"logic_independence":{"enum":["PASS","FAIL","NOT_PROVEN"]},"data_independence":{"enum":["PASS","FAIL","NOT_PROVEN"]},"oracle_independence":{"enum":["PASS","FAIL","NOT_PROVEN"]},
+    "shared_code_set":{"type":"array","items":{"type":"string"},"uniqueItems":true},"shared_test_logic_set":{"type":"array","items":{"type":"string"},"uniqueItems":true},"shared_fixture_set":{"type":"array","items":{"type":"string"},"uniqueItems":true},"shared_oracle_set":{"type":"array","items":{"type":"string"},"uniqueItems":true},"shared_data_source_set":{"type":"array","items":{"type":"string"},"uniqueItems":true},"independence_risk_register":{"type":"array","items":{"type":"string"}},
+    "independent_run_ledger":{"type":"array","items":{"type":"string"}},"independent_property_results":{"type":"array","items":{"type":"object"}},"new_defects":{"type":"array","items":{"type":"string"}},"confirmed_defects":{"type":"array","items":{"type":"string"}},"qualification_process_defects":{"type":"array","items":{"type":"string"}},
+    "objective_match":{"enum":["PASS","FAIL","NOT_PROVEN"]},"architectural_intent_match":{"enum":["PASS","FAIL","NOT_PROVEN"]},"invariant_match":{"enum":["PASS","FAIL","NOT_PROVEN"]},"prohibited_behavior_absence":{"enum":["PASS","FAIL","NOT_PROVEN"]},"constraint_relocation":{"enum":["NO","YES","NOT_PROVEN"]},"architectural_substitution":{"enum":["NO","YES","NOT_PROVEN"]},
+    "final_state":{"enum":["PASS","FAIL_WITH_COMPLETE_KNOWN_DEFECT_SET","BLOCKED_NOT_PROVEN_WITH_EXACT_UNREACHABLE_SCOPE"]}
+  }
+}

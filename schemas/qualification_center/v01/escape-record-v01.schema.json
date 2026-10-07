@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QC_ESCAPE_RECORD_V01",
+  "type":"object","additionalProperties":false,
+  "required":["defect_id","property_id","property_scope_class","earliest_detectable_stage","latest_permitted_stage","actual_detection_stage","escape_occurred","escaped_control_id","escape_reason","product_defect","process_defect","anti_recurrence_control_id","regression_fixture_id"],
+  "properties":{
+    "defect_id":{"type":"string","minLength":1},"property_id":{"type":"string","minLength":1},"property_scope_class":{"enum":["LOCAL","INTERFACE","COMPOSITIONAL","SYSTEM","AUTHORITY","EVIDENCE","RUNTIME","ENVIRONMENTAL"]},
+    "earliest_detectable_stage":{"type":"string","minLength":1},"latest_permitted_stage":{"type":"string","minLength":1},"actual_detection_stage":{"type":"string","minLength":1},"escape_occurred":{"type":"boolean"},
+    "escaped_control_id":{"type":["string","null"]},"escape_reason":{"type":"string"},"product_defect":{"type":"boolean"},"process_defect":{"type":"boolean"},"anti_recurrence_control_id":{"type":"string","minLength":1},"regression_fixture_id":{"type":"string","minLength":1}
+  }
+}

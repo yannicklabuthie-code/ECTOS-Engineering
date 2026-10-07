@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_QC_PROPERTY_CONTRACT_V01",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["property_id","property_family","property_scope_class","requirement_id","owner_objective_id","invariant_ids","target_member_ids","target_interface_ids","earliest_detectable_stage","latest_permitted_detection_stage","positive_control_id","negative_control_ids","expected_property","oracle_id","oracle_type","required_evidence_fields","qualification_profile","fail_effect","block_effect","downstream_admission_effect"],
+  "properties": {
+    "property_id": {"type": "string", "minLength": 1},
+    "property_family": {"enum": ["P01","P02","P03","P04","P05","P06","P07","P08","P09","P10","P11","P12","P13","P14","P15","P16","P17","P18","P19","P20","P21","P22","P23","P24","P25"]},
+    "property_scope_class": {"enum": ["LOCAL","INTERFACE","COMPOSITIONAL","SYSTEM","AUTHORITY","EVIDENCE","RUNTIME","ENVIRONMENTAL"]},
+    "requirement_id": {"type": "string", "minLength": 1},
+    "owner_objective_id": {"type": "string", "minLength": 1},
+    "invariant_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "target_member_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "target_interface_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "earliest_detectable_stage": {"type": "string", "minLength": 1},
+    "latest_permitted_detection_stage": {"type": "string", "minLength": 1},
+    "positive_control_id": {"type": "string", "minLength": 1},
+    "negative_control_ids": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "expected_property": {"type": "string", "minLength": 1},
+    "oracle_id": {"type": "string", "minLength": 1},
+    "oracle_type": {"type": "string", "minLength": 1},
+    "required_evidence_fields": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "qualification_profile": {"type": "string", "minLength": 1},
+    "fail_effect": {"type": "string", "minLength": 1},
+    "block_effect": {"type": "string", "minLength": 1},
+    "downstream_admission_effect": {"type": "string", "minLength": 1}
+  }
+}

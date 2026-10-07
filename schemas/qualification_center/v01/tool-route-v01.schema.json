@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_QC_TOOL_ROUTE_V01",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["route_id","property_id","control_id","tool_id","tool_version","tool_sha256","tool_trust_state","tool_currentness_state","platform_profile","runtime_profile","qualification_profile","host_id","host_trust_state","tool_target_fit","expected_evidence_schema_id","execution_authority_required","route_status"],
+  "properties": {
+    "route_id": {"type": "string", "minLength": 1},
+    "property_id": {"type": "string", "minLength": 1},
+    "control_id": {"type": "string", "minLength": 1},
+    "tool_id": {"type": "string", "minLength": 1},
+    "tool_version": {"type": "string", "minLength": 1},
+    "tool_sha256": {"type": "string", "pattern": "^[A-Fa-f0-9]{64}$"},
+    "tool_trust_state": {"type": "string", "minLength": 1},
+    "tool_currentness_state": {"enum": ["CURRENT","HISTORICAL","SUPERSEDED","PARTIAL","NOT_PROVEN"]},
+    "platform_profile": {"type": "string", "minLength": 1},
+    "runtime_profile": {"type": "string", "minLength": 1},
+    "qualification_profile": {"type": "string", "minLength": 1},
+    "host_id": {"type": "string", "minLength": 1},
+    "host_trust_state": {"type": "string", "minLength": 1},
+    "tool_target_fit": {"enum": ["PASS","FAIL","BLOCKED","NOT_PROVEN"]},
+    "expected_evidence_schema_id": {"type": "string", "minLength": 1},
+    "execution_authority_required": {"type": "string", "minLength": 1},
+    "route_status": {"enum": ["PASS","FAIL","BLOCKED","NOT_PROVEN","NOT_EXECUTED","NOT_APPLICABLE"]}
+  }
+}
