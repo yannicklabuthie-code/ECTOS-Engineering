@@ -1,0 +1,75 @@
+{
+  "admission_authority": null,
+  "authority_state": "MAIN_AUTHORIZED_FOR_IMPLEMENTATION",
+  "blocker_reason": "",
+  "blocker_state": "CLEAR",
+  "circuit_breaker_state": "NOT_TRIGGERED",
+  "created_at": "2026-10-07T22:40:00Z",
+  "created_by": "ECTOS_MAIN_AUTHORITY",
+  "currentness_state": "CURRENT",
+  "evidence_pointers": [
+    {
+      "commit": "a887581c4e4d1a3c2d821706b1bba5896ae98455",
+      "path": "tests/test_mission_registry.py",
+      "pointer_id": "ECTOS_MISSION_REGISTRY_MVP_TESTS_V01",
+      "repository": "yannicklabuthie-code/ECTOS-Engineering",
+      "sha256": "D1FA23B1DE1960D03B33ACF7083903C3413693262722292B7A0FC857F277776F"
+    }
+  ],
+  "input_pointers": [
+    {
+      "commit": "9fa93d1c0836f3dc257bec659a228508ac07b029",
+      "path": "ectos/artifacts/METHODOLOGY_ARTIFACT_PERSISTENCE_MVP/V01/ARTIFACT.txt",
+      "pointer_id": "ECTOS_ARTIFACT_POINTER_METHODOLOGY_ARTIFACT_PERSISTENCE_MVP_V01",
+      "repository": "yannicklabuthie-code/ECTOS-Engineering",
+      "sha256": "1B4D600C4C6539EE74E43B01B64A08CDC4577D9507035DC83B353F499B027A57"
+    }
+  ],
+  "known_defect_ids": [],
+  "known_defect_set_state": "EMPTY_FOR_IMPLEMENTATION_TEST_SCOPE",
+  "known_failure_count": 0,
+  "last_transition_authority": "ECTOS_MAIN_AUTHORITY",
+  "last_transition_evidence": "LOCAL_UNIT_TESTS_8_OF_8_PASS_AND_CLI_CREATE_READ_TRANSITION_RESUME_PASS",
+  "main_authority": "ECTOS_MAIN_AUTHORITY",
+  "mission_id": "ECTOS-METHODOLOGY-03.2",
+  "mission_type": "METHODOLOGY_MVP",
+  "next_action_class": "MAIN_REVIEW",
+  "next_authority": "ECTOS_MAIN_AUTHORITY",
+  "next_execution_authority_eligible": false,
+  "next_target": "NOT_ASSIGNED_PENDING_MAIN_REVIEW",
+  "objective": "Implement a durable versioned Mission Registry that creates, reads, transitions, blocks, lists and resumes missions from registry records and immutable pointers without chat-session state.",
+  "output_pointers": [
+    {
+      "commit": "a887581c4e4d1a3c2d821706b1bba5896ae98455",
+      "path": "engineering/mission_registry.py",
+      "pointer_id": "ECTOS_MISSION_REGISTRY_MVP_IMPLEMENTATION_V01",
+      "repository": "yannicklabuthie-code/ECTOS-Engineering",
+      "sha256": "5BB45F26EE444DA9BEB494ECACAA8573205BCB3E81510A143BF15E5F5A388C8F"
+    },
+    {
+      "commit": "a887581c4e4d1a3c2d821706b1bba5896ae98455",
+      "path": "ectos/mission-registry/ECTOS_MISSION_REGISTRY_SCHEMA_V02.json",
+      "pointer_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V02",
+      "repository": "yannicklabuthie-code/ECTOS-Engineering",
+      "sha256": "65D9CBE3700549F24F95DDDE4DDC8DA0C57B3CDE7EE90F409C9A13ECEB4A7F1E"
+    }
+  ],
+  "producer_actor": "ECTOS_MAIN_AUTHORITY",
+  "project": "ECTOS",
+  "project_container": "ECTOS-POC",
+  "qualifier_actor": null,
+  "related_failure_count": 0,
+  "repeated_root_failure": false,
+  "result_state": "IMPLEMENTATION_COMPLETE_PENDING_MAIN_REVIEW",
+  "return_pointer": null,
+  "schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V02",
+  "source_commit": "a887581c4e4d1a3c2d821706b1bba5896ae98455",
+  "source_repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "state": "PENDING_MAIN_REVIEW",
+  "superior_authority": "PROJECT_OWNER_YANICK",
+  "systemic_review_required": false,
+  "systemic_review_state": "NOT_REQUIRED",
+  "target_node": "METHODOLOGY_MVP_MISSION_REGISTRY",
+  "unreachable_scope": [],
+  "updated_at": "2026-10-07T22:56:00Z"
+}
