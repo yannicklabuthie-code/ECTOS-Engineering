@@ -1,0 +1,17 @@
+{
+  "artifact": {
+    "commit": "9fa93d1c0836f3dc257bec659a228508ac07b029",
+    "filename": "ARTIFACT.txt",
+    "path": "ectos/artifacts/METHODOLOGY_ARTIFACT_PERSISTENCE_MVP/V01/ARTIFACT.txt",
+    "repository": "yannicklabuthie-code/ECTOS-Engineering",
+    "sha256": "1B4D600C4C6539EE74E43B01B64A08CDC4577D9507035DC83B353F499B027A57",
+    "size_bytes": 279
+  },
+  "currentness": "CURRENT_TEST_ARTIFACT",
+  "manifest_id": "ECTOS_METHODOLOGY_ARTIFACT_PERSISTENCE_MVP_MANIFEST_V01",
+  "mission_id": "ECTOS-METHODOLOGY-02.3",
+  "package_id": "METHODOLOGY_ARTIFACT_PERSISTENCE_MVP",
+  "project": "ECTOS",
+  "target_node": "METHODOLOGY_MVP_ARTIFACT_PERSISTENCE",
+  "version": "V01"
+}
