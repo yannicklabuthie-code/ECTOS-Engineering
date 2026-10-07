@@ -1,0 +1,85 @@
+{
+  "schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V02",
+  "predecessor_schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V01",
+  "status": "CURRENT_MVP_IMPLEMENTATION_SCHEMA",
+  "purpose": "Durable operational truth for ECTOS missions, separate from Dependency Graph technical topology.",
+  "state_model": {
+    "normal": [
+      "DRAFT",
+      "QUEUED",
+      "AUTHORIZED",
+      "RUNNING",
+      "WAITING",
+      "RETURN_RECEIVED",
+      "PENDING_MAIN_REVIEW",
+      "MAIN_ADJUDICATED",
+      "CLOSED"
+    ],
+    "exception": [
+      "BLOCKED",
+      "FAILED_SYSTEMIC",
+      "CANCELED"
+    ],
+    "v02_change": "Adds WAITING as an explicit operational state required by Methodology step 03.2; V01 remains historical and is not silently rewritten."
+  },
+  "pointer_contract": {
+    "required_fields": [
+      "pointer_id",
+      "repository",
+      "commit",
+      "path",
+      "sha256"
+    ],
+    "rule": "Resume requires at least one durable immutable pointer and exact source_repository/source_commit binding."
+  },
+  "authority_rules": [
+    "AGENT_RETURN_DOES_NOT_EQUAL_MAIN_ACCEPTANCE",
+    "NEXT_EXECUTION_AUTHORITY_ELIGIBLE_IS_MAIN_OR_GOVERNANCE_DECISION",
+    "STATE_TRANSITIONS_REQUIRE_IDENTIFIED_AUTHORITY_AND_EVIDENCE",
+    "CIRCUIT_BREAKER_BLOCKS_ORDINARY_EXECUTION_UNTIL_REAUTHORIZED"
+  ],
+  "required_fields": [
+    "schema_id",
+    "mission_id",
+    "project",
+    "project_container",
+    "mission_type",
+    "target_node",
+    "objective",
+    "producer_actor",
+    "qualifier_actor",
+    "admission_authority",
+    "main_authority",
+    "superior_authority",
+    "state",
+    "authority_state",
+    "currentness_state",
+    "blocker_state",
+    "blocker_reason",
+    "circuit_breaker_state",
+    "systemic_review_required",
+    "systemic_review_state",
+    "known_failure_count",
+    "related_failure_count",
+    "repeated_root_failure",
+    "known_defect_set_state",
+    "known_defect_ids",
+    "unreachable_scope",
+    "source_repository",
+    "source_commit",
+    "input_pointers",
+    "output_pointers",
+    "return_pointer",
+    "result_state",
+    "evidence_pointers",
+    "next_authority",
+    "next_target",
+    "next_action_class",
+    "next_execution_authority_eligible",
+    "created_at",
+    "updated_at",
+    "created_by",
+    "last_transition_authority",
+    "last_transition_evidence"
+  ]
+}
