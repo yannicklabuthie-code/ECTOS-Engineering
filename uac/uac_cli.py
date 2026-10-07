@@ -24,17 +24,22 @@ def get_key(env_name: str) -> bytes:
     return value.encode("utf-8")
 
 
-def get_keyring(env_name: str) -> dict[str, bytes]:
+def get_public_keyring(env_name: str) -> dict[str, dict]:
     value = os.environ.get(env_name, "")
     if not value:
-        raise UACDenied(f"AUTHORITY_EVIDENCE_KEYRING_MISSING:{env_name}")
+        raise UACDenied(f"AUTHORITY_EVIDENCE_PUBLIC_KEYRING_MISSING:{env_name}")
     try:
         raw = json.loads(value)
     except json.JSONDecodeError as exc:
-        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID_JSON") from exc
+        raise UACDenied("AUTHORITY_EVIDENCE_PUBLIC_KEYRING_INVALID_JSON") from exc
     if not isinstance(raw, dict) or not raw:
-        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID")
-    return {str(k): str(v).encode("utf-8") for k, v in raw.items() if str(v)}
+        raise UACDenied("AUTHORITY_EVIDENCE_PUBLIC_KEYRING_INVALID")
+    for key_id, public_key in raw.items():
+        if not isinstance(key_id, str) or not isinstance(public_key, dict):
+            raise UACDenied("AUTHORITY_EVIDENCE_PUBLIC_KEYRING_INVALID")
+        if public_key.get("key_use") != "VERIFY_ONLY":
+            raise UACDenied("AUTHORITY_EVIDENCE_PUBLIC_KEYRING_NOT_VERIFY_ONLY")
+    return raw
 
 
 def main() -> int:
@@ -44,7 +49,7 @@ def main() -> int:
     admit = sub.add_parser("admit")
     admit.add_argument("--request", required=True)
     admit.add_argument("--signing-key-env", default="ECTOS_UAC_SIGNING_KEY")
-    admit.add_argument("--authority-keyring-env", default="ECTOS_UAC_EVIDENCE_KEYS")
+    admit.add_argument("--authority-public-keyring-env", default="ECTOS_UAC_EVIDENCE_PUBLIC_KEYS")
     admit.add_argument("--ttl-seconds", type=int, default=900)
 
     verify = sub.add_parser("verify")
@@ -64,7 +69,7 @@ def main() -> int:
                 req,
                 key,
                 ttl_seconds=args.ttl_seconds,
-                authority_keyring=get_keyring(args.authority_keyring_env),
+                authority_keyring=get_public_keyring(args.authority_public_keyring_env),
             ))
         else:
             receipt = load_json(args.receipt)

@@ -4,23 +4,39 @@ import argparse
 import json
 from pathlib import Path
 
+from byte_contract import canonical_json_bytes
 from uac_core import UACDenied
 
 
-def resolve_staged_path(root: Path, declared_path: str) -> Path:
+def _normalize_declared(declared_path: str) -> str:
     if not isinstance(declared_path, str) or not declared_path.strip():
         raise UACDenied("DECLARED_ARTIFACT_PATH_INVALID")
-    normalized = declared_path.replace("\\", "/").lstrip("./")
-    direct = root / Path(normalized)
-    if direct.is_file():
-        return direct
-    basename = Path(normalized).name
-    matches = sorted(p for p in root.rglob(basename) if p.is_file())
-    if len(matches) == 1:
-        return matches[0]
-    if not matches:
-        raise UACDenied(f"STAGED_ARTIFACT_NOT_FOUND:{normalized}")
-    raise UACDenied(f"STAGED_ARTIFACT_PATH_AMBIGUOUS:{normalized}")
+    normalized = declared_path.replace("\\", "/")
+    if normalized.startswith("/") or normalized.startswith("../") or "/../" in f"/{normalized}/":
+        raise UACDenied(f"DECLARED_ARTIFACT_PATH_INVALID:{declared_path}")
+    return normalized
+
+
+def resolve_staged_path(root: Path, declared_path: str) -> Path:
+    normalized = _normalize_declared(declared_path)
+    root = root.resolve()
+    candidate = (root / "source" / Path(normalized)).resolve()
+    try:
+        candidate.relative_to(root)
+    except ValueError as exc:
+        raise UACDenied(f"STAGED_ARTIFACT_PATH_ESCAPES_ROOT:{normalized}") from exc
+    if not candidate.is_file():
+        raise UACDenied(f"STAGED_ARTIFACT_NOT_FOUND_EXACT:{normalized}")
+    return candidate
+
+
+def staged_mapping(root: Path, declared: dict[str, str]) -> dict[str, str]:
+    root = root.resolve()
+    mapping: dict[str, str] = {}
+    for role, declared_path in declared.items():
+        resolved = resolve_staged_path(root, declared_path)
+        mapping[role] = resolved.relative_to(root).as_posix()
+    return mapping
 
 
 def main() -> int:
@@ -33,13 +49,13 @@ def main() -> int:
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
     root = Path(args.root)
-    mapping = {
-        "package_path": resolve_staged_path(root, args.package_path).as_posix(),
-        "manifest_path": resolve_staged_path(root, args.manifest_path).as_posix(),
-        "dependency_graph_path": resolve_staged_path(root, args.dependency_graph_path).as_posix(),
-        "request_path": resolve_staged_path(root, args.request_path).as_posix(),
-    }
-    Path(args.output).write_text(json.dumps(mapping, sort_keys=True, separators=(",", ":")) + "\n", encoding="utf-8", newline="\n")
+    mapping = staged_mapping(root, {
+        "package": args.package_path,
+        "manifest": args.manifest_path,
+        "dependency_graph": args.dependency_graph_path,
+        "request": args.request_path,
+    })
+    Path(args.output).write_bytes(canonical_json_bytes(mapping))
     print(json.dumps(mapping, sort_keys=True))
     return 0
 

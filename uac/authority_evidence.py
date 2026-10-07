@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-import base64
 import hashlib
-import hmac
 import json
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict
 
+from atomic_state import AtomicStateError, atomic_consume
+from authority_crypto import AuthorityCryptoError, public_key_fingerprint, verify_rsa_pkcs1_v1_5_sha256
 from uac_errors import UACDenied
 
 EVIDENCE_KINDS = {
@@ -15,6 +15,7 @@ EVIDENCE_KINDS = {
     "systemic_assurance": ("SYSTEMIC_ASSURANCE", "PASS"),
     "consolidated_defect_closure": ("CONSOLIDATED_DEFECT_CLOSURE_AUTHORITY", "CLOSED"),
     "circuit_breaker": ("ECTOS_MAIN_AUTHORITY", "CLEAR"),
+    "governance_currentness": ("GOVERNANCE_CURRENTNESS_AUTHORITY", "PROVEN_CURRENT"),
     "rule_source_currentness": ("ECTOS_RULE_SOURCE_AUTHORITY", "PROVEN_CURRENT"),
     "negative_controls": ("INDEPENDENT_QUALIFIER", "PASS"),
 }
@@ -39,27 +40,6 @@ def evidence_digest(evidence: Dict[str, Any]) -> str:
     return hashlib.sha256(_canon(_signable(evidence))).hexdigest()
 
 
-def sign_evidence(evidence: Dict[str, Any], key: bytes) -> Dict[str, Any]:
-    result = dict(evidence)
-    result["evidence_sha256"] = evidence_digest(result)
-    mac = hmac.new(key, _canon(_signable(result)), hashlib.sha256).digest()
-    result["signature"] = base64.urlsafe_b64encode(mac).decode("ascii").rstrip("=")
-    return result
-
-
-def _verify_signature(evidence: Dict[str, Any], key: bytes) -> None:
-    supplied = evidence.get("signature")
-    if not isinstance(supplied, str) or not supplied:
-        raise UACDenied("AUTHORITY_EVIDENCE_SIGNATURE_MISSING")
-    digest = evidence.get("evidence_sha256")
-    if digest != evidence_digest(evidence):
-        raise UACDenied("AUTHORITY_EVIDENCE_DIGEST_MISMATCH")
-    mac = hmac.new(key, _canon(_signable(evidence)), hashlib.sha256).digest()
-    expected = base64.urlsafe_b64encode(mac).decode("ascii").rstrip("=")
-    if not hmac.compare_digest(supplied, expected):
-        raise UACDenied("AUTHORITY_EVIDENCE_SIGNATURE_INVALID")
-
-
 def _parse_time(name: str, value: Any) -> datetime:
     if not isinstance(value, str) or not value:
         raise UACDenied(f"AUTHORITY_EVIDENCE_{name.upper()}_MISSING")
@@ -72,10 +52,51 @@ def _parse_time(name: str, value: Any) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
+def _validate_public_keyring_separation(registry: Dict[str, Any], keyring: Dict[str, Dict[str, Any]]) -> None:
+    if not isinstance(keyring, dict) or not keyring:
+        raise UACDenied("AUTHORITY_EVIDENCE_PUBLIC_KEYRING_UNAVAILABLE")
+    policies = registry.get("authority_evidence_policies", {})
+    fingerprint_owner: dict[str, tuple[str, str]] = {}
+    for kind, policy in policies.items():
+        issuer_role = policy.get("issuer_role")
+        trusted_issuers = policy.get("trusted_issuer_ids", [])
+        trusted_keys = policy.get("trusted_key_ids", [])
+        for key_id in trusted_keys:
+            public_key = keyring.get(str(key_id))
+            if not public_key:
+                raise UACDenied(f"AUTHORITY_EVIDENCE_PUBLIC_KEY_UNAVAILABLE:{kind}")
+            if public_key.get("issuer_role") != issuer_role:
+                raise UACDenied(f"AUTHORITY_EVIDENCE_PUBLIC_KEY_ROLE_MISMATCH:{kind}")
+            if public_key.get("issuer_id") not in trusted_issuers:
+                raise UACDenied(f"AUTHORITY_EVIDENCE_PUBLIC_KEY_ISSUER_MISMATCH:{kind}")
+            try:
+                fingerprint = public_key_fingerprint(public_key)
+            except AuthorityCryptoError as exc:
+                raise UACDenied(f"AUTHORITY_EVIDENCE_PUBLIC_KEY_INVALID:{kind}:{exc}") from exc
+            owner = (str(public_key.get("issuer_id")), str(public_key.get("issuer_role")))
+            previous = fingerprint_owner.get(fingerprint)
+            if previous is not None and previous != owner:
+                raise UACDenied("CRYPTOGRAPHIC_AUTHORITY_KEY_SEPARATION_VIOLATION")
+            fingerprint_owner[fingerprint] = owner
+
+
+def _verify_signature(evidence: Dict[str, Any], public_key: Dict[str, Any]) -> None:
+    supplied = evidence.get("signature")
+    if not isinstance(supplied, str) or not supplied:
+        raise UACDenied("AUTHORITY_EVIDENCE_SIGNATURE_MISSING")
+    digest = evidence.get("evidence_sha256")
+    if digest != evidence_digest(evidence):
+        raise UACDenied("AUTHORITY_EVIDENCE_DIGEST_MISMATCH")
+    try:
+        verify_rsa_pkcs1_v1_5_sha256(_canon(_signable(evidence)), supplied, public_key)
+    except AuthorityCryptoError as exc:
+        raise UACDenied(f"AUTHORITY_EVIDENCE_SIGNATURE_INVALID:{exc}") from exc
+
+
 def verify_authority_evidence_bundle(
     request: Dict[str, Any],
     registry: Dict[str, Any],
-    keyring: Dict[str, bytes],
+    keyring: Dict[str, Dict[str, Any]],
     ledger_path: Path,
     consume: bool = False,
 ) -> Dict[str, str]:
@@ -83,13 +104,10 @@ def verify_authority_evidence_bundle(
     if not isinstance(bundle, dict):
         raise UACDenied("AUTHORITY_EVIDENCE_BUNDLE_MISSING")
 
+    _validate_public_keyring_separation(registry, keyring)
     policies = registry.get("authority_evidence_policies", {})
-    ledger = {"consumed_authority_evidence_nonces": []}
-    if ledger_path.exists():
-        ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
-    consumed = set(ledger.get("consumed_authority_evidence_nonces", []))
-    newly_consumed: list[str] = []
     derived: Dict[str, str] = {}
+    nonces: list[str] = []
     now = datetime.now(timezone.utc)
 
     for kind, (default_role, default_decision) in EVIDENCE_KINDS.items():
@@ -102,9 +120,9 @@ def verify_authority_evidence_bundle(
         key_id = evidence.get("key_id")
         if key_id not in policy.get("trusted_key_ids", []):
             raise UACDenied(f"AUTHORITY_EVIDENCE_UNTRUSTED_KEY:{kind}")
-        key = keyring.get(str(key_id))
-        if not key:
-            raise UACDenied(f"AUTHORITY_EVIDENCE_KEY_UNAVAILABLE:{kind}")
+        public_key = keyring.get(str(key_id))
+        if not public_key:
+            raise UACDenied(f"AUTHORITY_EVIDENCE_PUBLIC_KEY_UNAVAILABLE:{kind}")
         if evidence.get("issuer_role") != expected_role:
             raise UACDenied(f"AUTHORITY_EVIDENCE_ISSUER_ROLE_INVALID:{kind}")
         trusted_issuer_ids = policy.get("trusted_issuer_ids", [])
@@ -117,6 +135,8 @@ def verify_authority_evidence_bundle(
             dynamic_issuer = request.get("systemic_assurance_id")
         if dynamic_issuer is not None and evidence.get("issuer_id") != dynamic_issuer:
             raise UACDenied(f"AUTHORITY_EVIDENCE_ISSUER_TARGET_MISMATCH:{kind}")
+        if public_key.get("issuer_id") != evidence.get("issuer_id") or public_key.get("issuer_role") != evidence.get("issuer_role"):
+            raise UACDenied(f"AUTHORITY_EVIDENCE_KEY_IDENTITY_MISMATCH:{kind}")
         if evidence.get("decision") != expected_decision:
             raise UACDenied(f"AUTHORITY_EVIDENCE_DECISION_INVALID:{kind}")
         for field in BINDING_FIELDS:
@@ -131,17 +151,17 @@ def verify_authority_evidence_bundle(
         nonce = evidence.get("nonce")
         if not isinstance(nonce, str) or not nonce:
             raise UACDenied(f"AUTHORITY_EVIDENCE_NONCE_MISSING:{kind}")
-        if nonce in consumed or nonce in newly_consumed:
+        if nonce in nonces:
             raise UACDenied(f"AUTHORITY_EVIDENCE_REPLAY:{kind}")
-        _verify_signature(evidence, key)
-        newly_consumed.append(nonce)
+        _verify_signature(evidence, public_key)
+        nonces.append(nonce)
         derived[kind] = str(evidence["decision"])
 
     if consume:
-        consumed.update(newly_consumed)
-        ledger["consumed_authority_evidence_nonces"] = sorted(consumed)
-        ledger_path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = ledger_path.with_suffix(ledger_path.suffix + ".tmp")
-        tmp.write_text(json.dumps(ledger, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
-        tmp.replace(ledger_path)
+        try:
+            duplicate = atomic_consume(ledger_path, "consumed_authority_evidence_nonces", nonces)
+        except AtomicStateError as exc:
+            raise UACDenied(f"AUTHORITY_EVIDENCE_REPLAY_LEDGER_FAILURE:{exc}") from exc
+        if duplicate is not None:
+            raise UACDenied("AUTHORITY_EVIDENCE_REPLAY")
     return derived

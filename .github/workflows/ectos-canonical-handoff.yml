@@ -31,7 +31,7 @@ on:
     secrets:
       ECTOS_UAC_SIGNING_KEY:
         required: true
-      ECTOS_UAC_EVIDENCE_KEYS:
+      ECTOS_UAC_EVIDENCE_PUBLIC_KEYS:
         required: true
 
 permissions:
@@ -62,7 +62,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Resolve deterministic staged artifact paths
+      - name: Resolve exact staged artifact paths
         id: resolve
         shell: bash
         run: |
@@ -74,10 +74,16 @@ jobs:
             --dependency-graph-path "${{ inputs.dependency_graph_path }}" \
             --request-path "${{ inputs.request_path }}" \
             --output staged-paths.json
-          echo "package_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["package_path"])')" >> "$GITHUB_OUTPUT"
-          echo "manifest_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["manifest_path"])')" >> "$GITHUB_OUTPUT"
-          echo "dependency_graph_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["dependency_graph_path"])')" >> "$GITHUB_OUTPUT"
-          echo "request_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["request_path"])')" >> "$GITHUB_OUTPUT"
+          echo "package_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["package"])')" >> "$GITHUB_OUTPUT"
+          echo "manifest_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["manifest"])')" >> "$GITHUB_OUTPUT"
+          echo "dependency_graph_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["dependency_graph"])')" >> "$GITHUB_OUTPUT"
+          echo "request_path=$(python -c 'import json; print(json.load(open("staged-paths.json", encoding="utf-8"))["request"])')" >> "$GITHUB_OUTPUT"
+
+      - name: Verify exact PRE_DISPATCH receipt presence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f candidate/pre-dispatch/PRE_DISPATCH_RECEIPT.json || { echo 'PRE_DISPATCH_RECEIPT_NOT_FOUND'; exit 40; }
 
       - name: Attest live GitHub governance before signing
         shell: bash
@@ -97,28 +103,29 @@ jobs:
           import json
           from pathlib import Path
           request = json.loads(Path("${{ steps.resolve.outputs.request_path }}").read_text(encoding="utf-8"))
+          pre = json.loads(Path("candidate/pre-dispatch/PRE_DISPATCH_RECEIPT.json").read_text(encoding="utf-8"))
           declared_repo = "${{ inputs.source_repository }}"
           declared_commit = "${{ inputs.source_commit_sha }}".lower()
-          if request.get("source_repository") != declared_repo:
-              raise SystemExit(f"SOURCE_REPOSITORY_DECLARATION_MISMATCH:{request.get('source_repository')!r}!={declared_repo!r}")
-          if str(request.get("source_commit", "")).lower() != declared_commit:
+          if request.get("source_repository") != declared_repo or pre.get("source_repository") != declared_repo:
+              raise SystemExit("SOURCE_REPOSITORY_DECLARATION_MISMATCH")
+          if str(request.get("source_commit", "")).lower() != declared_commit or str(pre.get("source_commit", "")).lower() != declared_commit:
               raise SystemExit("SOURCE_COMMIT_DECLARATION_MISMATCH")
 
-      - name: Fail closed if authority secrets are unavailable
+      - name: Fail closed if authority material is unavailable
         shell: bash
         env:
           ECTOS_UAC_SIGNING_KEY: ${{ secrets.ECTOS_UAC_SIGNING_KEY }}
-          ECTOS_UAC_EVIDENCE_KEYS: ${{ secrets.ECTOS_UAC_EVIDENCE_KEYS }}
+          ECTOS_UAC_EVIDENCE_PUBLIC_KEYS: ${{ secrets.ECTOS_UAC_EVIDENCE_PUBLIC_KEYS }}
         run: |
           set -euo pipefail
           test -n "$ECTOS_UAC_SIGNING_KEY" || { echo 'PRODUCTION_SIGNING_KEY_MISSING'; exit 40; }
-          test -n "$ECTOS_UAC_EVIDENCE_KEYS" || { echo 'AUTHORITY_EVIDENCE_KEYRING_UNAVAILABLE'; exit 40; }
+          test -n "$ECTOS_UAC_EVIDENCE_PUBLIC_KEYS" || { echo 'AUTHORITY_EVIDENCE_PUBLIC_KEYRING_UNAVAILABLE'; exit 40; }
 
       - name: Materialize signed canonical handoff
         shell: bash
         env:
           ECTOS_UAC_SIGNING_KEY: ${{ secrets.ECTOS_UAC_SIGNING_KEY }}
-          ECTOS_UAC_EVIDENCE_KEYS: ${{ secrets.ECTOS_UAC_EVIDENCE_KEYS }}
+          ECTOS_UAC_EVIDENCE_PUBLIC_KEYS: ${{ secrets.ECTOS_UAC_EVIDENCE_PUBLIC_KEYS }}
         run: |
           set -euo pipefail
           mkdir -p handoff
@@ -127,6 +134,8 @@ jobs:
             --manifest "${{ steps.resolve.outputs.manifest_path }}" \
             --dependency-graph "${{ steps.resolve.outputs.dependency_graph_path }}" \
             --request "${{ steps.resolve.outputs.request_path }}" \
+            --pre-dispatch-receipt candidate/pre-dispatch/PRE_DISPATCH_RECEIPT.json \
+            --staged-paths staged-paths.json \
             --output-dir handoff \
             --commit-sha "${{ inputs.source_commit_sha }}" \
             --governance-attestation governance/GOVERNANCE_ATTESTATION.json
@@ -143,6 +152,8 @@ jobs:
             --dependency-graph "${{ steps.resolve.outputs.dependency_graph_path }}" \
             --descriptor handoff/HANDOFF_DESCRIPTOR.json \
             --receipt handoff/UAC_RECEIPT.json \
+            --pre-dispatch-receipt handoff/PRE_DISPATCH_RECEIPT.json \
+            --staged-paths handoff/STAGED_PATHS.json \
             --governance-attestation handoff/GOVERNANCE_ATTESTATION.json \
             --expected-commit-sha "${{ inputs.source_commit_sha }}"
 
@@ -153,10 +164,6 @@ jobs:
           cp "${{ steps.resolve.outputs.package_path }}" handoff/
           cp "${{ steps.resolve.outputs.manifest_path }}" handoff/
           cp "${{ steps.resolve.outputs.dependency_graph_path }}" handoff/
-          cp staged-paths.json handoff/STAGED_PATHS.json
-          receipt=$(find candidate -type f -name PRE_DISPATCH_RECEIPT.json -print)
-          test "$(printf '%s\n' "$receipt" | sed '/^$/d' | wc -l)" -eq 1
-          cp "$receipt" handoff/PRE_DISPATCH_RECEIPT.json
           sha256sum handoff/* > handoff/HANDOFF_SHA256SUMS.txt
 
       - name: Publish canonical handoff artifact

@@ -4,17 +4,21 @@ import base64
 import hashlib
 import hmac
 import json
-import os
 import secrets
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict
 
+from atomic_state import AtomicStateError, atomic_consume
+from authority_evidence import verify_authority_evidence_bundle
+from uac_errors import UACDenied
+
 HERE = Path(__file__).resolve().parent
 DEFAULT_REGISTRY = HERE / "config" / "registry.json"
 DEFAULT_LEDGER = HERE / "state" / "replay_ledger.json"
 DEFAULT_EVIDENCE_LEDGER = HERE / "state" / "authority_evidence_replay_ledger.json"
-RECEIPT_VERSION = "ECTOS_UAC_RECEIPT_V02"
+RECEIPT_VERSION = "ECTOS_UAC_RECEIPT_V03"
+DEFAULT_ADMISSION_SIGNING_KEY_ID = "UAC_RECEIPT_SIGNING_KEY_V01"
 DEPENDENCY_ZERO_COUNTERS = (
     "undeclared_dependency_count",
     "unresolved_transitive_dependency_count",
@@ -22,10 +26,6 @@ DEPENDENCY_ZERO_COUNTERS = (
     "implicit_environment_assumption_count",
     "unknown_blast_radius_edge_count",
 )
-
-
-from uac_errors import UACDenied
-from authority_evidence import verify_authority_evidence_bundle
 
 
 def _utcnow() -> datetime:
@@ -39,15 +39,6 @@ def _canon(obj: Dict[str, Any]) -> bytes:
 def _load_json(path: Path) -> Dict[str, Any]:
     with path.open("r", encoding="utf-8") as fh:
         return json.load(fh)
-
-
-def _write_json_atomic(path: Path, data: Dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    with tmp.open("w", encoding="utf-8", newline="\n") as fh:
-        json.dump(data, fh, indent=2, sort_keys=True)
-        fh.write("\n")
-    os.replace(tmp, path)
 
 
 def _require_hex_sha256(name: str, value: Any) -> str:
@@ -73,17 +64,29 @@ def _route_allowed(registry: Dict[str, Any], actor: str, target: str, action: st
     return False
 
 
+def _validate_admission_authority(registry: Dict[str, Any], request: Dict[str, Any], signing_key_id: str) -> None:
+    authority_id = request.get("admission_authority")
+    cfg = registry.get("admission_authorities", {}).get(authority_id)
+    if not cfg or not cfg.get("enabled"):
+        raise UACDenied("ADMISSION_AUTHORITY_NOT_REGISTERED")
+    if cfg.get("role") != "ADMISSION_AUTHORITY":
+        raise UACDenied("ADMISSION_AUTHORITY_ROLE_INVALID")
+    if signing_key_id not in cfg.get("trusted_receipt_signing_key_ids", []):
+        raise UACDenied("ADMISSION_AUTHORITY_KEY_BINDING_INVALID")
+
+
 def evaluate_admission(
     request: Dict[str, Any],
     registry_path: Path = DEFAULT_REGISTRY,
-    authority_keyring: Dict[str, bytes] | None = None,
+    authority_keyring: Dict[str, Dict[str, Any]] | None = None,
     evidence_ledger_path: Path = DEFAULT_EVIDENCE_LEDGER,
     consume_authority_evidence: bool = False,
+    admission_signing_key_id: str = DEFAULT_ADMISSION_SIGNING_KEY_ID,
 ) -> Dict[str, Any]:
     registry = _load_json(registry_path)
     required_fields = [
         "project", "mission_id", "failure_family_id", "actor", "qualifier",
-        "systemic_assurance_id", "package_id", "package_sha256", "manifest_sha256",
+        "systemic_assurance_id", "admission_authority", "package_id", "package_sha256", "manifest_sha256",
         "dependency_graph_sha256", "dependency_closure", "target", "action",
         "qualification_result", "systemic_review_state", "consolidated_defect_set_state",
         "governance_currentness", "rule_source_currentness", "negative_controls",
@@ -106,6 +109,7 @@ def evaluate_admission(
         raise UACDenied("PRODUCER_OR_ACTOR_CANNOT_BE_ITS_OWN_QUALIFIER")
     if request.get("systemic_assurance_id") in {actor, request.get("qualifier")}:
         raise UACDenied("SYSTEMIC_ASSURANCE_SEPARATION_VIOLATION")
+    _validate_admission_authority(registry, request, admission_signing_key_id)
 
     _require_hex_sha256("PACKAGE_SHA256", request["package_sha256"])
     _require_hex_sha256("MANIFEST_SHA256", request["manifest_sha256"])
@@ -126,7 +130,7 @@ def evaluate_admission(
             raise UACDenied(f"{field.upper()}_NOT_ZERO")
 
     if not authority_keyring:
-        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_UNAVAILABLE")
+        raise UACDenied("AUTHORITY_EVIDENCE_PUBLIC_KEYRING_UNAVAILABLE")
     derived = verify_authority_evidence_bundle(
         request,
         registry,
@@ -139,6 +143,7 @@ def evaluate_admission(
         "systemic_review_state": "systemic_assurance",
         "consolidated_defect_set_state": "consolidated_defect_closure",
         "circuit_breaker_state": "circuit_breaker",
+        "governance_currentness": "governance_currentness",
         "rule_source_currentness": "rule_source_currentness",
         "negative_controls": "negative_controls",
     }
@@ -149,7 +154,13 @@ def evaluate_admission(
     for field, expected in registry.get("required_states", {}).items():
         if request.get(field) != expected:
             raise UACDenied(f"{field.upper()}_NOT_ACCEPTED")
-    return {"decision": "ADMIT", "reason": "ALL_REQUIRED_GATES_PASS", "authority_evidence": derived}
+    return {
+        "decision": "ADMIT",
+        "reason": "ALL_REQUIRED_GATES_PASS",
+        "authority_evidence": derived,
+        "admission_authority": request["admission_authority"],
+        "admission_signing_key_id": admission_signing_key_id,
+    }
 
 
 def _sign_payload(payload: Dict[str, Any], signing_key: bytes) -> str:
@@ -162,8 +173,9 @@ def issue_receipt(
     signing_key: bytes,
     ttl_seconds: int = 900,
     registry_path: Path = DEFAULT_REGISTRY,
-    authority_keyring: Dict[str, bytes] | None = None,
+    authority_keyring: Dict[str, Dict[str, Any]] | None = None,
     evidence_ledger_path: Path = DEFAULT_EVIDENCE_LEDGER,
+    admission_signing_key_id: str = DEFAULT_ADMISSION_SIGNING_KEY_ID,
 ) -> Dict[str, Any]:
     evaluate_admission(
         request,
@@ -171,6 +183,7 @@ def issue_receipt(
         authority_keyring=authority_keyring,
         evidence_ledger_path=evidence_ledger_path,
         consume_authority_evidence=True,
+        admission_signing_key_id=admission_signing_key_id,
     )
     now = _utcnow()
     evidence_hashes = {
@@ -180,46 +193,71 @@ def issue_receipt(
     }
     payload = {
         "receipt_version": RECEIPT_VERSION,
-        "project": request["project"], "mission_id": request["mission_id"],
-        "failure_family_id": request["failure_family_id"], "package_id": request["package_id"],
+        "project": request["project"],
+        "mission_id": request["mission_id"],
+        "failure_family_id": request["failure_family_id"],
+        "package_id": request["package_id"],
         "package_sha256": request["package_sha256"].lower(),
         "manifest_sha256": request["manifest_sha256"].lower(),
         "dependency_graph_sha256": request["dependency_graph_sha256"].lower(),
         "dependency_closure": request["dependency_closure"],
-        "actor": request["actor"], "qualifier": request["qualifier"],
+        "actor": request["actor"],
+        "qualifier": request["qualifier"],
         "systemic_assurance_id": request["systemic_assurance_id"],
-        "target": request["target"], "action": request["action"],
+        "admission_authority": request["admission_authority"],
+        "admission_signing_key_id": admission_signing_key_id,
+        "target": request["target"],
+        "action": request["action"],
         "source_repository": request["source_repository"],
         "source_commit": request["source_commit"].lower(),
         "governance_attestation_sha256": request.get("governance_attestation_sha256"),
+        "pre_dispatch_receipt_sha256": request.get("pre_dispatch_receipt_sha256"),
+        "staged_path_set_sha256": request.get("staged_path_set_sha256"),
+        "source_tree_sha256": request.get("source_tree_sha256"),
         "governance_currentness": request["governance_currentness"],
         "rule_source_currentness": request["rule_source_currentness"],
         "circuit_breaker_state": request["circuit_breaker_state"],
         "negative_controls": request["negative_controls"],
         "authority_evidence_sha256": evidence_hashes,
         **{k: request[k] for k in DEPENDENCY_ZERO_COUNTERS},
-        "issued_at": now.isoformat(), "expires_at": (now + timedelta(seconds=ttl_seconds)).isoformat(),
-        "nonce": secrets.token_urlsafe(24), "receipt_id": secrets.token_hex(16),
-        "issuer_id": "ECTOS_UAC_CONTROL_PLANE_V02",
+        "issued_at": now.isoformat(),
+        "expires_at": (now + timedelta(seconds=ttl_seconds)).isoformat(),
+        "nonce": secrets.token_urlsafe(24),
+        "receipt_id": secrets.token_hex(16),
+        "issuer_id": request["admission_authority"],
         "issuer_role": "ADMISSION_AUTHORITY",
     }
     return {"payload": payload, "signature": _sign_payload(payload, signing_key)}
 
 
-def verify_receipt(receipt: Dict[str, Any], signing_key: bytes, expected_target: str,
-                   expected_action: str, consume: bool = False,
-                   ledger_path: Path = DEFAULT_LEDGER) -> Dict[str, Any]:
-    payload = receipt.get("payload"); signature = receipt.get("signature")
+def verify_receipt(
+    receipt: Dict[str, Any],
+    signing_key: bytes,
+    expected_target: str,
+    expected_action: str,
+    consume: bool = False,
+    ledger_path: Path = DEFAULT_LEDGER,
+) -> Dict[str, Any]:
+    payload = receipt.get("payload")
+    signature = receipt.get("signature")
     if not isinstance(payload, dict) or not isinstance(signature, str):
         raise UACDenied("RECEIPT_FORMAT_INVALID")
     expected = _sign_payload(payload, signing_key)
-    if not hmac.compare_digest(signature, expected): raise UACDenied("RECEIPT_SIGNATURE_INVALID")
-    if payload.get("receipt_version") != RECEIPT_VERSION: raise UACDenied("RECEIPT_VERSION_INVALID")
-    if payload.get("target") != expected_target: raise UACDenied("RECEIPT_TARGET_MISMATCH")
-    if payload.get("action") != expected_action: raise UACDenied("RECEIPT_ACTION_MISMATCH")
-    if payload.get("dependency_closure") != "PASS": raise UACDenied("RECEIPT_DEPENDENCY_CLOSURE_INVALID")
+    if not hmac.compare_digest(signature, expected):
+        raise UACDenied("RECEIPT_SIGNATURE_INVALID")
+    if payload.get("receipt_version") != RECEIPT_VERSION:
+        raise UACDenied("RECEIPT_VERSION_INVALID")
+    if payload.get("issuer_role") != "ADMISSION_AUTHORITY":
+        raise UACDenied("RECEIPT_ISSUER_ROLE_INVALID")
+    if payload.get("target") != expected_target:
+        raise UACDenied("RECEIPT_TARGET_MISMATCH")
+    if payload.get("action") != expected_action:
+        raise UACDenied("RECEIPT_ACTION_MISMATCH")
+    if payload.get("dependency_closure") != "PASS":
+        raise UACDenied("RECEIPT_DEPENDENCY_CLOSURE_INVALID")
     for field in DEPENDENCY_ZERO_COUNTERS:
-        if payload.get(field) != 0: raise UACDenied(f"RECEIPT_{field.upper()}_NOT_ZERO")
+        if payload.get(field) != 0:
+            raise UACDenied(f"RECEIPT_{field.upper()}_NOT_ZERO")
     _require_hex_sha256("RECEIPT_DEPENDENCY_GRAPH_SHA256", payload.get("dependency_graph_sha256"))
     source_commit = payload.get("source_commit")
     if not isinstance(source_commit, str) or len(source_commit) != 40:
@@ -230,12 +268,16 @@ def verify_receipt(receipt: Dict[str, Any], signing_key: bytes, expected_target:
         expires_at = datetime.fromisoformat(payload["expires_at"])
     except Exception as exc:
         raise UACDenied("RECEIPT_EXPIRY_INVALID") from exc
-    if expires_at.tzinfo is None or _utcnow() >= expires_at.astimezone(timezone.utc): raise UACDenied("RECEIPT_EXPIRED")
-    ledger = {"consumed_receipt_ids": []}
-    if ledger_path.exists(): ledger = _load_json(ledger_path)
-    consumed = set(ledger.get("consumed_receipt_ids", [])); receipt_id = payload.get("receipt_id")
-    if not receipt_id: raise UACDenied("RECEIPT_ID_MISSING")
-    if receipt_id in consumed: raise UACDenied("RECEIPT_REPLAY_DETECTED")
+    if expires_at.tzinfo is None or _utcnow() >= expires_at.astimezone(timezone.utc):
+        raise UACDenied("RECEIPT_EXPIRED")
+    receipt_id = payload.get("receipt_id")
+    if not receipt_id:
+        raise UACDenied("RECEIPT_ID_MISSING")
     if consume:
-        consumed.add(receipt_id); ledger["consumed_receipt_ids"] = sorted(consumed); _write_json_atomic(ledger_path, ledger)
+        try:
+            duplicate = atomic_consume(ledger_path, "consumed_receipt_ids", [receipt_id])
+        except AtomicStateError as exc:
+            raise UACDenied(f"RECEIPT_REPLAY_LEDGER_FAILURE:{exc}") from exc
+        if duplicate is not None:
+            raise UACDenied("RECEIPT_REPLAY_DETECTED")
     return {"decision": "ADMIT", "receipt_id": receipt_id, "consumed": consume}

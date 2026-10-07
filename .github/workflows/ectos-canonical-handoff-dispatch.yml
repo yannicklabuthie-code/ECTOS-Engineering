@@ -43,12 +43,12 @@ jobs:
     name: ectos/stage-exact-candidate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout exact candidate source
+      - name: Checkout exact candidate staging ref with source history
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.source_repository }}
           ref: ${{ inputs.candidate_ref }}
-          fetch-depth: 1
+          fetch-depth: 0
           path: source
 
       - name: Checkout current canonical UAC control plane
@@ -59,7 +59,7 @@ jobs:
           fetch-depth: 1
           path: .ectos-engineering
 
-      - name: Verify exact candidate byte identity and JSON contract
+      - name: Verify exact source tree bytes, source commit, and staging delta
         shell: bash
         run: |
           set -euo pipefail

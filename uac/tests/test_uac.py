@@ -1,4 +1,3 @@
-import copy
 import tempfile
 import unittest
 from pathlib import Path
@@ -25,7 +24,7 @@ def valid_request():
         "qualifier": "ECTOS_INDEPENDENT_QUALIFIER",
         "systemic_assurance_id": "ECTOS_SYSTEMIC_ASSURANCE",
         "admission_authority": "ECTOS_UAC_CONTROL_PLANE_V02",
-        "package_id": "PKG-V02",
+        "package_id": "PKG-V03",
         "package_sha256": SHA_A,
         "manifest_sha256": SHA_B,
         "dependency_graph_sha256": SHA_A,
@@ -52,33 +51,20 @@ def valid_request():
 
 def issue(request):
     with tempfile.TemporaryDirectory() as td:
-        return issue_receipt(
-            request,
-            KEY,
-            authority_keyring=KEYRING,
-            evidence_ledger_path=Path(td) / "evidence.json",
-        )
+        return issue_receipt(request, KEY, authority_keyring=KEYRING, evidence_ledger_path=Path(td) / "evidence.json")
 
 
 class TestUAC(unittest.TestCase):
     def test_positive_receipt(self):
         receipt = issue(valid_request())
         with tempfile.TemporaryDirectory() as td:
-            result = verify_receipt(
-                receipt, KEY,
-                "ECTOS_ENGINEERING_REPOSITORY_PROMOTION", "PROMOTE_CANDIDATE",
-                consume=True, ledger_path=Path(td) / "ledger.json",
-            )
+            result = verify_receipt(receipt, KEY, "ECTOS_ENGINEERING_REPOSITORY_PROMOTION", "PROMOTE_CANDIDATE", consume=True, ledger_path=Path(td) / "ledger.json")
         self.assertEqual(result["decision"], "ADMIT")
 
     def assert_denied(self, request, contains):
         with tempfile.TemporaryDirectory() as td:
             with self.assertRaises(UACDenied) as ctx:
-                evaluate_admission(
-                    request,
-                    authority_keyring=KEYRING,
-                    evidence_ledger_path=Path(td) / "evidence.json",
-                )
+                evaluate_admission(request, authority_keyring=KEYRING, evidence_ledger_path=Path(td) / "evidence.json")
         self.assertIn(contains, str(ctx.exception))
 
     def test_unknown_actor_denied(self):
@@ -111,7 +97,7 @@ class TestUAC(unittest.TestCase):
 
     def test_stale_governance_denied(self):
         r = valid_request(); r["governance_currentness"] = "STALE"
-        self.assert_denied(r, "GOVERNANCE_CURRENTNESS_NOT_ACCEPTED")
+        self.assert_denied(r, "CALLER_STATE_NOT_BOUND_TO_AUTHORITY_EVIDENCE:governance_currentness")
 
     def test_stale_rule_source_denied(self):
         r = valid_request(); r["rule_source_currentness"] = "NOT_PROVEN"
@@ -167,18 +153,15 @@ class TestUAC(unittest.TestCase):
 
     def test_wrong_target_receipt_denied(self):
         receipt = issue(valid_request())
-        with self.assertRaises(UACDenied):
-            verify_receipt(receipt, KEY, "OTHER_TARGET", "PROMOTE_CANDIDATE")
+        with self.assertRaises(UACDenied): verify_receipt(receipt, KEY, "OTHER_TARGET", "PROMOTE_CANDIDATE")
 
     def test_wrong_action_receipt_denied(self):
         receipt = issue(valid_request())
-        with self.assertRaises(UACDenied):
-            verify_receipt(receipt, KEY, "ECTOS_ENGINEERING_REPOSITORY_PROMOTION", "OTHER_ACTION")
+        with self.assertRaises(UACDenied): verify_receipt(receipt, KEY, "ECTOS_ENGINEERING_REPOSITORY_PROMOTION", "OTHER_ACTION")
 
     def test_receipt_signature_tamper_denied(self):
         receipt = issue(valid_request()); receipt["payload"]["package_id"] = "TAMPERED"
-        with self.assertRaises(UACDenied):
-            verify_receipt(receipt, KEY, "ECTOS_ENGINEERING_REPOSITORY_PROMOTION", "PROMOTE_CANDIDATE")
+        with self.assertRaises(UACDenied): verify_receipt(receipt, KEY, "ECTOS_ENGINEERING_REPOSITORY_PROMOTION", "PROMOTE_CANDIDATE")
 
     def test_replay_denied_after_consume(self):
         receipt = issue(valid_request())
