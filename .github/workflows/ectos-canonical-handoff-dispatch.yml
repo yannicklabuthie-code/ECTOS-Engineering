@@ -43,30 +43,46 @@ jobs:
     name: ectos/stage-exact-candidate
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout exact candidate ref
+      - name: Checkout exact candidate source
         uses: actions/checkout@v4
         with:
+          repository: ${{ inputs.source_repository }}
           ref: ${{ inputs.candidate_ref }}
           fetch-depth: 1
+          path: source
 
-      - name: Verify exact candidate files exist
+      - name: Checkout current canonical UAC control plane
+        uses: actions/checkout@v4
+        with:
+          repository: yannicklabuthie-code/ECTOS-Engineering
+          ref: main
+          fetch-depth: 1
+          path: .ectos-engineering
+
+      - name: Verify exact candidate byte identity and JSON contract
         shell: bash
         run: |
           set -euo pipefail
-          test -f "${{ inputs.package_path }}"
-          test -f "${{ inputs.manifest_path }}"
-          test -f "${{ inputs.dependency_graph_path }}"
-          test -f "${{ inputs.request_path }}"
+          mkdir -p pre-dispatch
+          python .ectos-engineering/uac/pre_dispatch.py \
+            --repo-root source \
+            --source-commit "${{ inputs.source_commit_sha }}" \
+            --package-path "${{ inputs.package_path }}" \
+            --manifest-path "${{ inputs.manifest_path }}" \
+            --dependency-graph-path "${{ inputs.dependency_graph_path }}" \
+            --request-path "${{ inputs.request_path }}" \
+            --output pre-dispatch/PRE_DISPATCH_RECEIPT.json
 
       - name: Publish exact candidate artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.source_artifact_name }}
           path: |
-            ${{ inputs.package_path }}
-            ${{ inputs.manifest_path }}
-            ${{ inputs.dependency_graph_path }}
-            ${{ inputs.request_path }}
+            source/${{ inputs.package_path }}
+            source/${{ inputs.manifest_path }}
+            source/${{ inputs.dependency_graph_path }}
+            source/${{ inputs.request_path }}
+            pre-dispatch/PRE_DISPATCH_RECEIPT.json
           if-no-files-found: error
           retention-days: 7
 

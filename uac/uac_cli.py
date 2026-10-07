@@ -24,6 +24,19 @@ def get_key(env_name: str) -> bytes:
     return value.encode("utf-8")
 
 
+def get_keyring(env_name: str) -> dict[str, bytes]:
+    value = os.environ.get(env_name, "")
+    if not value:
+        raise UACDenied(f"AUTHORITY_EVIDENCE_KEYRING_MISSING:{env_name}")
+    try:
+        raw = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID_JSON") from exc
+    if not isinstance(raw, dict) or not raw:
+        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID")
+    return {str(k): str(v).encode("utf-8") for k, v in raw.items() if str(v)}
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(prog="ectos-uac")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -31,6 +44,7 @@ def main() -> int:
     admit = sub.add_parser("admit")
     admit.add_argument("--request", required=True)
     admit.add_argument("--signing-key-env", default="ECTOS_UAC_SIGNING_KEY")
+    admit.add_argument("--authority-keyring-env", default="ECTOS_UAC_EVIDENCE_KEYS")
     admit.add_argument("--ttl-seconds", type=int, default=900)
 
     verify = sub.add_parser("verify")
@@ -46,7 +60,12 @@ def main() -> int:
         key = get_key(args.signing_key_env)
         if args.cmd == "admit":
             req = load_json(args.request)
-            write_json(issue_receipt(req, key, ttl_seconds=args.ttl_seconds))
+            write_json(issue_receipt(
+                req,
+                key,
+                ttl_seconds=args.ttl_seconds,
+                authority_keyring=get_keyring(args.authority_keyring_env),
+            ))
         else:
             receipt = load_json(args.receipt)
             write_json(verify_receipt(receipt, key, args.target, args.action,

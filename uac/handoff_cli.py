@@ -17,6 +17,24 @@ def _key_from_env(name: str) -> bytes:
     return value.encode("utf-8")
 
 
+def _keyring_from_env(name: str) -> dict[str, bytes]:
+    value = os.environ.get(name, "")
+    if not value:
+        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_UNAVAILABLE")
+    try:
+        raw = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID_JSON") from exc
+    if not isinstance(raw, dict) or not raw:
+        raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID")
+    out: dict[str, bytes] = {}
+    for key_id, secret in raw.items():
+        if not isinstance(key_id, str) or not isinstance(secret, str) or not secret:
+            raise UACDenied("AUTHORITY_EVIDENCE_KEYRING_INVALID")
+        out[key_id] = secret.encode("utf-8")
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="ECTOS canonical UAC handoff")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -30,6 +48,7 @@ def main() -> int:
     issue.add_argument("--commit-sha", required=True)
     issue.add_argument("--governance-attestation", required=True)
     issue.add_argument("--signing-key-env", default="ECTOS_UAC_SIGNING_KEY")
+    issue.add_argument("--authority-keyring-env", default="ECTOS_UAC_EVIDENCE_KEYS")
 
     verify = sub.add_parser("verify")
     verify.add_argument("--package", required=True)
@@ -48,6 +67,7 @@ def main() -> int:
             result = materialize_handoff(
                 Path(args.package), Path(args.manifest), Path(args.dependency_graph), Path(args.request),
                 Path(args.output_dir), key, args.commit_sha, Path(args.governance_attestation),
+                _keyring_from_env(args.authority_keyring_env),
             )
         else:
             result = verify_handoff(
