@@ -122,6 +122,22 @@ Current family-model candidate classes:
 
 The six historical qualification profiles recovered in Tooling forensics MUST NOT be silently equated to these six family classes until exact profile identities/contracts are reconciled.
 
+## Qualification profile / tool reconciliation
+
+The current reconciliation register is versioned separately in:
+
+cartography/ectos-os/ECTOS_OS_QUALIFICATION_PROFILE_TOOL_RECONCILIATION_V01.md
+
+Current facts preserved there include:
+- REACHABLE_TOOL_RECORD_COUNT=54 (historical/read-only corpus)
+- QUALIFICATION_PROFILE_COUNT=6 (historical/read-only corpus)
+- CURRENT_TRUSTED_QUALIFIER_COUNT=0
+- CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
+- exact named profile identity QP-WPS51-V01 recovered
+- historical broad profile name QP-001 recovered, but current machine-readable identity/currentness remains NOT_PROVEN
+- ECTOS_POWERSHELL_PS51_PROFILE V01 is a current code-rule/engineering profile and MUST NOT be silently substituted for QP-WPS51-V01
+- one-to-one mapping between the six historical profiles and the six engine-family candidates remains NOT_PROVEN
+
 ## Current exact gaps
 
 - F07-GAP-001: current active runtime consumption of the 13 recovered objects is NOT_PROVEN per object.
@@ -136,7 +152,9 @@ The six historical qualification profiles recovered in Tooling forensics MUST NO
 - CARTOGRAPHY-GAP-QF-001: complete ENGINE_FAMILY_ID assignment for the current OS graph is NOT_PROVEN.
 - CARTOGRAPHY-GAP-QF-002: historical qualification profile -> engine-family binding is NOT_PROVEN.
 - CARTOGRAPHY-GAP-QF-003: current admitted qualification tool by family is NOT_PROVEN.
+- CARTOGRAPHY-GAP-QF-004: exact identities/contracts for all six historical qualification profiles are NOT_PROVEN.
+- CARTOGRAPHY-GAP-QF-005: complete 54-tool -> profile -> family -> OS target binding is NOT_PROVEN.
 
 ## Closure rule
 
-This cartography MUST NOT be marked complete until the current package set, package->engine bindings, intra-layer edges, cross-layer edges, contracts, routes, qualification lineage, engine-family qualification requirements and present runtime/currentness are either physically proven or explicitly marked NOT_PROVEN with exact unreachable scope.
+This cartography MUST NOT be marked complete until the current package set, package->engine bindings, intra-layer edges, cross-layer edges, contracts, routes, qualification lineage, engine-family qualification requirements, qualification-profile/tool reconciliation and present runtime/currentness are either physically proven or explicitly marked NOT_PROVEN with exact unreachable scope.
