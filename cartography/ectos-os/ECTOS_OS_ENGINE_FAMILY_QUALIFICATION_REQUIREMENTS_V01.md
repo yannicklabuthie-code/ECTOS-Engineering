@@ -336,21 +336,52 @@ NEW_QUALIFIER_CODE_REQUIRED only if:
 - a new runtime boundary requires a new adapter,
 - or the engine-family contract itself materially changes.
 
-## Search-before-build decision
+## Owner-corrected tool selection policy
 
-For each family:
+The 54-record tooling corpus is ARCHIVAL / DISCOVERY EVIDENCE ONLY.
 
-1. derive REQUIRED_CAPABILITIES from this profile;
-2. search recovered 54-tool corpus;
-3. compare exact tool capabilities, runtime and evidence contract;
-4. classify each candidate:
-   - REUSE_CANDIDATE
-   - EXTEND_CANDIDATE
-   - BUILD_NEW_REQUIRED
-   - NOT_PROVEN
-5. independently qualify the selected tool;
-6. Factory-admit the exact tool/profile binding;
-7. only then qualify target packages/edges.
+It is NOT a backlog of 54 candidates to re-check, requalify, classify or adapt.
+
+The active selection order is:
+
+1. start from qualification/control assets that are physically proven to have successfully contributed to ECTOS OS qualification or assembly closure;
+2. bind those successful assets to the engine-family requirements in this document;
+3. reuse or adapt only a proven successful asset when its capability contract fits the target family;
+4. if no proven successful asset fits, prefer a small governed family-specific qualifier built from current canonical engineering primitives / native runtime capabilities;
+5. independently qualify that new/adapted qualifier before Factory admission;
+6. never revive an unused, failed, superseded or merely discovered historical tool solely because it appears in the 54-record corpus.
+
+ARCHIVAL_54_TOOL_RECHECK_REQUIRED=NO
+ARCHIVAL_54_TOOL_REQUALIFICATION_REQUIRED=NO
+ARCHIVAL_54_TOOL_MAPPING_REQUIRED_FOR_FAMILY_DESIGN=NO
+
+## Distinguish actors from qualification instruments
+
+Operational actors/sessions and executable qualification instruments are different objects.
+
+Examples of source-backed operational qualification/engineering actors include:
+- ECTOS DEV Tooling Registry & Qualification Mapping Agent
+- Yanick ECTOS/ENGINEERING ASSURANCE PRÊT
+- Yanick ECTOS Assurance Layer
+
+These actors may produce, review, route or qualify evidence. They are not automatically executable qualification tools.
+
+Conversely, a qualification control/script/package is not an independent qualifier merely because it can execute checks.
+
+ACTOR != TOOL
+TOOL != QUALIFIER
+QUALIFIER != ADMISSION_AUTHORITY
+
+## Current successful qualification/control anchors
+
+Current cartography work SHALL prioritize the successful source-backed OS qualification/control lineage already recovered, including:
+
+- ECTOS.G00.V06.QF.TRANSITIVE_DEPENDENCY_CLOSURE.SUCCESSOR.V02 for G00 targeted qualification lineage;
+- ECTOS.COMPLETE_SIX_LAYER_CORE.FORMAL_FINAL_CORE_QF.V01 for the six-layer/final façade qualification lineage;
+- ECTOS.G00.L01.FORMAL_QF_CONTROL.V06 for recovered G00/L01 bound-component qualification lineage;
+- exact additional successful controls only when their result and target binding are physically/source-backed.
+
+The shortlist is intentionally small. Failed/unused/discovery-only artifacts remain historical evidence, not active qualification candidates.
 
 ## Currentness / evidence boundary
 
@@ -364,30 +395,31 @@ Therefore this document defines qualification requirements, not current tool adm
 ## Next required mapping
 
 NEXT_REGISTER=
-ECTOS_OS_TOOL_CAPABILITY_TO_FAMILY_REQUIREMENT_MATRIX_V01
+ECTOS_OS_PROVEN_QUALIFICATION_ASSET_TO_FAMILY_MATRIX_V01
 
 Required columns:
-- TOOL_ID
-- TOOL_SHA256
-- TOOL_CURRENTNESS
-- TOOL_RUNTIME
-- CAPABILITY_SET
+- ASSET_ID
+- ASSET_TYPE=ACTOR|QUALIFICATION_CONTROL|RUNNER|HARNESS|VALIDATOR|OTHER
+- EXACT_IDENTITY
+- SHA256_IF_APPLICABLE
+- HISTORICAL_SUCCESS_RESULT
+- TARGET_BINDING
 - ENGINE_FAMILY
 - REQUIREMENT_COVERAGE
 - MISSING_GATES
-- NEGATIVE_CONTROL_COVERAGE
-- HISTORICAL_TARGETS
-- CURRENT_TRUST
-- CURRENT_FACTORY_ADMISSION
-- REUSE_CLASSIFICATION
+- RUNTIME
+- CURRENTNESS
+- REUSE_CLASSIFICATION=REUSE|ADAPT|BUILD_NEW|NOT_PROVEN
 - EVIDENCE_SOURCE
+
+Only successful/proven assets enter this active matrix. The 54-record discovery corpus remains outside the active matrix unless a specific member is promoted into the shortlist by exact evidence.
 
 ## Closure condition
 
 This candidate requirement model becomes eligible for governed qualification-profile freeze only after:
 
 - complete OS node/edge cartography or exact NOT_PROVEN boundaries;
-- capability mapping against reachable qualification tools;
+- successful/proven qualification assets are mapped to family requirements;
 - exact family/profile runtime overlays;
 - independent review of family completeness and prohibited-behavior absence;
 - Main adjudication.
