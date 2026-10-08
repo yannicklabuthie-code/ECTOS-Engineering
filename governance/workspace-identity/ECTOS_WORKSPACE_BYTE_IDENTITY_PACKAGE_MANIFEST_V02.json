@@ -1,0 +1,123 @@
+{
+  "dependency_graph": "governance/workspace-identity/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json",
+  "downstream_dependencies": [
+    "Mission Registry V03 resume",
+    "qualification receipt",
+    "canonical handoff",
+    "future assembly qualification"
+  ],
+  "entrypoints": [
+    "validators/workspace_identity/validate_workspace_identity.py",
+    "engineering/mission_registry.py"
+  ],
+  "evidence_pointers": [
+    {
+      "path": "governance/workspace-identity/ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02.json",
+      "role": "materialization_contract"
+    },
+    {
+      "path": "schemas/workspace_identity/ECTOS_MATERIALIZATION_EVIDENCE_V01.schema.json",
+      "role": "materialization_evidence_schema"
+    },
+    {
+      "path": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02.json",
+      "role": "member_selection_model"
+    }
+  ],
+  "host_requirements": [
+    "WINDOWS",
+    "ISOLATED_GIT_WORKTREE",
+    "RAW_WORKSPACE_BYTE_ACCESS"
+  ],
+  "members": [
+    {
+      "path": "ectos/mission-registry/ECTOS_MISSION_REGISTRY_SCHEMA_V03.json",
+      "sha256": "B212344E16A84D4BE832448E103F9E40F2531CEEEEE5BDBBC859EABA8BAF2934",
+      "size_bytes": 2108
+    },
+    {
+      "path": "engineering/mission_registry.py",
+      "sha256": "F9EFA9BE8622C1BD883FEB36CCDACF2960DB3C9EB1B66EA3663EA9D3F07CF032",
+      "size_bytes": 17880
+    },
+    {
+      "path": "governance/workspace-identity/ECTOS_GENERIC_WORKSPACE_IDENTITY_CONTRACT_V02.json",
+      "sha256": "F5AFE6F8C6BED1AE9F6CD26FBE8F558665591459BD87CDDB827B6840854B1E06",
+      "size_bytes": 3690
+    },
+    {
+      "path": "governance/workspace-identity/ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02.json",
+      "sha256": "883FBF7A437D7396993EF56E4813B55AA5CEEA56DF9BD293607A144D9D13725C",
+      "size_bytes": 2398
+    },
+    {
+      "path": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_CLASSIFICATION_BASELINE_V01.json",
+      "sha256": "770296FFC44DE8582E510E561721296C42811CA83EB1CA6AA7D5C2C4F6B75B2F",
+      "size_bytes": 9584
+    },
+    {
+      "path": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02.json",
+      "sha256": "EF63AFC154073F447FDAE5CB07CD927FFFA500C2F47B03E8427CA935D39B6309",
+      "size_bytes": 8458
+    },
+    {
+      "path": "schemas/workspace_identity/ECTOS_GENERIC_WORKSPACE_IDENTITY_CONTRACT_V02.schema.json",
+      "sha256": "0A39969F95363B9BA350CDD28566A29B8869BC2C0ABD5BFE26918029608961E7",
+      "size_bytes": 2145
+    },
+    {
+      "path": "schemas/workspace_identity/ECTOS_MATERIALIZATION_EVIDENCE_V01.schema.json",
+      "sha256": "7D798661B68C46340C8E1A2571189B7DA6D0B73BB0857DF5874CF842BF24393B",
+      "size_bytes": 2235
+    },
+    {
+      "path": "schemas/workspace_identity/ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02.schema.json",
+      "sha256": "EDA492ED68F938732CFFEB450D39163525B9D7DCFD3ACE2A880EA50AFC4E2BF8",
+      "size_bytes": 1463
+    },
+    {
+      "path": "schemas/workspace_identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02.schema.json",
+      "sha256": "36A6E5D54B6007B0D20B46987C0455E8A5964031A83BED753C66F60C62AA3F58",
+      "size_bytes": 1739
+    },
+    {
+      "path": "tests/test_mission_registry.py",
+      "sha256": "605B6196F34087981A36D172DA8E93A5B68B62EC5353CEA6A891479DD31BBCE9",
+      "size_bytes": 10046
+    },
+    {
+      "path": "tests/test_workspace_identity_policy.py",
+      "sha256": "D0E295EFC4EDA8D6E3DEDC1DE2145FAC1E3CF0014B5BC87A556C29879781D252",
+      "size_bytes": 13979
+    },
+    {
+      "path": "validators/workspace_identity/validate_workspace_identity.py",
+      "sha256": "6BE3CDEB4CED75BC01217A2918A878EB46D0E1A049F21A29231F2D7324581E5F",
+      "size_bytes": 27378
+    }
+  ],
+  "metadata_members": [
+    "governance/workspace-identity/ECTOS_WORKSPACE_BYTE_IDENTITY_PACKAGE_MANIFEST_V02.json",
+    "governance/workspace-identity/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json"
+  ],
+  "package_id": "ECTOS_SYSTEMIC_WORKSPACE_BYTE_IDENTITY_V02",
+  "package_sha256": "7D96DDE93924CB6A24BF71D917155271D40519E05E076F6FD4579B41475F3703",
+  "package_sha256_algorithm": "SHA256(sorted(path\\0size_bytes\\0sha256\\n))",
+  "package_version": "V02",
+  "predecessor_head": "feebdc24a667af82739e4564169103e11944e3da",
+  "rollback_reference": "feebdc24a667af82739e4564169103e11944e3da",
+  "runtime_requirements": [
+    "Python 3.14.3",
+    "Git 2.53.0.windows.1"
+  ],
+  "schema_id": "ECTOS_WORKSPACE_BYTE_IDENTITY_PACKAGE_MANIFEST_V02",
+  "source_commit": "bed03bc8dcc497e9d7b3698a7fb16e13f8aa2bfe",
+  "source_repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "upstream_dependencies": [
+    "AGENTS.md",
+    "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER.json",
+    "governance/ECTOS_PACKAGE_DEPENDENCY_GRAPH_CONTRACT_V01.md",
+    "GitHub canonical repository",
+    "Windows Git checkout policy"
+  ]
+}
