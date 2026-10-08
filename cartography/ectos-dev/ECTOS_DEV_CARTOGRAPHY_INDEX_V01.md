@@ -39,6 +39,14 @@ BRANCH=cartography/ectos-dev-current-assembly-v01
    - producer/qualifier/Main separation, evidence causality, reconstructibility/recovery/replay/rollback and sovereign Main handoff obligations defined
    - literal runtime routes/entrypoints remain NOT_PROVEN until implementation binding
 
+6. `ECTOS_DEV_PHYSICAL_BUILD_READINESS_RECONCILIATION_V01.md`
+   - re-adjudicates the historical DEV physical-build blockers against the current October 2026 documentary state
+   - closes the old Governance/workflow/sequence blockers for documentary scope
+   - preserves current execution blockers: Methodology 03.2 breaker and qualification tooling/trust/admission
+   - identifies exact first-build preconditions: physical target identity/path/member set, literal schemas, minimal Git artifact/evidence binding, runtime/host/toolchain binding
+   - confirms final Git+Supabase Repository consolidation is deferred and does not block the first DEV build, while minimal Git reconstructibility remains mandatory
+   - earliest planned increment remains DEV_CONTROL_FOUNDATION_INCREMENT_01 but PHYSICALLY_CONSTRUCTIBLE_NOW=NO
+
 ## Current architecture state
 
 DEV_LOGICAL_CARTOGRAPHY=CLOSED_FOR_CURRENT_DOCUMENTARY_SCOPE
@@ -46,6 +54,7 @@ OS_TO_DEV_REUSE_DECISION_MATRIX=CLOSED_FOR_CURRENT_DOCUMENTARY_SCOPE
 PREBUILD_CONTRACT_FIELD_SET=FROZEN
 PREBUILD_DOCUMENTARY_CONTRACT_CHAIN=CLOSED_WITH_EXACT_PHYSICAL_NOT_PROVEN_BOUNDARIES
 CROSS_COMPONENT_SEAM_SET=14
+BUILD_READINESS_RECONCILIATION=CLOSED_WITH_EXACT_BLOCKER_SET
 PHYSICAL_DEV_BUILD_AUTHORITY=NO
 NEXT_EXECUTION_AUTHORITY_ELIGIBLE=NO
 
@@ -75,8 +84,17 @@ DEV-K000
 
 EV-03 is the parallel governed Monitoring handoff.
 
-## Remaining pre-build closure
+## Current execution-gating blockers
 
-The documentary architecture and semantic contract chain are now frozen for the current evidence-backed scope.
+1. Methodology 03.2 systemic breaker remains triggered.
+2. Selected DEV qualification tooling currentness/trust/Factory admission remains open: 4 selected, 0 Factory-admitted, 0 current trusted qualifiers, 0 execution-eligible routes.
+3. First physical increment exact package/member/path identity not frozen.
+4. Literal first-increment machine schemas not frozen.
+5. Minimal Git artifact/manifest/SHA/evidence pointer layout not frozen.
+6. First-increment runtime/host/toolchain binding remains partial/not frozen.
 
-Physical DEV build authority still requires reconciliation of the current build-readiness preconditions, active circuit breakers, selected qualification-tool currentness/trust/lineage, Repository/RIM/current-pointer bindings where required, exact runtime/toolchain targets, literal machine schemas and exact target package identities for the first authorized build increment.
+## Exact next safe mission
+
+`ECTOS_DEV_FIRST_INCREMENT_PHYSICAL_CONTRACT_FREEZE_V01`
+
+This is read-only/documentary and must not generate implementation code. Physical build authority remains prohibited until the execution-gating blockers are closed and Main re-adjudicates readiness.
