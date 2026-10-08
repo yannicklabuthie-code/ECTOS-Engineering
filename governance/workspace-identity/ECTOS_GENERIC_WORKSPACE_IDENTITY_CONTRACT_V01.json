@@ -1,0 +1,106 @@
+{
+  "contract_id": "ECTOS_GENERIC_WORKSPACE_IDENTITY_CONTRACT_V01",
+  "version": "V01",
+  "status": "CURRENT_CANDIDATE",
+  "scope": "CROSS_PLATFORM_GOVERNED_TEXTUAL_WORKSPACE_BYTE_IDENTITY",
+  "supported_os": ["WINDOWS", "LINUX", "MACOS"],
+  "supported_runtime_classes": ["PYTHON", "JSON_DATA", "MARKDOWN_GOVERNANCE", "YAML_WORKFLOW", "TEXT_IDENTITY_INPUT"],
+  "member_selection_model": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V01.json",
+  "raw_byte_source": "RAW_BYTES_FROM_MATERIALIZED_WORKSPACE_FILE",
+  "required_workspace_eol": "LF_FOR_SELECTED_TEXT_MEMBERS",
+  "normalization_during_hash": "PROHIBITED",
+  "blob_substitution_as_workspace_evidence": "PROHIBITED",
+  "worktree_byte_identity_rule": {
+    "workspace_object_command": "git hash-object --no-filters <workspace-file>",
+    "committed_object_command": "git rev-parse HEAD:<repository-relative-path>",
+    "required_comparison": "EQUAL",
+    "eol_command": "git ls-files --eol <repository-relative-path>",
+    "selected_text_required_workspace_eol": "w/lf",
+    "clean_git_status_is_sufficient": false
+  },
+  "currentness_rule": {
+    "contract_and_selection_model_must_be_from": "EXACT_COMMIT_UNDER_REVIEW",
+    "governance_currentness_must_be_resolved_independently_where_applicable": true,
+    "chat_or_memory_only": "INSUFFICIENT"
+  },
+  "fail_closed_rule": {
+    "conditions": [
+      "MISSING_MEMBER_POLICY",
+      "UNREGISTERED_GOVERNED_FAMILY",
+      "SELECTED_TEXT_MEMBER_NOT_W_LF",
+      "WORKSPACE_OBJECT_DIFFERS_FROM_COMMITTED_OBJECT",
+      "REMOTE_COMMIT_NOT_PROVEN",
+      "LOCAL_MATERIALIZATION_NOT_PROVEN",
+      "WORKTREE_HOST_BINDING_NOT_PROVEN",
+      "STALE_MATERIALIZATION_EVIDENCE",
+      "NORMALIZED_HASH_SUBSTITUTION_ATTEMPT",
+      "BLOB_BYTES_USED_AS_WORKSPACE_EVIDENCE",
+      "BINARY_MEMBER_CLASSIFIED_AS_TEXT"
+    ],
+    "result": "BLOCK"
+  },
+  "materialization_evidence_requirements": [
+    "source_repository",
+    "remote_commit",
+    "local_head",
+    "worktree_path",
+    "host_identity",
+    "member_selection_model_identity",
+    "gitattributes_identity",
+    "git_config_origin_evidence",
+    "git_ls_files_eol",
+    "workspace_raw_object_sha",
+    "committed_blob_sha",
+    "workspace_sha256",
+    "blob_sha256"
+  ],
+  "qualification_binding": {
+    "required_chain": [
+      "REMOTE_CANDIDATE_IDENTITY",
+      "LOCAL_MATERIALIZATION_IDENTITY",
+      "WORKTREE_HOST_BINDING",
+      "RAW_BYTE_IDENTITY",
+      "RUNTIME_IDENTITY",
+      "TEST_EXECUTION",
+      "RESULT_EVIDENCE"
+    ],
+    "remote_commit_exists_implies_execution_ready": false,
+    "remote_commit_exists_implies_local_byte_identity": false,
+    "qualification_receipt_must_bind": [
+      "source_repository",
+      "source_commit",
+      "worktree_host_binding",
+      "materialization_evidence_id",
+      "raw_byte_identity_result",
+      "runtime_identity",
+      "test_result_evidence"
+    ],
+    "successor_recovery_rule": "FAIL_CLOSED_IF_ANY_REQUIRED_CHAIN_LINK_IS_NOT_PROVEN"
+  },
+  "negative_controls": [
+    "WINDOWS_CORE_AUTOCRLF_TRUE",
+    "WINDOWS_CORE_AUTOCRLF_FALSE",
+    "UNSPECIFIED_ATTRIBUTE",
+    "EXPLICIT_LF_ATTRIBUTE",
+    "CRLF_WORKTREE_AGAINST_LF_BLOB",
+    "CLEAN_GIT_STATUS_BUT_RAW_BYTE_MISMATCH",
+    "MISSING_MEMBER_POLICY",
+    "BINARY_FILE_EXCLUSION",
+    "UNREGISTERED_GOVERNED_FAMILY",
+    "REMOTE_COMMIT_PRESENT_LOCAL_MATERIALIZATION_ABSENT",
+    "WRONG_MATERIALIZED_COMMIT",
+    "STALE_MATERIALIZATION_EVIDENCE",
+    "NORMALIZED_HASH_SUBSTITUTION_ATTEMPT",
+    "BLOB_BYTES_USED_AS_SUBSTITUTE_FOR_WORKSPACE_BYTES"
+  ],
+  "migration_boundary": {
+    "fresh_materialization_rule": "USE_VERSIONED_GITATTRIBUTES_AND_REQUIRE_POST_MATERIALIZATION_RAW_BYTE_PROOF",
+    "existing_worktree_migration_rule": "NO_SILENT_MIGRATION; REQUIRES_EXACT_AUTHORITY_AND_PRE_MIGRATION_EVIDENCE",
+    "post_migration_proof": "REPEAT_EOL_AND_RAW_OBJECT_IDENTITY_FOR_COMPLETE_SELECTED_MEMBER_SET"
+  },
+  "rollback_boundary": {
+    "forensic_preservation": "PRESERVE_FAILED_WORKTREE_UNTIL_EXPLICIT_REMOVAL_AUTHORITY",
+    "source_policy_rollback": "REVERT_ONLY_BY_VERSIONED_SUCCESSOR_OR_AUTHORIZED_REVERT",
+    "host_global_config_mutation_required": false
+  }
+}
