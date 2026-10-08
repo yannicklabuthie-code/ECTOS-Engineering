@@ -67,6 +67,15 @@ The cartography MUST identify, for every package/object:
 - TIMEOUT_PATH
 - QUALIFICATION_EVIDENCE
 - CURRENTNESS
+- ENGINE_FAMILY_ID
+- QUALIFICATION_PROFILE_ID
+- REQUIRED_QUALIFICATION_CAPABILITIES
+- EXISTING_TOOL_CANDIDATES
+- CURRENT_ADMITTED_TOOL
+- TOOL_CURRENTNESS
+- TOOL_QUALIFICATION_STATE
+- ASSEMBLY_TEST_REQUIREMENTS
+- CROSS_LAYER_TEST_REQUIREMENTS
 
 The expected architectural chain is recovered at semantic layer level as:
 
@@ -84,6 +93,35 @@ LAYER_ASSEMBLED != NEXT_LAYER_COMPATIBLE
 
 A cross-layer boundary is READY only when its outbound contract, routing/handoff contract, inbound contract and negative controls are physically proven.
 
+## Engine-family qualification invariant
+
+ECTOS OS cartography is also the source model for qualification capability derivation.
+
+ENGINE_FAMILY_CARTOGRAPHY
+-> FAMILY_QUALIFICATION_PROFILE
+-> REQUIRED_CHALLENGE_SET
+-> QUALIFICATION_TOOL_REQUIREMENTS
+-> TOOL_CANDIDATE
+-> INDEPENDENT_TOOL_QUALIFICATION
+-> FACTORY_ADMISSION
+-> TARGET_QUALIFICATION
+
+The current family-model candidate is versioned separately in:
+
+cartography/ectos-os/ECTOS_OS_ENGINE_FAMILY_QUALIFICATION_MODEL_V01.md
+
+A new engine/package in a known family SHOULD be qualifiable by family-level generic qualification logic plus a target-specific profile/contract. New package identities MUST NOT force package-name-specific qualifier logic when the family contract has not changed.
+
+Current family-model candidate classes:
+- ROUTING_CONTROL_MODULE
+- ORCHESTRATION_CONTROL
+- RUNTIME_FACADE_MODULE
+- CORE_COMPONENT_ENGINE
+- CROSS_LAYER_HANDOFF
+- RUNTIME_CARRIER_AND_MATERIALIZATION
+
+The six historical qualification profiles recovered in Tooling forensics MUST NOT be silently equated to these six family classes until exact profile identities/contracts are reconciled.
+
 ## Current exact gaps
 
 - F07-GAP-001: current active runtime consumption of the 13 recovered objects is NOT_PROVEN per object.
@@ -95,7 +133,10 @@ A cross-layer boundary is READY only when its outbound contract, routing/handoff
 - F07-GAP-007: the 62-package historical baseline -> current/running relation is NOT_PROVEN.
 - F07-GAP-008: complete package -> engine causal binding is PARTIAL.
 - F07-GAP-009: current trusted qualification toolset is NOT_PROVEN.
+- CARTOGRAPHY-GAP-QF-001: complete ENGINE_FAMILY_ID assignment for the current OS graph is NOT_PROVEN.
+- CARTOGRAPHY-GAP-QF-002: historical qualification profile -> engine-family binding is NOT_PROVEN.
+- CARTOGRAPHY-GAP-QF-003: current admitted qualification tool by family is NOT_PROVEN.
 
 ## Closure rule
 
-This cartography MUST NOT be marked complete until the current package set, package->engine bindings, intra-layer edges, cross-layer edges, contracts, routes, qualification lineage and present runtime/currentness are either physically proven or explicitly marked NOT_PROVEN with exact unreachable scope.
+This cartography MUST NOT be marked complete until the current package set, package->engine bindings, intra-layer edges, cross-layer edges, contracts, routes, qualification lineage, engine-family qualification requirements and present runtime/currentness are either physically proven or explicitly marked NOT_PROVEN with exact unreachable scope.
