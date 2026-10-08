@@ -51,8 +51,16 @@ This index points to the current evidence-first cartography working set. Presenc
    - exact profile-name recovery state
    - QP-001 source-backed as a broad historical cross-domain profile
    - QP-WPS51-V01 source-backed as a Windows PowerShell 5.1 qualification profile
-   - 4 of the announced 6 historical profile identities remain NOT_PROVEN
-   - no silent equivalence between qualification profile, engine family, engineering profile, tool, qualifier, or Factory admission
+   - QP-WPS51 source-backed static/native/negative gate classes recorded
+   - 4 of the announced 6 historical profile identities remain exact unreachable scope from the current reachable source graph
+   - profile identity recovery ends BLOCKED_NOT_PROVEN_WITH_EXACT_UNREACHABLE_SCOPE rather than inventing names
+
+8. `ECTOS_OS_ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_V01.md`
+   - candidate family-level qualification requirements for routing, orchestration, runtime façades, core component engines, cross-layer handoffs and runtime/materialization
+   - separates generic family gates from runtime-specific overlays such as QP-WPS51-V01
+   - defines required negative-control families and assembly requirements
+   - defines the search-before-build route for REUSE / EXTEND / BUILD_NEW / NOT_PROVEN decisions
+   - explicitly does not claim current Factory tool admission
 
 ## Current evidence state
 
@@ -68,8 +76,10 @@ QUALIFICATION_PROFILE_COUNT=6
 EXACT_NAMED_QUALIFICATION_PROFILE_COUNT=2
 EXACT_NAMED_PROFILES=QP-001|QP-WPS51-V01
 EXACT_PROFILE_IDENTITIES_REMAINING_NOT_PROVEN=4
+PROFILE_IDENTITY_SAFE_READ_ONLY_SEARCH_EXHAUSTED=YES
 CURRENT_TRUSTED_QUALIFIER_COUNT=0
 CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
+ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_CANDIDATE=CREATED
 
 ## Current major unresolved bindings
 
@@ -78,13 +88,26 @@ CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 - complete current intra-layer package graph
 - complete current cross-layer handoff graph
 - exact current input/output contracts for every edge
-- four remaining historical qualification-profile identities
+- four remaining historical qualification-profile identities: exact unreachable scope from current reachable sources
 - complete exact contracts for all six historical qualification profiles
-- complete 54-tool -> profile -> family -> OS target/edge mapping
+- complete 54-tool -> capability -> profile/family -> OS target/edge mapping
 - current Factory admission by family
 - current execution-eligible qualifier by family
 - governed qualification-date lineage for full chain
 - current active runtime consumption of each recovered object
+
+## Immediate next cartography target
+
+NEXT_REGISTER=ECTOS_OS_TOOL_CAPABILITY_TO_FAMILY_REQUIREMENT_MATRIX_V01
+
+The next safe step is to compare reachable qualification tools against the family requirement model and classify each physically supported candidate as:
+
+- REUSE_CANDIDATE
+- EXTEND_CANDIDATE
+- BUILD_NEW_REQUIRED
+- NOT_PROVEN
+
+The four unrecovered historical profile IDs remain preserved as an exact source gap but do not justify stopping family-capability mapping.
 
 ## Closure condition
 
