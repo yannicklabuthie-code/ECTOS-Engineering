@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import os
+import platform
 import subprocess
 import tempfile
 import unittest
@@ -10,6 +11,7 @@ from pathlib import Path
 
 from validators.workspace_identity.validate_workspace_identity import (
     WorkspaceIdentityPolicyError,
+    _physical_host_identity,
     build_physical_evidence,
     inspect_cleanliness,
     inspect_workspace_member,
@@ -215,9 +217,12 @@ class WorkspaceIdentityPolicyV02Tests(unittest.TestCase):
         with self.assertRaises(WorkspaceIdentityPolicyError): validate_materialization_evidence(ROOT, evidence, GENERIC, MODEL, MATERIALIZATION)
 
     def test_31_cli_has_no_weak_default_path(self):
+        before = set(filter(None, git(ROOT, "ls-files", "--others", "--exclude-standard").splitlines()))
         result = subprocess.run([os.fspath(Path(os.sys.executable)), os.fspath(ROOT / "validators/workspace_identity/validate_workspace_identity.py"), "--root", os.fspath(ROOT)], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        after = set(filter(None, git(ROOT, "ls-files", "--others", "--exclude-standard").splitlines()))
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("--evidence", result.stderr)
+        self.assertEqual(before, after)
 
     def test_32_package_graph_absence_is_not_a_pass(self):
         result = subprocess.run([os.fspath(Path(os.sys.executable)), os.fspath(ROOT / "validators/workspace_identity/validate_workspace_identity.py"), "--root", os.fspath(ROOT), "--evidence", "missing.json", "--manifest", "missing.json", "--dependency-graph", "missing.json"], text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -226,6 +231,10 @@ class WorkspaceIdentityPolicyV02Tests(unittest.TestCase):
     def test_33_double_star_matching(self):
         self.assertTrue(path_matches("a/b/tool.py", "**/*.py")); self.assertTrue(path_matches("tool.py", "**/*.py"))
 
+
+    def test_34_physical_host_identity_is_nonempty(self):
+        self.assertTrue(_physical_host_identity())
+        self.assertEqual(_physical_host_identity().lower(), platform.node().lower())
 
 if __name__ == "__main__":
     unittest.main()

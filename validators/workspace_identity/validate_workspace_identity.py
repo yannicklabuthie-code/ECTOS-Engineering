@@ -5,11 +5,15 @@ import fnmatch
 import hashlib
 import json
 import os
+import platform
 import re
+import socket
 import subprocess
 import sys
 from pathlib import Path
 from typing import Any
+
+sys.dont_write_bytecode = True
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 if str(REPOSITORY_ROOT) not in sys.path:
@@ -354,6 +358,14 @@ def inspect_cleanliness(root: Path, contract: dict[str, Any]) -> dict[str, Any]:
     return {"worktree_clean": True, "index_clean": True, "untracked_objects": [], "ignored_execution_relevant_objects": []}
 
 
+def _physical_host_identity() -> str:
+    for candidate in (platform.node(), socket.gethostname(), os.environ.get("COMPUTERNAME", "")):
+        value = str(candidate or "").strip()
+        if value:
+            return value
+    raise WorkspaceIdentityPolicyError("HOST_IDENTITY_UNRESOLVED")
+
+
 def _normalize_remote(url: str) -> str:
     value = url.strip().replace("\\", "/")
     if value.endswith(".git"):
@@ -376,7 +388,7 @@ def build_physical_evidence(root: Path, model: dict[str, Any], materialization: 
         "remote_commit": remote_commit,
         "local_head": str(_git(root, "rev-parse", "HEAD")).strip(),
         "worktree_path": str(root.resolve()),
-        "host_identity": os.environ.get("COMPUTERNAME", ""),
+        "host_identity": _physical_host_identity(),
         "runtime_identity": f"Python {sys.version.split()[0]}",
         "member_selection_model_identity": _identity_sha(root / "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02.json"),
         "gitattributes_identity": _identity_sha(root / ".gitattributes"),
@@ -410,7 +422,7 @@ def validate_materialization_evidence(root: Path, evidence: dict[str, Any], cont
         raise WorkspaceIdentityPolicyError("COMMIT_NOT_PHYSICALLY_RESOLVABLE")
     if Path(evidence["worktree_path"]).resolve() != root.resolve():
         raise WorkspaceIdentityPolicyError("WORKTREE_PATH_PHYSICAL_MISMATCH")
-    if evidence["host_identity"].upper() != os.environ.get("COMPUTERNAME", "").upper():
+    if evidence["host_identity"].upper() != _physical_host_identity().upper():
         raise WorkspaceIdentityPolicyError("HOST_IDENTITY_PHYSICAL_MISMATCH")
     if evidence["runtime_identity"] != f"Python {sys.version.split()[0]}":
         raise WorkspaceIdentityPolicyError("RUNTIME_IDENTITY_PHYSICAL_MISMATCH")
