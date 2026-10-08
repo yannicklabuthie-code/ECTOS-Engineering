@@ -19,6 +19,7 @@
 *.yaml text eol=lf
 *.sha256 text eol=lf
 **/SHA256SUMS.txt text eol=lf
+**/*SHA256SUMS.txt text eol=lf
 /SEED_SHA256SUMS.txt text eol=lf
 
 # Explicit binary exclusions.

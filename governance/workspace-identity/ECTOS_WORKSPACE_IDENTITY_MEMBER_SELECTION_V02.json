@@ -126,7 +126,10 @@
       "byte_identity_required": "YES",
       "currentness_source": "EXACT_SOURCE_COMMIT",
       "eol_policy": "LF",
-      "exceptions": [],
+      "exceptions": [
+        "governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V01.md",
+        "governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V02.md"
+      ],
       "family_id": "VERSIONED_GOVERNANCE_SOURCES",
       "path_pattern_or_member_set": [
         "AGENTS.md",
@@ -135,7 +138,7 @@
         "governance/**/*.json",
         ".gitattributes"
       ],
-      "priority": 800,
+      "priority": 130,
       "qualification_required": "YES",
       "rationale": "Governed family VERSIONED_GOVERNANCE_SOURCES"
     },
