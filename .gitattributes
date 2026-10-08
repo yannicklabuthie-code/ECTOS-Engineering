@@ -1,4 +1,6 @@
-# Narrow code-rule source policy; deterministic LF checkout on governed identity sources.
+# ECTOS deterministic checkout policy for governed textual sources.
+# Binary formats are explicitly excluded. Existing worktrees are not silently migrated.
+
 /rules/powershell/*.json text eol=lf
 /AGENTS.md text eol=lf
 /ECTOS_ENGINEERING_CODE_RULE_SOURCE.md text eol=lf
@@ -8,4 +10,27 @@
 /governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V02.md text eol=lf
 /uac/*.json text eol=lf
 /uac/**/*.json text eol=lf
+
+# Generic governed textual families.
+*.py text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sha256 text eol=lf
+**/SHA256SUMS.txt text eol=lf
+/SEED_SHA256SUMS.txt text eol=lf
+
+# Explicit binary exclusions.
+*.zip -text
+*.png -text
+*.jpg -text
+*.jpeg -text
+*.gif -text
+*.pdf -text
+*.pfx -text
+*.der -text
+*.dll -text
+*.exe -text
+
 /.gitattributes text eol=lf
