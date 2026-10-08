@@ -3,7 +3,7 @@
 PROJECT=ECTOS
 SCOPE=ECTOS_OS_QUALIFICATION_PROFILE_IDENTITY_RECOVERY
 MODE=EVIDENCE_FIRST_READ_ONLY_RECONCILIATION
-STATE=PARTIAL_NOT_PROVEN
+STATE=BLOCKED_NOT_PROVEN_WITH_EXACT_UNREACHABLE_SCOPE
 
 ## Purpose
 
@@ -25,7 +25,7 @@ This register MUST NOT infer a one-to-one equivalence between:
 - CURRENT_TRUSTED_QUALIFIER_COUNT=0
 - CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 
-The exact identities/contracts of all six historical qualification profiles are not yet closed.
+The exact identities/contracts of all six historical qualification profiles are not closed from the currently reachable source graph.
 
 ## Exact profile identities recovered from reachable sources
 
@@ -54,8 +54,41 @@ PROFILE_ID=QP-WPS51-V01
 IDENTITY_STATE=SOURCE_BACKED_NAMED_PROFILE
 CURRENTNESS=CURRENT_PROFILE_CONFORMANCE_NOT_PROVEN
 PROFILE_ROLE=WINDOWS_POWERSHELL_5_1_QUALIFICATION_PROFILE
+PACKAGE_CLASS=ECTOS_POWERSHELL51_TOOL_PACKAGE
+PLATFORM_PROFILE=TPP-WPS51-V01
 
-Recovered source-backed facts include:
+Recovered source-backed required gate classes include:
+
+STATIC_GATES:
+- package identity
+- manifest
+- SHA256
+- schema
+- dependency declaration
+- currentness declaration
+
+NATIVE_GATES:
+- Windows PowerShell Desktop 5.1 parse
+- import/load
+- native execution
+- process exit semantics
+- stdout capture
+- stderr capture
+
+NEGATIVE_CONTROL_FAMILIES:
+- wrong platform
+- unknown platform
+- wrong runtime
+- unknown runtime
+- untrusted qualifier
+- missing native gate
+- missing required evidence
+- missing dependency
+- stale/superseded profile
+- stale/superseded qualifier
+- unauthorized substitution
+
+Recovered source-backed facts also include:
 
 - TARGET_PROFILE=QP-WPS51-V01 in the Pre-DEV qualification-tool assurance candidate rail;
 - QUALIFICATION_PROFILE=QP-WPS51-V01 in systemic source recovery;
@@ -74,7 +107,11 @@ HISTORICAL_QUALIFICATION_PROFILE_COUNT=6
 EXACT_PROFILE_IDENTITIES_RECOVERED_BY_NAME=2
 EXACT_PROFILE_IDENTITIES_REMAINING_NOT_PROVEN=4
 
-The four remaining exact profile IDs/contracts are NOT_PROVEN from the currently reachable source graph.
+Repeated current-source searches for additional QP identifiers did not source-back four additional exact historical profile names. No QP-002..QP-006 sequence is inferred because the source graph did not prove such identities.
+
+UNREACHABLE_SCOPE_COUNT=1
+UNREACHABLE_SCOPE_01=EXACT_IDENTITIES_AND_MACHINE_READABLE_CONTRACTS_FOR_REMAINING_FOUR_HISTORICAL_QUALIFICATION_PROFILES
+SAFE_READ_ONLY_SEARCH_EXHAUSTED_FOR_CURRENT_REACHABLE_SOURCE_GRAPH=YES
 
 No placeholder IDs are invented.
 No profile names are reconstructed from functional resemblance.
@@ -147,6 +184,9 @@ QP-001:
 QP-WPS51-V01:
 - PROFILE_EXACT_NAME=PROVEN
 - TARGET_RUNTIME_CLASS=WINDOWS_POWERSHELL_5_1
+- STATIC_GATE_CLASS_SET=SOURCE_BACKED
+- NATIVE_GATE_CLASS_SET=SOURCE_BACKED
+- NEGATIVE_CONTROL_FAMILY_SET=SOURCE_BACKED
 - CURRENT_PROFILE_CONFORMANCE=NOT_PROVEN
 - CURRENT_TRUST=NOT_PROVEN
 - CURRENT_FACTORY_ADMISSION=NOT_PROVEN
@@ -160,7 +200,7 @@ UNKNOWN_PROFILE_03..06:
 
 ## Impact on ECTOS OS cartography
 
-The cartography may now safely represent:
+The cartography may safely represent:
 
 OS_NODE_OR_EDGE
 -> ENGINE_FAMILY
@@ -174,7 +214,9 @@ OS_NODE_OR_EDGE
 -> EXACT_PROFILE
 -> CURRENT_ADMITTED_TOOL
 
-chain until the four remaining profiles and the complete 54-tool/profile bindings are physically recovered.
+chain until the remaining profiles and complete 54-tool/profile bindings are physically recovered.
+
+The four unrecovered historical profile identities do NOT block construction of a candidate family-qualification requirement model, provided that model is explicitly derived from current cartography/invariants and is not represented as recovered historical Factory truth.
 
 ## Impact on ECTOS DEV methodology
 
@@ -195,13 +237,20 @@ A new qualifier is justified only when the existing admitted tool/profile capabi
 
 ## Exact open gaps
 
-- PROFILE-ID-GAP-001: four of six historical qualification profile identities remain NOT_PROVEN.
+- PROFILE-ID-GAP-001: four of six historical qualification profile identities remain NOT_PROVEN and are currently unreachable from the reachable source graph.
 - PROFILE-ID-GAP-002: complete exact contracts for all six historical profiles remain NOT_PROVEN.
 - PROFILE-ID-GAP-003: complete 54-tool -> profile binding remains NOT_PROVEN.
 - PROFILE-ID-GAP-004: complete profile -> engine-family binding remains NOT_PROVEN.
 - PROFILE-ID-GAP-005: complete profile/tool -> OS node/edge binding remains NOT_PROVEN.
 - PROFILE-ID-GAP-006: current Factory admission and trust for family-level qualification routes remain NOT_PROVEN.
 
+## Current terminal read-only state
+
+FINAL_STATE=BLOCKED_NOT_PROVEN_WITH_EXACT_UNREACHABLE_SCOPE
+KNOWN_PROFILE_IDENTITY_SET_COMPLETE=NO
+SAFE_ANALYSIS_EXHAUSTED_FOR_CURRENT_PROFILE_IDENTITY_SEARCH=YES
+NEXT_SAFE_ACTION=CONTINUE_FAMILY_REQUIREMENT_AND_TOOL_CAPABILITY_MAPPING_WITH_EXPLICIT_NOT_PROVEN_PROFILE_GAPS
+
 ## Closure condition
 
-This register can close only when all six historical qualification profile identities and contracts are physically/source-backed, and every reachable qualification tool can be classified against them without silent admission or inferred currentness.
+This register can only move to complete profile identity closure when all six historical qualification profile identities and contracts become physically/source-backed. Until then, the exact unreachable scope above remains preserved.
