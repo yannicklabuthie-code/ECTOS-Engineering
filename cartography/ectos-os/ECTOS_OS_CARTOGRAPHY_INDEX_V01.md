@@ -47,6 +47,13 @@ This index points to the current evidence-first cartography working set. Presenc
    - 0 NO_RELATION
    - current Factory admission / trust / execution eligibility remains NOT_PROVEN
 
+7. `ECTOS_OS_QUALIFICATION_PROFILE_IDENTITY_RECOVERY_V01.md`
+   - exact profile-name recovery state
+   - QP-001 source-backed as a broad historical cross-domain profile
+   - QP-WPS51-V01 source-backed as a Windows PowerShell 5.1 qualification profile
+   - 4 of the announced 6 historical profile identities remain NOT_PROVEN
+   - no silent equivalence between qualification profile, engine family, engineering profile, tool, qualifier, or Factory admission
+
 ## Current evidence state
 
 HISTORICAL_DOCUMENTARY_ROOT_PACKAGE_BASELINE=62
@@ -58,6 +65,9 @@ PARTIAL_TARGET_BOUND_RELATION_COUNT=7
 NO_RELATION_COUNT=0
 REACHABLE_TOOL_RECORD_COUNT=54
 QUALIFICATION_PROFILE_COUNT=6
+EXACT_NAMED_QUALIFICATION_PROFILE_COUNT=2
+EXACT_NAMED_PROFILES=QP-001|QP-WPS51-V01
+EXACT_PROFILE_IDENTITIES_REMAINING_NOT_PROVEN=4
 CURRENT_TRUSTED_QUALIFIER_COUNT=0
 CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 
@@ -68,7 +78,8 @@ CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 - complete current intra-layer package graph
 - complete current cross-layer handoff graph
 - exact current input/output contracts for every edge
-- all six historical qualification-profile identities/contracts
+- four remaining historical qualification-profile identities
+- complete exact contracts for all six historical qualification profiles
 - complete 54-tool -> profile -> family -> OS target/edge mapping
 - current Factory admission by family
 - current execution-eligible qualifier by family
