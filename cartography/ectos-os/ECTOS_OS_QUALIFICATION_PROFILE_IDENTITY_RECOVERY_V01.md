@@ -25,6 +25,8 @@ This register MUST NOT infer a one-to-one equivalence between:
 - CURRENT_TRUSTED_QUALIFIER_COUNT=0
 - CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 
+REACHABLE_TOOL_RECORD_COUNT=54 is an archival/discovery corpus counter only. It is NOT an active qualification-tool backlog and does NOT require 54-tool requalification or complete 54-tool capability mapping.
+
 The exact identities/contracts of all six historical qualification profiles are not closed from the currently reachable source graph.
 
 ## Exact profile identities recovered from reachable sources
@@ -146,57 +148,16 @@ A profile may be:
 
 Therefore the final mapping requires exact contract capability comparison, not name matching.
 
-## Required reconciliation fields
+## Active tool-selection boundary
 
-For each recovered profile, close:
+The 54-record corpus remains preserved as historical discovery evidence, but active family-tool selection does NOT iterate through all 54 records.
 
-- PROFILE_ID
-- VERSION
-- STATUS
-- SOURCE_IDENTITY
-- SOURCE_SHA256 where physically available
-- TARGET_RUNTIME
-- TARGET_OS
-- TARGET_CLASS_OR_FAMILY
-- REQUIRED_GATES
-- REQUIRED_NEGATIVE_CONTROLS
-- REQUIRED_EVIDENCE
-- FINAL_RESULT_GATE
-- TOOL_CAPABILITY_REQUIREMENTS
-- QUALIFIER_INDEPENDENCE_REQUIREMENTS
-- CURRENTNESS_SOURCE
-- CURRENT_FACTORY_ADMISSION
-- HISTORICAL_TOOL_BINDINGS
-- CURRENT_TOOL_BINDINGS
-- ENGINE_FAMILY_MATCH
-- OS_NODE_OR_EDGE_TARGETS
+ACTIVE_TOOL_SELECTION_INPUT=
+- physically/source-backed successful qualification/control assets that actually contributed to accepted ECTOS OS qualification or assembly closure;
+- current canonical engineering/runtime primitives when a new family-specific qualifier must be created or adapted.
 
-## Current classification
-
-QP-001:
-- PROFILE_EXACT_NAME=PROVEN
-- HISTORICAL_SCOPE=PARTIAL_SOURCE_BACKED
-- CURRENT_MACHINE_READABLE_CONTRACT=NOT_PROVEN
-- CURRENT_TRUST=NOT_PROVEN
-- CURRENT_FACTORY_ADMISSION=NOT_PROVEN
-- ENGINE_FAMILY_BINDING=NOT_PROVEN
-
-QP-WPS51-V01:
-- PROFILE_EXACT_NAME=PROVEN
-- TARGET_RUNTIME_CLASS=WINDOWS_POWERSHELL_5_1
-- STATIC_GATE_CLASS_SET=SOURCE_BACKED
-- NATIVE_GATE_CLASS_SET=SOURCE_BACKED
-- NEGATIVE_CONTROL_FAMILY_SET=SOURCE_BACKED
-- CURRENT_PROFILE_CONFORMANCE=NOT_PROVEN
-- CURRENT_TRUST=NOT_PROVEN
-- CURRENT_FACTORY_ADMISSION=NOT_PROVEN
-- ENGINE_FAMILY_BINDING=NOT_PROVEN
-
-UNKNOWN_PROFILE_03..06:
-- PROFILE_EXACT_NAME=NOT_PROVEN
-- CONTRACT=NOT_PROVEN
-- TOOL_BINDING=NOT_PROVEN
-- ENGINE_FAMILY_BINDING=NOT_PROVEN
+FAILED_UNUSED_OR_DISCOVERY_ONLY_TOOL_REQUALIFICATION=NO
+COMPLETE_54_TOOL_MAPPING_REQUIRED=NO
 
 ## Impact on ECTOS OS cartography
 
@@ -204,17 +165,10 @@ The cartography may safely represent:
 
 OS_NODE_OR_EDGE
 -> ENGINE_FAMILY
--> HISTORICAL_TOOL_OR_CONTROL_RELATION
+-> SUCCESSFUL_HISTORICAL_TOOL_OR_CONTROL_RELATION
 -> PROFILE_BINDING_STATE
 
-but MUST NOT claim a complete:
-
-OS_NODE_OR_EDGE
--> ENGINE_FAMILY
--> EXACT_PROFILE
--> CURRENT_ADMITTED_TOOL
-
-chain until the remaining profiles and complete 54-tool/profile bindings are physically recovered.
+but MUST NOT claim a complete current admitted route unless current trust/admission evidence exists.
 
 The four unrecovered historical profile identities do NOT block construction of a candidate family-qualification requirement model, provided that model is explicitly derived from current cartography/invariants and is not represented as recovered historical Factory truth.
 
@@ -224,33 +178,33 @@ The qualification methodology derived from ECTOS OS SHALL follow:
 
 ENGINE_FAMILY
 -> FAMILY_QUALIFICATION_REQUIREMENTS
--> PROFILE_FIT
--> EXISTING_TOOL_SEARCH
--> TOOL_FIT
+-> RUNTIME_PROFILE / OVERLAY
+-> PROVEN_SUCCESSFUL_TOOL_OR_CONTROL_SEARCH
+-> REUSE_OR_ADAPT_IF_FIT
+-> BUILD_NEW_IF_GAP
 -> INDEPENDENT_TOOL_QUALIFICATION
 -> FACTORY_ADMISSION
 -> TARGET_QUALIFICATION
 
 A new DEV package in an already-known family MUST NOT automatically require new qualifier code.
 
-A new qualifier is justified only when the existing admitted tool/profile capability set cannot satisfy the family contract and that gap is physically proven.
+A new qualifier is justified only when the proven successful tool/control capability set cannot satisfy the family contract and that gap is physically proven.
 
 ## Exact open gaps
 
 - PROFILE-ID-GAP-001: four of six historical qualification profile identities remain NOT_PROVEN and are currently unreachable from the reachable source graph.
 - PROFILE-ID-GAP-002: complete exact contracts for all six historical profiles remain NOT_PROVEN.
-- PROFILE-ID-GAP-003: complete 54-tool -> profile binding remains NOT_PROVEN.
+- PROFILE-ID-GAP-003: successful qualification/control asset -> family requirement coverage remains PARTIAL.
 - PROFILE-ID-GAP-004: complete profile -> engine-family binding remains NOT_PROVEN.
-- PROFILE-ID-GAP-005: complete profile/tool -> OS node/edge binding remains NOT_PROVEN.
-- PROFILE-ID-GAP-006: current Factory admission and trust for family-level qualification routes remain NOT_PROVEN.
+- PROFILE-ID-GAP-005: current Factory admission and trust for family-level qualification routes remain NOT_PROVEN.
 
 ## Current terminal read-only state
 
 FINAL_STATE=BLOCKED_NOT_PROVEN_WITH_EXACT_UNREACHABLE_SCOPE
 KNOWN_PROFILE_IDENTITY_SET_COMPLETE=NO
 SAFE_ANALYSIS_EXHAUSTED_FOR_CURRENT_PROFILE_IDENTITY_SEARCH=YES
-NEXT_SAFE_ACTION=CONTINUE_FAMILY_REQUIREMENT_AND_TOOL_CAPABILITY_MAPPING_WITH_EXPLICIT_NOT_PROVEN_PROFILE_GAPS
+NEXT_SAFE_ACTION=MAP_PROVEN_SUCCESSFUL_QUALIFICATION_ASSETS_TO_ENGINE_FAMILY_REQUIREMENTS
 
 ## Closure condition
 
-This register can only move to complete profile identity closure when all six historical qualification profile identities and contracts become physically/source-backed. Until then, the exact unreachable scope above remains preserved.
+This register can only move to complete profile identity closure when all six historical qualification profile identities and contracts become physically/source-backed. Until then, the exact unreachable scope above remains preserved. This does not create a requirement to requalify or classify the complete 54-record archival discovery corpus.
