@@ -23,7 +23,7 @@ This index points to the current evidence-first cartography working set. Presenc
 2. `ECTOS_OS_ENGINE_FAMILY_QUALIFICATION_MODEL_V01.md`
    - candidate engine-family qualification taxonomy
    - family-level qualification challenge model
-   - search-before-build tool rule
+   - search-before-build rule constrained to proven successful assets
 
 3. `ECTOS_OS_ENGINE_FAMILY_ASSIGNMENT_REGISTER_V01.md`
    - assignment of recovered OS objects to candidate qualification families
@@ -37,7 +37,7 @@ This index points to the current evidence-first cartography working set. Presenc
 
 5. `ECTOS_OS_QUALIFICATION_PROFILE_TOOL_RECONCILIATION_V01.md`
    - historical qualification-profile identities recovered so far
-   - 54-tool / 6-profile corpus reconciliation boundary
+   - 54-record corpus retained as archival/discovery evidence only
    - profile-vs-family anti-conflation rules
 
 6. `ECTOS_OS_TOOL_TO_ENGINE_FAMILY_BINDING_V01.md`
@@ -54,13 +54,22 @@ This index points to the current evidence-first cartography working set. Presenc
    - QP-WPS51 source-backed static/native/negative gate classes recorded
    - 4 of the announced 6 historical profile identities remain exact unreachable scope from the current reachable source graph
    - profile identity recovery ends BLOCKED_NOT_PROVEN_WITH_EXACT_UNREACHABLE_SCOPE rather than inventing names
+   - complete 54-tool re-check/requalification is explicitly NOT required
 
 8. `ECTOS_OS_ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_V01.md`
    - candidate family-level qualification requirements for routing, orchestration, runtime façades, core component engines, cross-layer handoffs and runtime/materialization
    - separates generic family gates from runtime-specific overlays such as QP-WPS51-V01
    - defines required negative-control families and assembly requirements
-   - defines the search-before-build route for REUSE / EXTEND / BUILD_NEW / NOT_PROVEN decisions
-   - explicitly does not claim current Factory tool admission
+   - active tool-selection policy starts from proven successful qualification/control assets only
+   - new/adapted family qualifier is built only when proven successful assets do not cover the family requirement
+
+9. `ECTOS_OS_PROVEN_QUALIFICATION_ASSET_TO_FAMILY_MATRIX_V01.md`
+   - active SMALL shortlist, not the 54-record discovery corpus
+   - separates operational actors from executable qualification instruments
+   - source-backed operational actors include Tooling Registry & Qualification Mapping Agent, Engineering Assurance PRÊT and Assurance Layer
+   - successful recovered qualification controls include G00 V06 targeted QF, Complete Six Layer Core Formal Final Core QF V01 and G00/L01 Formal QF Control V06
+   - family outcome is REUSE / ADAPT / BUILD_NEW / NOT_PROVEN
+   - DevCal remains owner-designated possible use but successful OS qualification role is NOT_PROVEN from current reachable evidence
 
 ## Current evidence state
 
@@ -72,6 +81,9 @@ DIRECT_STRONG_HISTORICAL_RELATION_COUNT=6
 PARTIAL_TARGET_BOUND_RELATION_COUNT=7
 NO_RELATION_COUNT=0
 REACHABLE_TOOL_RECORD_COUNT=54
+REACHABLE_TOOL_RECORD_COUNT_ROLE=ARCHIVAL_DISCOVERY_ONLY
+ACTIVE_54_TOOL_RECHECK_REQUIRED=NO
+ACTIVE_54_TOOL_REQUALIFICATION_REQUIRED=NO
 QUALIFICATION_PROFILE_COUNT=6
 EXACT_NAMED_QUALIFICATION_PROFILE_COUNT=2
 EXACT_NAMED_PROFILES=QP-001|QP-WPS51-V01
@@ -80,6 +92,7 @@ PROFILE_IDENTITY_SAFE_READ_ONLY_SEARCH_EXHAUSTED=YES
 CURRENT_TRUSTED_QUALIFIER_COUNT=0
 CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_CANDIDATE=CREATED
+PROVEN_SUCCESSFUL_QUALIFICATION_ASSET_SHORTLIST=CREATED
 
 ## Current major unresolved bindings
 
@@ -90,7 +103,7 @@ ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_CANDIDATE=CREATED
 - exact current input/output contracts for every edge
 - four remaining historical qualification-profile identities: exact unreachable scope from current reachable sources
 - complete exact contracts for all six historical qualification profiles
-- complete 54-tool -> capability -> profile/family -> OS target/edge mapping
+- successful qualification/control asset -> family requirement coverage completion
 - current Factory admission by family
 - current execution-eligible qualifier by family
 - governed qualification-date lineage for full chain
@@ -98,16 +111,18 @@ ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_CANDIDATE=CREATED
 
 ## Immediate next cartography target
 
-NEXT_REGISTER=ECTOS_OS_TOOL_CAPABILITY_TO_FAMILY_REQUIREMENT_MATRIX_V01
+NEXT_TARGET=CLOSE_FAMILY_QUALIFICATION_COVERAGE_FROM_PROVEN_SUCCESSFUL_ASSET_SHORTLIST
 
-The next safe step is to compare reachable qualification tools against the family requirement model and classify each physically supported candidate as:
+For each engine family, determine:
 
-- REUSE_CANDIDATE
-- EXTEND_CANDIDATE
-- BUILD_NEW_REQUIRED
-- NOT_PROVEN
+- PROVEN_SUCCESSFUL_ASSET_MATCH
+- COVERAGE_STATE
+- MISSING_CAPABILITIES
+- DECISION=REUSE|ADAPT|BUILD_NEW|NOT_PROVEN
+- REQUIRED_RUNTIME_OVERLAY
+- REQUIRED_INDEPENDENT_QUALIFICATION_ROUTE
 
-The four unrecovered historical profile IDs remain preserved as an exact source gap but do not justify stopping family-capability mapping.
+The four unrecovered historical profile IDs and the archival 54-record corpus remain preserved evidence gaps/history. They do not create a workload to re-check every historical tool.
 
 ## Closure condition
 
