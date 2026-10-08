@@ -71,6 +71,17 @@ This index points to the current evidence-first cartography working set. Presenc
    - family outcome is REUSE / ADAPT / BUILD_NEW / NOT_PROVEN
    - DevCal remains owner-designated possible use but successful OS qualification role is NOT_PROVEN from current reachable evidence
 
+10. `ECTOS_OS_ENGINE_FAMILY_QUALIFICATION_DECISION_REGISTER_V01.md`
+   - freezes the current per-family qualification-tool route from proven successful OS assets only
+   - QFAM-ROUTING-CONTROL-V01=ADAPT
+   - QFAM-ORCHESTRATION-CONTROL-V01=ADAPT
+   - QFAM-RUNTIME-FACADE-V01=ADAPT
+   - QFAM-CORE-COMPONENT-ENGINE-V01=BUILD_NEW
+   - QFAM-CROSS-LAYER-HANDOFF-V01=BUILD_NEW
+   - QFAM-RUNTIME-CARRIER-MATERIALIZATION-V01=BUILD_NEW
+   - REUSE_AS_IS_COUNT=0, ADAPT_COUNT=3, BUILD_NEW_COUNT=3
+   - BUILD_NEW is documentary requirement only; no code/tool execution authority is granted
+
 ## Current evidence state
 
 HISTORICAL_DOCUMENTARY_ROOT_PACKAGE_BASELINE=62
@@ -93,6 +104,10 @@ CURRENT_TRUSTED_QUALIFIER_COUNT=0
 CURRENT_EXECUTION_ELIGIBLE_ROUTE_COUNT=0
 ENGINE_FAMILY_QUALIFICATION_REQUIREMENTS_CANDIDATE=CREATED
 PROVEN_SUCCESSFUL_QUALIFICATION_ASSET_SHORTLIST=CREATED
+ENGINE_FAMILY_QUALIFICATION_DECISION_REGISTER=CREATED
+ENGINE_FAMILY_DECISION_ADAPT_COUNT=3
+ENGINE_FAMILY_DECISION_BUILD_NEW_COUNT=3
+ENGINE_FAMILY_DECISION_REUSE_AS_IS_COUNT=0
 
 ## Current major unresolved bindings
 
@@ -103,7 +118,7 @@ PROVEN_SUCCESSFUL_QUALIFICATION_ASSET_SHORTLIST=CREATED
 - exact current input/output contracts for every edge
 - four remaining historical qualification-profile identities: exact unreachable scope from current reachable sources
 - complete exact contracts for all six historical qualification profiles
-- successful qualification/control asset -> family requirement coverage completion
+- exact adapted/new qualifier contracts for each engine family
 - current Factory admission by family
 - current execution-eligible qualifier by family
 - governed qualification-date lineage for full chain
@@ -111,18 +126,23 @@ PROVEN_SUCCESSFUL_QUALIFICATION_ASSET_SHORTLIST=CREATED
 
 ## Immediate next cartography target
 
-NEXT_TARGET=CLOSE_FAMILY_QUALIFICATION_COVERAGE_FROM_PROVEN_SUCCESSFUL_ASSET_SHORTLIST
+NEXT_TARGET=FREEZE_PER_FAMILY_QUALIFIER_CONTRACTS_AND_BIND_TO_CURRENT_OS_NODES_AND_EDGES
 
-For each engine family, determine:
+For each family, freeze:
 
-- PROVEN_SUCCESSFUL_ASSET_MATCH
-- COVERAGE_STATE
-- MISSING_CAPABILITIES
-- DECISION=REUSE|ADAPT|BUILD_NEW|NOT_PROVEN
-- REQUIRED_RUNTIME_OVERLAY
-- REQUIRED_INDEPENDENT_QUALIFICATION_ROUTE
+- FAMILY_ID
+- QUALIFIER_MODE=ADAPT|BUILD_NEW
+- BASE_PROVEN_ASSET if any
+- REQUIRED_GATES
+- REQUIRED_NEGATIVE_CONTROLS
+- RUNTIME_OVERLAY
+- TARGET_NODE_OR_EDGE_SET
+- INPUT_EVIDENCE_CONTRACT
+- OUTPUT_QUALIFICATION_RECEIPT_CONTRACT
+- INDEPENDENT_QUALIFIER_ROUTE
+- FACTORY_ADMISSION_REQUIRED=YES
 
-The four unrecovered historical profile IDs and the archival 54-record corpus remain preserved evidence gaps/history. They do not create a workload to re-check every historical tool.
+The four unrecovered historical profile IDs and archival 54-record corpus remain preserved evidence/history and do not create an active requalification workload.
 
 ## Closure condition
 
