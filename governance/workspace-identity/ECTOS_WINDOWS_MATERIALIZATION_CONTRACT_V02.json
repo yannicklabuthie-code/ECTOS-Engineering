@@ -1,0 +1,54 @@
+{
+  "contract_id": "ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02",
+  "version": "V02",
+  "status": "CURRENT_CANDIDATE",
+  "scope": "WINDOWS_EXACT_CANDIDATE_MATERIALIZATION",
+  "schema_path": "schemas/workspace_identity/ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02.schema.json",
+  "target_os": "WINDOWS",
+  "host_global_config_required": false,
+  "system_core_autocrlf_true_supported": true,
+  "cleanliness_policy": {
+    "tracked_worktree_diff": "PROHIBITED",
+    "index_diff": "PROHIBITED",
+    "untracked_objects": "PROHIBITED_EXCEPT_ALLOWLIST",
+    "ignored_objects": "PROHIBITED_EXCEPT_ALLOWLIST",
+    "safe_untracked_patterns": [],
+    "safe_ignored_patterns": ["**/results/**", "**/tools/modules/**", "*.tmp"]
+  },
+  "fresh_materialization_rule": {
+    "source": "EXACT_REMOTE_REPOSITORY_BRANCH_AND_COMMIT",
+    "workspace": "NEW_ISOLATED_WORKTREE_OR_CHECKOUT",
+    "checkout_policy": "VERSIONED_REPOSITORY_GITATTRIBUTES",
+    "required_post_materialization": [
+      "HEAD_MATCH", "WORKTREE_CLEAN", "INDEX_CLEAN", "NO_DISALLOWED_UNTRACKED_OBJECTS",
+      "NO_DISALLOWED_IGNORED_OBJECTS", "SELECTED_MEMBER_EOL_POLICY", "SELECTED_MEMBER_RAW_BYTE_IDENTITY",
+      "PACKAGE_DEPENDENCY_CLOSURE"
+    ],
+    "execution_eligible_before_all_proofs": false
+  },
+  "existing_worktree_migration_rule": {
+    "silent_migration": "PROHIBITED",
+    "authority_required": true,
+    "pre_migration_evidence_required": true,
+    "forensic_worktree_mutation": "PROHIBITED",
+    "post_migration_proof": "SAME_AS_FRESH_MATERIALIZATION_PLUS_PREDECESSOR_IDENTITY"
+  },
+  "remote_local_distinction": {
+    "remote_commit_exists": "DOCUMENTARY_SOURCE_IDENTITY_ONLY",
+    "local_materialization_proven": "SEPARATE_REQUIRED_PROOF",
+    "raw_byte_identity_proven": "SEPARATE_REQUIRED_PROOF",
+    "execution_ready": "ONLY_AFTER_COMPLETE_QUALIFICATION_CHAIN"
+  },
+  "normalized_hash_substitution": "PROHIBITED",
+  "blob_bytes_as_workspace_evidence": "PROHIBITED",
+  "dependency_graph_binding": {
+    "topology_owner": "DEPENDENCY_GRAPH",
+    "mission_registry_role": "REFERENCE_PROVEN_DEPENDENCY_AND_MATERIALIZATION_EVIDENCE_ONLY",
+    "duplicate_graph_topology_in_mission_registry": false
+  },
+  "rollback": {
+    "failed_materialization": "PRESERVE_FOR_FORENSIC_REVIEW_UNTIL_EXPLICIT_REMOVAL_AUTHORITY",
+    "existing_worktree_interference": "PROHIBITED",
+    "host_global_git_config_repair": "NOT_A_PRIMARY_CONTROL"
+  }
+}

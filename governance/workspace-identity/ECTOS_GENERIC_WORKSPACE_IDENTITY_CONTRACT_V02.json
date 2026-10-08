@@ -1,0 +1,94 @@
+{
+  "blob_substitution_as_workspace_evidence": "PROHIBITED",
+  "contract_id": "ECTOS_GENERIC_WORKSPACE_IDENTITY_CONTRACT_V02",
+  "currentness_rule": {
+    "accepted_status": "CURRENT_CANDIDATE",
+    "chat_or_memory_only": "INSUFFICIENT",
+    "contract_and_selection_model_must_be_from": "EXACT_COMMIT_UNDER_REVIEW",
+    "governance_currentness_must_be_resolved_independently_where_applicable": true
+  },
+  "materialization_contract": "governance/workspace-identity/ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02.json",
+  "materialization_evidence_required_fields": [
+    "source_repository",
+    "remote_commit",
+    "local_head",
+    "worktree_path",
+    "host_identity",
+    "runtime_identity",
+    "member_selection_model_identity",
+    "gitattributes_identity",
+    "git_config_origin_evidence",
+    "git_ls_files_eol",
+    "workspace_raw_object_sha",
+    "committed_blob_sha",
+    "workspace_sha256",
+    "blob_sha256",
+    "worktree_clean",
+    "index_clean",
+    "untracked_objects",
+    "ignored_execution_relevant_objects",
+    "workspace_evidence_source",
+    "raw_byte_identity_result",
+    "materialization_evidence_current"
+  ],
+  "materialization_evidence_schema": "schemas/workspace_identity/ECTOS_MATERIALIZATION_EVIDENCE_V01.schema.json",
+  "member_selection_baseline": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_CLASSIFICATION_BASELINE_V01.json",
+  "member_selection_model": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02.json",
+  "mission_registry_binding": {
+    "blocked_or_failed_systemic_execution_eligible": false,
+    "currentness_required_for_resume": "CURRENT",
+    "materialization_evidence_pointer_required_for_resume": true,
+    "schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V03",
+    "source_repository_and_commit_must_match_evidence": true
+  },
+  "normalization_during_hash": "PROHIBITED",
+  "qualification_binding": {
+    "remote_commit_exists_implies_execution_ready": false,
+    "remote_commit_exists_implies_local_byte_identity": false,
+    "required_chain": [
+      "REMOTE_CANDIDATE_IDENTITY",
+      "LOCAL_MATERIALIZATION_IDENTITY",
+      "WORKTREE_HOST_BINDING",
+      "WORKTREE_CLEANLINESS",
+      "RAW_BYTE_IDENTITY",
+      "MEMBER_SELECTION_CLOSURE",
+      "MATERIALIZATION_EVIDENCE",
+      "PACKAGE_DEPENDENCY_CLOSURE",
+      "RUNTIME_IDENTITY",
+      "TEST_EXECUTION",
+      "RESULT_EVIDENCE"
+    ],
+    "successor_recovery_rule": "FAIL_CLOSED_IF_ANY_REQUIRED_CHAIN_LINK_IS_NOT_PROVEN"
+  },
+  "raw_byte_source": "RAW_BYTES_FROM_MATERIALIZED_WORKSPACE_FILE",
+  "required_workspace_eol": "LF_FOR_SELECTED_TEXT_MEMBERS",
+  "rollback_boundary": {
+    "forensic_preservation": "PRESERVE_FAILED_WORKTREE_UNTIL_EXPLICIT_REMOVAL_AUTHORITY",
+    "host_global_config_mutation_required": false,
+    "source_policy_rollback": "REVERT_ONLY_BY_VERSIONED_SUCCESSOR_OR_AUTHORIZED_REVERT"
+  },
+  "schema_path": "schemas/workspace_identity/ECTOS_GENERIC_WORKSPACE_IDENTITY_CONTRACT_V02.schema.json",
+  "scope": "CROSS_PLATFORM_GOVERNED_WORKSPACE_BYTE_IDENTITY",
+  "status": "CURRENT_CANDIDATE",
+  "supported_os": [
+    "WINDOWS",
+    "LINUX",
+    "MACOS"
+  ],
+  "supported_runtime_classes": [
+    "PYTHON",
+    "JSON_DATA",
+    "MARKDOWN_GOVERNANCE",
+    "YAML_WORKFLOW",
+    "TEXT_IDENTITY_INPUT"
+  ],
+  "version": "V02",
+  "worktree_byte_identity_rule": {
+    "clean_git_status_is_sufficient": false,
+    "committed_object_command": "git rev-parse HEAD:<repository-relative-path>",
+    "eol_command": "git ls-files --eol <repository-relative-path>",
+    "required_comparison": "EQUAL",
+    "selected_text_required_workspace_eol": "w/lf",
+    "workspace_object_command": "git hash-object --no-filters <workspace-file>"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02_SCHEMA",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_id", "version", "status", "scope", "schema_path", "target_os",
+    "host_global_config_required", "system_core_autocrlf_true_supported",
+    "cleanliness_policy", "fresh_materialization_rule", "existing_worktree_migration_rule",
+    "remote_local_distinction", "normalized_hash_substitution",
+    "blob_bytes_as_workspace_evidence", "dependency_graph_binding", "rollback"
+  ],
+  "properties": {
+    "contract_id": {"const": "ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V02"},
+    "version": {"const": "V02"},
+    "status": {"const": "CURRENT_CANDIDATE"},
+    "scope": {"const": "WINDOWS_EXACT_CANDIDATE_MATERIALIZATION"},
+    "schema_path": {"type": "string", "minLength": 1},
+    "target_os": {"const": "WINDOWS"},
+    "host_global_config_required": {"const": false},
+    "system_core_autocrlf_true_supported": {"const": true},
+    "cleanliness_policy": {"type": "object"},
+    "fresh_materialization_rule": {"type": "object"},
+    "existing_worktree_migration_rule": {"type": "object"},
+    "remote_local_distinction": {"type": "object"},
+    "normalized_hash_substitution": {"const": "PROHIBITED"},
+    "blob_bytes_as_workspace_evidence": {"const": "PROHIBITED"},
+    "dependency_graph_binding": {"type": "object"},
+    "rollback": {"type": "object"}
+  }
+}

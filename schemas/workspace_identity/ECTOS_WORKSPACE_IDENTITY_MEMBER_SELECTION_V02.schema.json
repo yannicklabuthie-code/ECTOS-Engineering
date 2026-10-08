@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02_SCHEMA",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["model_id", "version", "status", "scope", "currentness_source", "selection_rules", "families"],
+  "properties": {
+    "model_id": {"const": "ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02"},
+    "version": {"const": "V02"},
+    "status": {"const": "CURRENT_CANDIDATE"},
+    "scope": {"const": "GENERIC_GOVERNED_WORKSPACE_BYTE_IDENTITY_SELECTION"},
+    "currentness_source": {"const": "EXACT_COMMIT_CONTAINING_THIS_MODEL"},
+    "selection_rules": {"type": "object"},
+    "families": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "family_id", "path_pattern_or_member_set", "priority", "byte_identity_required",
+          "eol_policy", "binary_or_text", "qualification_required", "currentness_source",
+          "exceptions", "rationale"
+        ],
+        "properties": {
+          "family_id": {"type": "string", "minLength": 1},
+          "path_pattern_or_member_set": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+          "priority": {"type": "integer"},
+          "byte_identity_required": {"const": "YES"},
+          "eol_policy": {"enum": ["LF", "BINARY_PRESERVE"]},
+          "binary_or_text": {"enum": ["TEXT", "BINARY"]},
+          "qualification_required": {"const": "YES"},
+          "currentness_source": {"type": "string", "minLength": 1},
+          "exceptions": {"type": "array", "items": {"type": "string"}},
+          "rationale": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

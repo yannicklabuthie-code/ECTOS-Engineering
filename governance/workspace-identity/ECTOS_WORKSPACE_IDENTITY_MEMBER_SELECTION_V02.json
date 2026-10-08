@@ -1,0 +1,268 @@
+{
+  "currentness_source": "EXACT_COMMIT_CONTAINING_THIS_MODEL",
+  "families": [
+    {
+      "binary_or_text": "BINARY",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "BINARY_PRESERVE",
+      "exceptions": [],
+      "family_id": "BINARY_ARTIFACTS",
+      "path_pattern_or_member_set": [
+        "**/*.zip",
+        "**/*.png",
+        "**/*.jpg",
+        "**/*.jpeg",
+        "**/*.gif",
+        "**/*.pdf",
+        "**/*.pfx",
+        "**/*.der",
+        "**/*.dll",
+        "**/*.exe"
+      ],
+      "priority": 1000,
+      "qualification_required": "YES",
+      "rationale": "Governed family BINARY_ARTIFACTS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "MISSION_REGISTRY_MEMBERS",
+      "path_pattern_or_member_set": [
+        "engineering/mission_registry.py",
+        "tests/test_mission_registry.py",
+        "ectos/mission-registry/**/*.json",
+        "ectos/mission-registry/**/*.md"
+      ],
+      "priority": 900,
+      "qualification_required": "YES",
+      "rationale": "Governed family MISSION_REGISTRY_MEMBERS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "DEPENDENCY_GRAPH_MEMBERS",
+      "path_pattern_or_member_set": [
+        "engineering/dependency_graph.py",
+        "engineering/tests/test_dependency_graph.py",
+        "governance/ECTOS_PACKAGE_DEPENDENCY_GRAPH_CONTRACT_V01.md",
+        "schemas/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.schema.json",
+        "**/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json"
+      ],
+      "priority": 900,
+      "qualification_required": "YES",
+      "rationale": "Governed family DEPENDENCY_GRAPH_MEMBERS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "POINTERS",
+      "path_pattern_or_member_set": [
+        "**/*POINTER*.json",
+        "**/pointers/**/*.json"
+      ],
+      "priority": 850,
+      "qualification_required": "YES",
+      "rationale": "Governed family POINTERS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "RECEIPTS",
+      "path_pattern_or_member_set": [
+        "**/*RECEIPT*.json",
+        "**/receipts/**/*.json"
+      ],
+      "priority": 840,
+      "qualification_required": "YES",
+      "rationale": "Governed family RECEIPTS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "MANIFESTS",
+      "path_pattern_or_member_set": [
+        "**/*MANIFEST*.json",
+        "**/manifest*.json"
+      ],
+      "priority": 830,
+      "qualification_required": "YES",
+      "rationale": "Governed family MANIFESTS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "PACKAGE_HANDOFF_IDENTITY_INPUTS",
+      "path_pattern_or_member_set": [
+        "uac/**/*.json",
+        ".github/workflows/ectos-canonical-handoff*.yml",
+        "**/*handoff*.json",
+        "**/*HANDOFF*.json"
+      ],
+      "priority": 820,
+      "qualification_required": "YES",
+      "rationale": "Governed family PACKAGE_HANDOFF_IDENTITY_INPUTS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "VERSIONED_GOVERNANCE_SOURCES",
+      "path_pattern_or_member_set": [
+        "AGENTS.md",
+        "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER*.json",
+        "governance/**/*.md",
+        "governance/**/*.json",
+        ".gitattributes"
+      ],
+      "priority": 800,
+      "qualification_required": "YES",
+      "rationale": "Governed family VERSIONED_GOVERNANCE_SOURCES"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "JSON_DURABLE_RUNTIME_STATE",
+      "path_pattern_or_member_set": [
+        "**/runtime/**/*.json",
+        "**/state/**/*.json",
+        "**/evidence/**/*.json"
+      ],
+      "priority": 780,
+      "qualification_required": "YES",
+      "rationale": "Governed family JSON_DURABLE_RUNTIME_STATE"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "JSON_CONTRACTS",
+      "path_pattern_or_member_set": [
+        "**/*CONTRACT*.json",
+        "**/*SCHEMA*.json",
+        "**/schemas/**/*.json",
+        "**/config/**/*.json"
+      ],
+      "priority": 770,
+      "qualification_required": "YES",
+      "rationale": "Governed family JSON_CONTRACTS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "SHA_SIDECARS",
+      "path_pattern_or_member_set": [
+        "**/*.sha256",
+        "**/SHA256SUMS.txt",
+        "SEED_SHA256SUMS.txt",
+        "**/*SHA256*.txt"
+      ],
+      "priority": 760,
+      "qualification_required": "YES",
+      "rationale": "Governed family SHA_SIDECARS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "YAML_WORKFLOWS",
+      "path_pattern_or_member_set": [
+        "**/*.yml",
+        "**/*.yaml"
+      ],
+      "priority": 700,
+      "qualification_required": "YES",
+      "rationale": "Governed family YAML_WORKFLOWS"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "PYTHON_EXECUTABLE_SOURCES",
+      "path_pattern_or_member_set": [
+        "**/*.py"
+      ],
+      "priority": 600,
+      "qualification_required": "YES",
+      "rationale": "Governed family PYTHON_EXECUTABLE_SOURCES"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "GOVERNED_MARKDOWN",
+      "path_pattern_or_member_set": [
+        "**/*.md"
+      ],
+      "priority": 600,
+      "qualification_required": "YES",
+      "rationale": "Governed family GOVERNED_MARKDOWN"
+    },
+    {
+      "binary_or_text": "TEXT",
+      "byte_identity_required": "YES",
+      "currentness_source": "EXACT_SOURCE_COMMIT",
+      "eol_policy": "LF",
+      "exceptions": [],
+      "family_id": "GENERIC_JSON_TEXT",
+      "path_pattern_or_member_set": [
+        "**/*.json"
+      ],
+      "priority": 100,
+      "qualification_required": "YES",
+      "rationale": "Governed family GENERIC_JSON_TEXT"
+    }
+  ],
+  "model_id": "ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02",
+  "scope": "GENERIC_GOVERNED_WORKSPACE_BYTE_IDENTITY_SELECTION",
+  "selection_rules": {
+    "binary_exclusion_is_absolute": true,
+    "classification_baseline": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_CLASSIFICATION_BASELINE_V01.json",
+    "classification_change_policy": {
+      "allow_previously_unclassified_to_be_classified": true,
+      "authorized_reclassifications": [],
+      "predecessor_commit": "feebdc24a667af82739e4564169103e11944e3da",
+      "predecessor_model_path": "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V01.json"
+    },
+    "generic_engine_changes_required_for_new_family": false,
+    "most_specific_semantic_family_wins": true,
+    "same_priority_and_specificity_collision": "FAIL_CLOSED",
+    "unregistered_governed_family": "FAIL_CLOSED"
+  },
+  "status": "CURRENT_CANDIDATE",
+  "version": "V02"
+}

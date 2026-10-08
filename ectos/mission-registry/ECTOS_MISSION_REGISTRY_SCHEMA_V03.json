@@ -1,0 +1,32 @@
+{
+  "schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V03",
+  "predecessor_schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V02",
+  "status": "CURRENT_CANDIDATE",
+  "purpose": "Durable mission operational truth with explicit physical materialization evidence binding, separate from Dependency Graph topology.",
+  "v03_change": "Resume requires CURRENT mission state, execution eligibility, non-triggered circuit breaker, physically resolved durable pointers, and a durable materialization evidence pointer whose source repository/commit matches the mission source binding.",
+  "pointer_contract": {
+    "required_fields": ["pointer_id", "repository", "commit", "path", "sha256"],
+    "physical_resolution_required_for_resume": true,
+    "artifact_sha256_required": true
+  },
+  "resume_contract": {
+    "currentness_required": "CURRENT",
+    "non_resumable_states": ["BLOCKED", "FAILED_SYSTEMIC", "CLOSED", "CANCELED"],
+    "next_execution_authority_eligible_required": true,
+    "triggered_circuit_breaker_allowed": false,
+    "materialization_evidence_pointer_required": true,
+    "materialization_evidence_source_binding_required": true,
+    "dependency_graph_topology_duplicated": false
+  },
+  "required_fields": [
+    "schema_id", "mission_id", "project", "project_container", "mission_type", "target_node", "objective",
+    "producer_actor", "qualifier_actor", "admission_authority", "main_authority", "superior_authority",
+    "state", "authority_state", "currentness_state", "blocker_state", "blocker_reason", "circuit_breaker_state",
+    "systemic_review_required", "systemic_review_state", "known_failure_count", "related_failure_count",
+    "repeated_root_failure", "known_defect_set_state", "known_defect_ids", "unreachable_scope",
+    "source_repository", "source_commit", "input_pointers", "output_pointers", "return_pointer",
+    "result_state", "evidence_pointers", "materialization_evidence_pointer", "next_authority", "next_target",
+    "next_action_class", "next_execution_authority_eligible", "created_at", "updated_at", "created_by",
+    "last_transition_authority", "last_transition_evidence"
+  ]
+}
