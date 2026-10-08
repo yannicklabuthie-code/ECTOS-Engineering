@@ -157,10 +157,11 @@ class WorkspaceIdentityPolicyTests(unittest.TestCase):
 
     def test_15_clean_git_status_can_hide_raw_byte_mismatch(self):
         with tempfile.TemporaryDirectory() as temp:
-            repo = make_repo(Path(temp), autocrlf="false", attributes=None)
+            repo = make_repo(Path(temp), autocrlf="true", attributes=None)
             blob = git(repo, "rev-parse", "HEAD:sample.py")
-            git(repo, "config", "core.autocrlf", "true")
-            (repo / "sample.py").write_bytes(b"print('ectos')\r\n")
+            (repo / "sample.py").unlink()
+            git(repo, "checkout", "--", "sample.py")
+            self.assertIn("w/crlf", git(repo, "ls-files", "--eol", "--", "sample.py"))
             self.assertEqual(git(repo, "status", "--porcelain"), "")
             raw = git(repo, "hash-object", "--no-filters", "--", "sample.py")
             self.assertNotEqual(raw, blob)
