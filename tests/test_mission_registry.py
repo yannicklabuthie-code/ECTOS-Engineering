@@ -178,6 +178,12 @@ class MissionRegistryV03Tests(unittest.TestCase):
             root = temp / "registry"; create_mission(root, payload)
             with self.assertRaisesRegex(ValueError, "MISSION_CIRCUIT_BREAKER_TRIGGERED"): resume_context(root, payload["mission_id"], ROOT, evidence_repo)
 
+    def test_13_qualified_triggered_circuit_breaker_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            temp = Path(td); _, evidence_repo, pointer = self.evidence_fixture(temp); payload = mission(pointer); payload["circuit_breaker_state"] = "TRIGGERED_FOR_03_2_DEFECT_FAMILY"
+            root = temp / "registry"; create_mission(root, payload)
+            with self.assertRaisesRegex(ValueError, "MISSION_CIRCUIT_BREAKER_TRIGGERED"): resume_context(root, payload["mission_id"], ROOT, evidence_repo)
+
 
 if __name__ == "__main__":
     unittest.main()

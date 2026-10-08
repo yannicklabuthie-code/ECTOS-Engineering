@@ -237,7 +237,9 @@ def resume_context(root: Path, mission_id: str, workspace_root: Path, evidence_r
     if mission["state"] in NON_RESUMABLE_STATES: raise ValueError(f"MISSION_NOT_RESUMABLE:{mission['state']}")
     if mission["currentness_state"] != "CURRENT": raise ValueError("MISSION_CURRENTNESS_NOT_CURRENT")
     if mission["next_execution_authority_eligible"] is not True: raise ValueError("MISSION_EXECUTION_AUTHORITY_NOT_ELIGIBLE")
-    if "TRIGGERED" in str(mission.get("circuit_breaker_state", "")).upper(): raise ValueError("MISSION_CIRCUIT_BREAKER_TRIGGERED")
+    circuit_state = str(mission.get("circuit_breaker_state", "")).strip().upper()
+    if circuit_state == "TRIGGERED" or circuit_state.startswith("TRIGGERED_"):
+        raise ValueError("MISSION_CIRCUIT_BREAKER_TRIGGERED")
     pointer = mission.get("materialization_evidence_pointer")
     if not isinstance(pointer, dict): raise ValueError("MISSION_MATERIALIZATION_EVIDENCE_POINTER_REQUIRED")
     evidence_bytes = resolve_pointer_bytes(pointer, evidence_repository_root)
