@@ -126,19 +126,19 @@
       "byte_identity_required": "YES",
       "currentness_source": "EXACT_SOURCE_COMMIT",
       "eol_policy": "LF",
-      "exceptions": [
-        "governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V01.md",
-        "governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V02.md"
-      ],
+      "exceptions": [],
       "family_id": "VERSIONED_GOVERNANCE_SOURCES",
       "path_pattern_or_member_set": [
+        ".gitattributes",
         "AGENTS.md",
-        "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER*.json",
-        "governance/**/*.md",
-        "governance/**/*.json",
-        ".gitattributes"
+        "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER.json",
+        "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V01.json",
+        "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json",
+        "governance/workspace-identity/ECTOS_GENERIC_WORKSPACE_IDENTITY_CONTRACT_V01.json",
+        "governance/workspace-identity/ECTOS_WINDOWS_MATERIALIZATION_CONTRACT_V01.json",
+        "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V01.json"
       ],
-      "priority": 130,
+      "priority": 950,
       "qualification_required": "YES",
       "rationale": "Governed family VERSIONED_GOVERNANCE_SOURCES"
     },
