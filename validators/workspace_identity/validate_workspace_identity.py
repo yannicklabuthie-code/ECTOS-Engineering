@@ -28,6 +28,9 @@ class WorkspaceIdentityPolicyError(ValueError):
 
 COMMIT_RE = re.compile(r"^[A-Fa-f0-9]{40}$")
 SHA256_RE = re.compile(r"^[A-Fa-f0-9]{64}$")
+PACKAGE_MANIFEST_REL = "governance/workspace-identity/ECTOS_WORKSPACE_BYTE_IDENTITY_PACKAGE_MANIFEST_V02.json"
+DEPENDENCY_GRAPH_REL = "governance/workspace-identity/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json"
+METADATA_PATHS = {PACKAGE_MANIFEST_REL, DEPENDENCY_GRAPH_REL}
 REQUIRED_FAMILY_IDS = {
     "PYTHON_EXECUTABLE_SOURCES", "JSON_CONTRACTS", "JSON_DURABLE_RUNTIME_STATE",
     "GOVERNED_MARKDOWN", "YAML_WORKFLOWS", "MANIFESTS", "SHA_SIDECARS",
@@ -372,24 +375,94 @@ def _normalize_remote(url: str) -> str:
         value = value[:-4]
     if value.startswith("https://github.com/"):
         return value[len("https://github.com/"):]
+    if value.startswith("git@github.com:"):
+        return value[len("git@github.com:"):]
     return value
+
+
+def _branch_ref(branch: str) -> str:
+    value = branch.strip()
+    if not value:
+        raise WorkspaceIdentityPolicyError("GOVERNED_BRANCH_REQUIRED")
+    if value.startswith("refs/heads/"):
+        return value
+    if value.startswith("refs/"):
+        raise WorkspaceIdentityPolicyError("GOVERNED_BRANCH_REF_INVALID")
+    return f"refs/heads/{value}"
+
+
+def _live_remote_head(root: Path, branch: str) -> str:
+    ref = _branch_ref(branch)
+    output = str(_git(root, "ls-remote", "origin", ref)).strip()
+    rows = [line for line in output.splitlines() if line.strip()]
+    if len(rows) != 1:
+        raise WorkspaceIdentityPolicyError("LIVE_REMOTE_BRANCH_HEAD_NOT_EXACTLY_ONE")
+    sha, returned_ref = rows[0].split("\t", 1)
+    if returned_ref != ref or not COMMIT_RE.fullmatch(sha):
+        raise WorkspaceIdentityPolicyError("LIVE_REMOTE_BRANCH_HEAD_INVALID")
+    return sha.lower()
+
+
+def _current_branch(root: Path) -> str:
+    branch = str(_git(root, "branch", "--show-current")).strip()
+    if not branch:
+        raise WorkspaceIdentityPolicyError("DETACHED_HEAD_NOT_ALLOWED")
+    return branch
 
 
 def _identity_sha(path: Path) -> dict[str, str]:
     return {"path": path.as_posix(), "sha256": sha256_file(path)}
 
 
-def build_physical_evidence(root: Path, model: dict[str, Any], materialization: dict[str, Any], source_repository: str, remote_commit: str) -> dict[str, Any]:
+def _source_member_paths(root: Path, model: dict[str, Any]) -> list[str]:
+    return [path for path in tracked_governed_members(root, model) if path not in METADATA_PATHS]
+
+
+def _verify_source_members_against_commit(root: Path, model: dict[str, Any], source_commit: str) -> None:
+    code, _, _ = _git_optional(root, "cat-file", "-e", f"{source_commit}^{{commit}}")
+    if code != 0:
+        raise WorkspaceIdentityPolicyError("SOURCE_FREEZE_COMMIT_NOT_PHYSICALLY_RESOLVABLE")
+    for rel in _source_member_paths(root, model):
+        full = root / rel
+        code, _, _ = _git_optional(root, "cat-file", "-e", f"{source_commit}:{rel}")
+        if code != 0:
+            raise WorkspaceIdentityPolicyError(f"SOURCE_MEMBER_NOT_IN_SOURCE_FREEZE:{rel}")
+        source_bytes = bytes(_git(root, "show", f"{source_commit}:{rel}", text=False))
+        if full.read_bytes() != source_bytes:
+            raise WorkspaceIdentityPolicyError(f"SOURCE_MEMBER_NOT_BOUND_TO_SOURCE_FREEZE:{rel}")
+
+
+def build_physical_evidence(
+    root: Path,
+    model: dict[str, Any],
+    materialization: dict[str, Any],
+    source_repository: str,
+    materialization_source_commit: str,
+    governed_branch_or_ref: str | None = None,
+) -> dict[str, Any]:
+    branch = governed_branch_or_ref or _current_branch(root)
+    live_remote_head = _live_remote_head(root, branch)
+    local_head = str(_git(root, "rev-parse", "HEAD")).strip().lower()
+    if live_remote_head != local_head:
+        raise WorkspaceIdentityPolicyError("REMOTE_LOCAL_METADATA_HEAD_MISMATCH")
+    if not COMMIT_RE.fullmatch(materialization_source_commit):
+        raise WorkspaceIdentityPolicyError("MATERIALIZATION_SOURCE_COMMIT_INVALID")
+    _verify_source_members_against_commit(root, model, materialization_source_commit.lower())
     members = inspect_workspace(root, model)
     clean = inspect_cleanliness(root, materialization)
     config = str(_git(root, "config", "--show-origin", "--get-all", "core.autocrlf")).strip().splitlines()
     return {
         "source_repository": source_repository,
-        "remote_commit": remote_commit,
-        "local_head": str(_git(root, "rev-parse", "HEAD")).strip(),
+        "governed_branch_or_ref": branch,
+        "live_remote_head": live_remote_head,
+        "remote_commit": live_remote_head,
+        "materialization_source_commit": materialization_source_commit.lower(),
+        "materialization_metadata_head": local_head,
+        "local_head": local_head,
         "worktree_path": str(root.resolve()),
         "host_identity": _physical_host_identity(),
         "runtime_identity": f"Python {sys.version.split()[0]}",
+        "evidence_created_at": datetime.now(timezone.utc).isoformat(),
         "member_selection_model_identity": _identity_sha(root / "governance/workspace-identity/ECTOS_WORKSPACE_IDENTITY_MEMBER_SELECTION_V02.json"),
         "gitattributes_identity": _identity_sha(root / ".gitattributes"),
         "git_config_origin_evidence": {"core.autocrlf": config},
@@ -411,15 +484,25 @@ def validate_materialization_evidence(root: Path, evidence: dict[str, Any], cont
     if missing:
         raise WorkspaceIdentityPolicyError("MATERIALIZATION_EVIDENCE_MISSING:" + ",".join(missing))
     validate_json_with_schema(root, evidence, contract["materialization_evidence_schema"])
-    if not COMMIT_RE.fullmatch(evidence["remote_commit"]) or not COMMIT_RE.fullmatch(evidence["local_head"]):
-        raise WorkspaceIdentityPolicyError("COMMIT_IDENTITY_INVALID")
-    if evidence["remote_commit"] != evidence["local_head"]:
-        raise WorkspaceIdentityPolicyError("WRONG_MATERIALIZED_COMMIT")
-    if str(_git(root, "rev-parse", "HEAD")).strip().lower() != evidence["local_head"].lower():
-        raise WorkspaceIdentityPolicyError("LOCAL_HEAD_PHYSICAL_MISMATCH")
-    code, _, _ = _git_optional(root, "cat-file", "-e", f"{evidence['remote_commit']}^{{commit}}")
-    if code != 0:
-        raise WorkspaceIdentityPolicyError("COMMIT_NOT_PHYSICALLY_RESOLVABLE")
+    for field in ("remote_commit", "local_head", "live_remote_head", "materialization_source_commit", "materialization_metadata_head"):
+        if not COMMIT_RE.fullmatch(str(evidence.get(field, ""))):
+            raise WorkspaceIdentityPolicyError(f"COMMIT_IDENTITY_INVALID:{field}")
+    branch = evidence["governed_branch_or_ref"]
+    if _current_branch(root) != branch:
+        raise WorkspaceIdentityPolicyError("GOVERNED_BRANCH_PHYSICAL_MISMATCH")
+    live_remote = _live_remote_head(root, branch)
+    local_head = str(_git(root, "rev-parse", "HEAD")).strip().lower()
+    metadata_head = evidence["materialization_metadata_head"].lower()
+    if not (live_remote == local_head == evidence["live_remote_head"].lower() == evidence["remote_commit"].lower() == metadata_head):
+        raise WorkspaceIdentityPolicyError("REMOTE_LOCAL_METADATA_HEAD_MISMATCH")
+    parents = str(_git(root, "rev-list", "--parents", "-n", "1", metadata_head)).strip().split()
+    if len(parents) != 2:
+        raise WorkspaceIdentityPolicyError("PACKAGE_METADATA_COMMIT_MUST_HAVE_ONE_PARENT")
+    source_commit = evidence["materialization_source_commit"].lower()
+    if parents[1].lower() != source_commit:
+        raise WorkspaceIdentityPolicyError("PACKAGE_METADATA_PARENT_NOT_SOURCE_FREEZE")
+    if source_commit == metadata_head:
+        raise WorkspaceIdentityPolicyError("SOURCE_AND_METADATA_COMMIT_MUST_BE_DISTINCT")
     if Path(evidence["worktree_path"]).resolve() != root.resolve():
         raise WorkspaceIdentityPolicyError("WORKTREE_PATH_PHYSICAL_MISMATCH")
     if evidence["host_identity"].upper() != _physical_host_identity().upper():
@@ -429,8 +512,11 @@ def validate_materialization_evidence(root: Path, evidence: dict[str, Any], cont
     origin = _normalize_remote(str(_git(root, "remote", "get-url", "origin")))
     if _normalize_remote(evidence["source_repository"]) != origin:
         raise WorkspaceIdentityPolicyError("SOURCE_REPOSITORY_PHYSICAL_MISMATCH")
-    physical = build_physical_evidence(root, model, materialization, evidence["source_repository"], evidence["remote_commit"])
+    _verify_source_members_against_commit(root, model, source_commit)
+    physical = build_physical_evidence(root, model, materialization, evidence["source_repository"], source_commit, branch)
     for field in required:
+        if field == "evidence_created_at":
+            continue
         if evidence[field] != physical[field]:
             raise WorkspaceIdentityPolicyError(f"MATERIALIZATION_EVIDENCE_PHYSICAL_MISMATCH:{field}")
 
@@ -440,7 +526,7 @@ def compute_package_sha256(members: list[dict[str, Any]]) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest().upper()
 
 
-def validate_package_manifest(root: Path, manifest: dict[str, Any]) -> None:
+def validate_package_manifest(root: Path, manifest: dict[str, Any], expected_source_commit: str | None = None) -> None:
     required = {
         "schema_id", "package_id", "package_version", "source_repository", "source_commit", "predecessor_head",
         "members", "package_sha256", "dependency_graph", "runtime_requirements", "host_requirements", "entrypoints",
@@ -451,30 +537,38 @@ def validate_package_manifest(root: Path, manifest: dict[str, Any]) -> None:
         raise WorkspaceIdentityPolicyError("PACKAGE_MANIFEST_FIELDS_MISSING:" + ",".join(missing))
     if manifest["schema_id"] != "ECTOS_WORKSPACE_BYTE_IDENTITY_PACKAGE_MANIFEST_V02":
         raise WorkspaceIdentityPolicyError("PACKAGE_MANIFEST_SCHEMA_INVALID")
-    if not COMMIT_RE.fullmatch(manifest["source_commit"]):
+    source_commit = str(manifest["source_commit"]).lower()
+    if not COMMIT_RE.fullmatch(source_commit):
         raise WorkspaceIdentityPolicyError("PACKAGE_SOURCE_COMMIT_INVALID")
+    if expected_source_commit is not None and source_commit != expected_source_commit.lower():
+        raise WorkspaceIdentityPolicyError("PACKAGE_SOURCE_COMMIT_NOT_SOURCE_FREEZE")
     seen: set[str] = set()
     for member in manifest["members"]:
         path = member.get("path")
         if not path or path in seen:
             raise WorkspaceIdentityPolicyError("PACKAGE_MEMBER_DUPLICATE_OR_EMPTY")
+        if path in METADATA_PATHS:
+            raise WorkspaceIdentityPolicyError("PACKAGE_METADATA_MEMBER_SELF_REFERENCE_FORBIDDEN")
         seen.add(path)
         full = root / path
         if not full.is_file():
             raise WorkspaceIdentityPolicyError(f"PACKAGE_MEMBER_MISSING:{path}")
-        if full.stat().st_size != member.get("size_bytes") or sha256_file(full) != str(member.get("sha256", "")).upper():
+        workspace_bytes = full.read_bytes()
+        if len(workspace_bytes) != member.get("size_bytes") or sha256_file(full) != str(member.get("sha256", "")).upper():
             raise WorkspaceIdentityPolicyError(f"PACKAGE_MEMBER_IDENTITY_MISMATCH:{path}")
-        code, blob, _ = _git_optional(root, "show", f"{manifest['source_commit']}:{path}")
+        code, _, _ = _git_optional(root, "cat-file", "-e", f"{source_commit}:{path}")
         if code != 0:
             raise WorkspaceIdentityPolicyError(f"PACKAGE_MEMBER_NOT_IN_SOURCE_COMMIT:{path}")
-        blob_bytes = bytes(_git(root, "show", f"{manifest['source_commit']}:{path}", text=False))
+        blob_bytes = bytes(_git(root, "show", f"{source_commit}:{path}", text=False))
         if hashlib.sha256(blob_bytes).hexdigest().upper() != member["sha256"].upper():
             raise WorkspaceIdentityPolicyError(f"PACKAGE_SOURCE_COMMIT_MEMBER_MISMATCH:{path}")
+        if workspace_bytes != blob_bytes:
+            raise WorkspaceIdentityPolicyError(f"PACKAGE_WORKSPACE_NOT_SOURCE_FREEZE:{path}")
     if compute_package_sha256(manifest["members"]) != manifest["package_sha256"].upper():
         raise WorkspaceIdentityPolicyError("PACKAGE_SHA256_MISMATCH")
 
 
-def validate_package_graph(root: Path, manifest: dict[str, Any], graph_path: Path) -> None:
+def validate_package_graph(root: Path, manifest: dict[str, Any], graph_path: Path, expected_source_commit: str | None = None) -> None:
     graph = load_graph(graph_path)
     result = validate_graph(graph)
     if result["status"] != "PASS":

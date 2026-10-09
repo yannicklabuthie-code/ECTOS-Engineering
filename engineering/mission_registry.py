@@ -16,6 +16,7 @@ from validators.workspace_identity.validate_workspace_identity import (
     load_json as load_workspace_json,
     validate_materialization_evidence,
 )
+from engineering.d10_currentness_oracle import D10CurrentnessError, validate_dual_identity_currentness
 
 SCHEMA_ID = "ECTOS_MISSION_REGISTRY_SCHEMA_V03"
 PREDECESSOR_SCHEMA_ID = "ECTOS_MISSION_REGISTRY_SCHEMA_V02"
@@ -47,7 +48,7 @@ REQUIRED_FIELDS = (
     "authority_state","currentness_state","blocker_state","blocker_reason","circuit_breaker_state",
     "systemic_review_required","systemic_review_state","known_failure_count","related_failure_count",
     "repeated_root_failure","known_defect_set_state","known_defect_ids","unreachable_scope","source_repository",
-    "source_commit","input_pointers","output_pointers","return_pointer","result_state","evidence_pointers",
+    "governed_branch_or_ref","source_commit","mission_metadata_head","input_pointers","output_pointers","return_pointer","result_state","evidence_pointers",
     "materialization_evidence_pointer","next_authority","next_target","next_action_class",
     "next_execution_authority_eligible","created_at","updated_at","created_by","last_transition_authority",
     "last_transition_evidence",
@@ -135,7 +136,9 @@ def validate_mission(mission: Any) -> dict[str, Any]:
     if not isinstance(mission.get("mission_id"), str) or not MISSION_ID_RE.fullmatch(mission["mission_id"]): errors.append("MISSION_ID_INVALID")
     if mission.get("state") not in ALLOWED_STATES: errors.append(f"STATE_INVALID:{mission.get('state')}")
     if mission.get("currentness_state") not in ALLOWED_CURRENTNESS: errors.append("CURRENTNESS_INVALID")
+    if not isinstance(mission.get("governed_branch_or_ref"), str) or not mission.get("governed_branch_or_ref", "").strip(): errors.append("GOVERNED_BRANCH_OR_REF_INVALID")
     if not isinstance(mission.get("source_commit"), str) or not COMMIT_RE.fullmatch(mission.get("source_commit", "")): errors.append("SOURCE_COMMIT_INVALID")
+    if not isinstance(mission.get("mission_metadata_head"), str) or not COMMIT_RE.fullmatch(mission.get("mission_metadata_head", "")): errors.append("MISSION_METADATA_HEAD_INVALID")
     for field in ("source_repository","project","project_container","mission_type","target_node","objective","main_authority","superior_authority","created_by"):
         if not isinstance(mission.get(field), str) or not mission.get(field, "").strip(): errors.append(f"FIELD_EMPTY:{field}")
     for field in ("systemic_review_required","repeated_root_failure","next_execution_authority_eligible"):
