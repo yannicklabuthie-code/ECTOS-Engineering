@@ -2,20 +2,27 @@
   "schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V03",
   "predecessor_schema_id": "ECTOS_MISSION_REGISTRY_SCHEMA_V02",
   "status": "CURRENT_CANDIDATE",
-  "purpose": "Durable mission operational truth with explicit physical materialization evidence binding, separate from Dependency Graph topology.",
-  "v03_change": "Resume requires CURRENT mission state, execution eligibility, non-triggered circuit breaker, physically resolved durable pointers, and a durable materialization evidence pointer whose source repository/commit matches the mission source binding.",
+  "purpose": "Durable mission operational truth with explicit dual-identity currentness binding, separate from Dependency Graph topology.",
+  "v03_change": "Resume requires physical proof of one source-freeze identity S and one package-metadata/live-head identity M with PARENT(M)=S; caller currentness labels are nonauthoritative.",
   "pointer_contract": {
     "required_fields": ["pointer_id", "repository", "commit", "path", "sha256"],
     "physical_resolution_required_for_resume": true,
-    "artifact_sha256_required": true
+    "artifact_sha256_required": true,
+    "materialization_pointer_repository_must_match_mission_repository": true
   },
   "resume_contract": {
-    "currentness_required": "CURRENT",
+    "currentness_required": "CURRENT_BUT_NONAUTHORITATIVE_WITHOUT_PHYSICAL_PROOF",
     "non_resumable_states": ["BLOCKED", "FAILED_SYSTEMIC", "CLOSED", "CANCELED"],
     "next_execution_authority_eligible_required": true,
     "triggered_circuit_breaker_allowed": false,
     "materialization_evidence_pointer_required": true,
     "materialization_evidence_source_binding_required": true,
+    "governed_branch_or_ref_required": true,
+    "mission_source_commit_must_equal_materialization_source_commit": true,
+    "mission_metadata_head_must_equal_materialization_metadata_head": true,
+    "live_remote_head_physical_resolution_required": true,
+    "source_and_metadata_domains_must_be_distinct": true,
+    "package_metadata_direct_parent_must_be_source_freeze": true,
     "dependency_graph_topology_duplicated": false
   },
   "required_fields": [
@@ -24,9 +31,10 @@
     "state", "authority_state", "currentness_state", "blocker_state", "blocker_reason", "circuit_breaker_state",
     "systemic_review_required", "systemic_review_state", "known_failure_count", "related_failure_count",
     "repeated_root_failure", "known_defect_set_state", "known_defect_ids", "unreachable_scope",
-    "source_repository", "source_commit", "input_pointers", "output_pointers", "return_pointer",
-    "result_state", "evidence_pointers", "materialization_evidence_pointer", "next_authority", "next_target",
-    "next_action_class", "next_execution_authority_eligible", "created_at", "updated_at", "created_by",
+    "source_repository", "governed_branch_or_ref", "source_commit", "mission_metadata_head",
+    "input_pointers", "output_pointers", "return_pointer", "result_state", "evidence_pointers",
+    "materialization_evidence_pointer", "next_authority", "next_target", "next_action_class",
+    "next_execution_authority_eligible", "created_at", "updated_at", "created_by",
     "last_transition_authority", "last_transition_evidence"
   ]
 }
