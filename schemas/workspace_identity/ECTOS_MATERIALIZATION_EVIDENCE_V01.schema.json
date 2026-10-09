@@ -3,85 +3,45 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
-    "blob_sha256": {
-      "type": "object"
-    },
-    "committed_blob_sha": {
-      "type": "object"
-    },
-    "git_config_origin_evidence": {
-      "type": "object"
-    },
-    "git_ls_files_eol": {
-      "type": "object"
-    },
-    "gitattributes_identity": {
-      "type": "object"
-    },
-    "host_identity": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "ignored_execution_relevant_objects": {
-      "maxItems": 0,
-      "type": "array"
-    },
-    "index_clean": {
-      "const": true
-    },
-    "local_head": {
-      "pattern": "^[A-Fa-f0-9]{40}$",
-      "type": "string"
-    },
-    "materialization_evidence_current": {
-      "const": true
-    },
-    "member_selection_model_identity": {
-      "type": "object"
-    },
-    "raw_byte_identity_result": {
-      "const": "PASS"
-    },
-    "remote_commit": {
-      "pattern": "^[A-Fa-f0-9]{40}$",
-      "type": "string"
-    },
-    "runtime_identity": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "source_repository": {
-      "minLength": 1,
-      "type": "string"
-    },
-    "untracked_objects": {
-      "maxItems": 0,
-      "type": "array"
-    },
-    "workspace_evidence_source": {
-      "const": "RAW_WORKSPACE_BYTES"
-    },
-    "workspace_raw_object_sha": {
-      "type": "object"
-    },
-    "workspace_sha256": {
-      "type": "object"
-    },
-    "worktree_clean": {
-      "const": true
-    },
-    "worktree_path": {
-      "minLength": 1,
-      "type": "string"
-    }
+    "blob_sha256": {"type": "object"},
+    "committed_blob_sha": {"type": "object"},
+    "evidence_created_at": {"minLength": 1, "type": "string"},
+    "git_config_origin_evidence": {"type": "object"},
+    "git_ls_files_eol": {"type": "object"},
+    "governed_branch_or_ref": {"minLength": 1, "type": "string"},
+    "gitattributes_identity": {"type": "object"},
+    "host_identity": {"minLength": 1, "type": "string"},
+    "ignored_execution_relevant_objects": {"maxItems": 0, "type": "array"},
+    "index_clean": {"const": true},
+    "live_remote_head": {"pattern": "^[A-Fa-f0-9]{40}$", "type": "string"},
+    "local_head": {"pattern": "^[A-Fa-f0-9]{40}$", "type": "string"},
+    "materialization_evidence_current": {"const": true},
+    "materialization_metadata_head": {"pattern": "^[A-Fa-f0-9]{40}$", "type": "string"},
+    "materialization_source_commit": {"pattern": "^[A-Fa-f0-9]{40}$", "type": "string"},
+    "member_selection_model_identity": {"type": "object"},
+    "raw_byte_identity_result": {"const": "PASS"},
+    "remote_commit": {"pattern": "^[A-Fa-f0-9]{40}$", "type": "string"},
+    "runtime_identity": {"minLength": 1, "type": "string"},
+    "source_repository": {"minLength": 1, "type": "string"},
+    "untracked_objects": {"maxItems": 0, "type": "array"},
+    "workspace_evidence_source": {"const": "RAW_WORKSPACE_BYTES"},
+    "workspace_raw_object_sha": {"type": "object"},
+    "workspace_sha256": {"type": "object"},
+    "worktree_clean": {"const": true},
+    "worktree_path": {"minLength": 1, "type": "string"}
   },
   "required": [
     "source_repository",
+    "governed_branch_or_ref",
+    "live_remote_head",
     "remote_commit",
+    "materialization_source_commit",
+    "materialization_metadata_head",
     "local_head",
     "worktree_path",
     "host_identity",
     "runtime_identity",
+    "evidence_created_at",
     "member_selection_model_identity",
     "gitattributes_identity",
     "git_config_origin_evidence",
