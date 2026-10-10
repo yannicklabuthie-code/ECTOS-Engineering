@@ -3,10 +3,10 @@
     "package_id":  "ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01",
     "version":  "V01",
     "source_repository":  "yannicklabuthie-code/ECTOS-Engineering",
-    "source_commit":  "5b7d033d4602e39a42558f015ad0e531001b60dd",
-    "source_tree":  "ae461eaf6d5a56a0c87f37486cdc496dc5f458c3",
+    "source_commit":  "131d7211f72962f6af744ece12289015115bbf18",
+    "source_tree":  "f674279da5557f109874a0cf5571eafc2a7e0883",
     "payload_member_count":  20,
-    "package_sha256":  "EDC46366703ED950F5EA900A3D56581F9EC99C5A8063815438EBD718B05888EB",
+    "package_sha256":  "1D73CC39F176418D99F2BE088093A6DA031E511E61F4B8DA4A1D99B84000FD3A",
     "package_sha256_algorithm":  "SHA256(sorted(path NUL size NUL sha256 LF))",
     "entrypoint":  "09_ENTRYPOINT/Invoke-ECTOSDevV1.ps1",
     "target_runtime":  "WindowsPowerShellDesktop5.1",
@@ -96,8 +96,8 @@
                     },
                     {
                         "path":  "10_SELFTEST/ECTOSDev.Tests.ps1",
-                        "sha256":  "2706BB38F50054201335134737A124A64D03E9A3312D21C2E6D46593E8F5529F",
-                        "size_bytes":  5083
+                        "sha256":  "693DEED4A287B5BCB0337F4CC4B1FB8D25C954A14BB0C741D12132C5D2987CC7",
+                        "size_bytes":  5137
                     },
                     {
                         "path":  "10_SELFTEST/Invoke-StaticRuleGate.ps1",
