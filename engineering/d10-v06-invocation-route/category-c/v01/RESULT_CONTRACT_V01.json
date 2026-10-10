@@ -1,0 +1,16 @@
+{
+  "contract_id": "ECTOS_D10_V06_CATEGORY_C_RESULT_CONTRACT_V01",
+  "schema_id": "ECTOS_D10_V06_CATEGORY_C_RESULT_V01",
+  "required_bindings": [
+    "successor_id", "invocation_id", "invocation_sha256", "repository", "github_sha",
+    "github_run_id", "runner_name", "machine_name", "v06_package_sha256", "mission_sha256",
+    "run_id", "status", "result", "process_records", "artifact_manifest_sha256",
+    "desktop_commander_dependency_count", "submit_count"
+  ],
+  "same_run_id_required_for": ["status", "result", "artifact_download"],
+  "required_process_capture": ["args", "working_directory", "started_epoch", "ended_epoch", "exit_code", "stdout", "stderr"],
+  "timeout_required": true,
+  "nonzero_exit_policy": "FAIL_CLOSED",
+  "submit_count_required": 1,
+  "desktop_commander_dependency_count_required": 0
+}

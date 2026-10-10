@@ -1,0 +1,37 @@
+{
+  "contract_id": "ECTOS_D10_V06_CATEGORY_C_INVOCATION_CONTRACT_V01",
+  "desktop_commander_dependency_count": 0,
+  "duplicate_submission_policy": "FAIL_CLOSED_PERSISTENT_INVOCATION_ID_GUARD",
+  "fixed_bindings": {
+    "machine_name": "SUCCEESMINDSET",
+    "python_path": "C:\\Python314\\python.exe",
+    "repository": "yannicklabuthie-code/ECTOS-Engineering",
+    "runner_name": "SUCCEESMINDSET-ECTOS-PS51",
+    "successor_id": "ECTOS_D10_V06_INVOCATION_ROUTE_CATEGORY_C_V01",
+    "v06_entrypoint_path": "C:\\dev\\ECTOS_EXTERNAL_DURABLE_EXECUTION_MVP_V06\\ectos_run.py",
+    "v06_package_path": "C:\\dev\\ECTOS_EXTERNAL_DURABLE_EXECUTION_MVP_V06\\ECTOS_EXTERNAL_DURABLE_EXECUTION_MVP_V06.zip",
+    "v06_package_sha256": "FC17DA9201994A7544263804DF4892DCFB826BBB21F37FBF8D5BDB6D38F84C23",
+    "workflow_path": ".github/workflows/ectos-d10-v06-invocation-route-category-c-v01.yml"
+  },
+  "mission_encoding": "BASE64_EXACT_BYTES",
+  "mission_sha256_required": true,
+  "owner_manual_mission_file_creation_required": false,
+  "required_fields": [
+    "schema_id",
+    "successor_id",
+    "invocation_id",
+    "repository",
+    "workflow_path",
+    "tooling_parent_commit",
+    "runner_name",
+    "machine_name",
+    "python_path",
+    "v06_package_path",
+    "v06_package_sha256",
+    "v06_entrypoint_path",
+    "mission_b64",
+    "mission_sha256"
+  ],
+  "schema_id": "ECTOS_D10_V06_CATEGORY_C_INVOCATION_V01",
+  "tooling_parent_commit_rule": "MUST_EQUAL_PHYSICAL_PARENT_OF_EXACT_INVOCATION_COMMIT"
+}

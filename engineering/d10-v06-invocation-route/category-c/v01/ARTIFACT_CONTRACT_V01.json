@@ -1,0 +1,10 @@
+{
+  "contract_id": "ECTOS_D10_V06_CATEGORY_C_ARTIFACT_CONTRACT_V01",
+  "schema_id": "ECTOS_D10_V06_CATEGORY_C_ARTIFACT_MANIFEST_V01",
+  "hash_algorithm": "SHA256",
+  "path_representation": "relative_forward_slash",
+  "required_fields_per_file": ["path", "size", "sha256"],
+  "empty_artifact_set": "REJECT",
+  "same_run_id_binding": "REQUIRED",
+  "stale_artifact_substitution": "PROHIBITED"
+}

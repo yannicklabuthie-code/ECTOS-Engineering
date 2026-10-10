@@ -1,0 +1,58 @@
+{
+  "schema_id": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01",
+  "package": {
+    "package_id": "ECTOS_D10_V06_INVOCATION_ROUTE_CATEGORY_C_V01",
+    "package_name": "ECTOS D10 V06 Invocation Route Category C",
+    "version": "V01",
+    "environment": "GITHUB_ACTIONS_SELF_HOSTED_WINDOWS",
+    "producer": "Yanick ECTOS/ENGINEERING ASSURANCE PRÊT"
+  },
+  "nodes": [
+    {"dependency_id":"github_repo","type":"REPOSITORY","name":"yannicklabuthie-code/ECTOS-Engineering","currentness":"CURRENT","physical_evidence":"canonical repository main + exact successor commit","test_coverage":"repository binding negative control","fail_closed_behavior":"repository mismatch rejected","impact_if_changed":"route trust broken"},
+    {"dependency_id":"workflow","type":"WORKFLOW","name":"ectos-d10-v06-invocation-route-category-c-v01.yml","currentness":"CURRENT","physical_evidence":"versioned workflow member","test_coverage":"workflow-ref negative control","fail_closed_behavior":"workflow mismatch rejected","impact_if_changed":"dispatch/currentness semantics change"},
+    {"dependency_id":"route","type":"SOURCE_FILE","name":"route.py","currentness":"CURRENT","physical_evidence":"versioned source member","test_coverage":"34-test engineering suite","fail_closed_behavior":"RouteError + nonzero exit","impact_if_changed":"all invocation gates"},
+    {"dependency_id":"invocation_contract","type":"CONFIGURATION","name":"INVOCATION_CONTRACT_V01.json","currentness":"CURRENT","physical_evidence":"versioned contract member","test_coverage":"required-field and identity controls","fail_closed_behavior":"required fields rejected","impact_if_changed":"input trust boundary"},
+    {"dependency_id":"mission_contract","type":"CONFIGURATION","name":"MISSION_INPUT_CONTRACT_V01.json","currentness":"CURRENT","physical_evidence":"versioned contract member","test_coverage":"mission sha/shape controls","fail_closed_behavior":"mission mismatch rejected","impact_if_changed":"V06 mission safety"},
+    {"dependency_id":"result_contract","type":"CONFIGURATION","name":"RESULT_CONTRACT_V01.json","currentness":"CURRENT","physical_evidence":"versioned contract member","test_coverage":"run-id/status/result controls","fail_closed_behavior":"mismatch rejected","impact_if_changed":"return evidence integrity"},
+    {"dependency_id":"artifact_contract","type":"CONFIGURATION","name":"ARTIFACT_CONTRACT_V01.json","currentness":"CURRENT","physical_evidence":"versioned contract member","test_coverage":"missing artifact/hash controls","fail_closed_behavior":"empty artifact set rejected","impact_if_changed":"artifact closure"},
+    {"dependency_id":"github_actions","type":"EXTERNAL_SERVICE","name":"GitHub Actions","currentness":"CURRENT","physical_evidence":"existing host-currentness workflow proves transport family","test_coverage":"successor CI job","fail_closed_behavior":"job cannot proceed if unavailable","impact_if_changed":"transport unavailable"},
+    {"dependency_id":"windows_runner","type":"OS_RUNTIME","name":"SUCCEESMINDSET self-hosted Windows runner","currentness":"CURRENT","physical_evidence":"runner label/name/machine binding","test_coverage":"runner and machine negative controls","fail_closed_behavior":"identity mismatch rejected","impact_if_changed":"wrong host execution"},
+    {"dependency_id":"python314","type":"OS_RUNTIME","name":"C:\\Python314\\python.exe","currentness":"CURRENT","physical_evidence":"fixed exact path contract","test_coverage":"missing/wrong Python controls","fail_closed_behavior":"missing/wrong runtime rejected","impact_if_changed":"V06 runtime mismatch"},
+    {"dependency_id":"v06_package","type":"PACKAGE","name":"ECTOS_EXTERNAL_DURABLE_EXECUTION_MVP_V06.zip","currentness":"CURRENT","physical_evidence":"fixed path + SHA256 FC17DA...","test_coverage":"missing/wrong SHA controls","fail_closed_behavior":"package mismatch rejected","impact_if_changed":"untrusted executable bytes"},
+    {"dependency_id":"v06_cli","type":"PROCESS","name":"ectos_run.py submit/status/result/download","currentness":"CURRENT","physical_evidence":"historically proven V06 CLI surface","test_coverage":"non-D10 fake CLI end-to-end controls","fail_closed_behavior":"nonzero/timeout/output mismatch rejected","impact_if_changed":"execution chain broken"},
+    {"dependency_id":"state_guard","type":"STATE","name":"persistent invocation-id submission guard","currentness":"CURRENT","physical_evidence":"exclusive-create state contract","test_coverage":"duplicate submission negative control","fail_closed_behavior":"existing guard rejects rerun","impact_if_changed":"duplicate V06 submission risk"},
+    {"dependency_id":"return_artifact","type":"OUTPUT_ARTIFACT","name":"governed_return.json + artifact_manifest.json","currentness":"CURRENT","physical_evidence":"hashed upload contract","test_coverage":"artifact hash closure control","fail_closed_behavior":"missing artifacts reject","impact_if_changed":"Main cannot verify execution"}
+  ],
+  "edges": [
+    {"edge_id":"e01","from":"workflow","to":"github_repo","type":"REQUIRES","direct_or_transitive":"DIRECT","required_by":"workflow checkout","contract":"exact repository","currentness":"CURRENT","physical_evidence":"checkout source","test_coverage":"repo mismatch control","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e02","from":"workflow","to":"windows_runner","type":"EXECUTES_ON","direct_or_transitive":"DIRECT","required_by":"job","contract":"self-hosted Windows X64 ectos-ps51 + exact name/machine","currentness":"CURRENT","physical_evidence":"workflow labels/env gates","test_coverage":"runner/machine controls","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e03","from":"workflow","to":"route","type":"CALLS","direct_or_transitive":"DIRECT","required_by":"invocation job","contract":"Python structured arguments","currentness":"CURRENT","physical_evidence":"workflow command","test_coverage":"engineering assurance","fail_closed_behavior":"nonzero fails job","status":"RESOLVED"},
+    {"edge_id":"e04","from":"route","to":"invocation_contract","type":"VALIDATES","direct_or_transitive":"DIRECT","required_by":"pre-submit","contract":"fixed identity bindings","currentness":"CURRENT","physical_evidence":"validate_invocation","test_coverage":"identity negatives","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e05","from":"route","to":"mission_contract","type":"VALIDATES","direct_or_transitive":"DIRECT","required_by":"pre-submit","contract":"exact base64 mission bytes + SHA256","currentness":"CURRENT","physical_evidence":"validate_mission","test_coverage":"mission negatives","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e06","from":"route","to":"python314","type":"REQUIRES","direct_or_transitive":"DIRECT","required_by":"V06 execution","contract":"exact runtime path","currentness":"CURRENT","physical_evidence":"fixed binding","test_coverage":"wrong/missing runtime","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e07","from":"route","to":"v06_package","type":"VALIDATES","direct_or_transitive":"DIRECT","required_by":"pre-submit","contract":"exact package path + SHA256","currentness":"CURRENT","physical_evidence":"sha256_file","test_coverage":"package negatives","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e08","from":"route","to":"v06_cli","type":"CALLS","direct_or_transitive":"DIRECT","required_by":"submit/status/result/download","contract":"same RUN_ID + bounded subprocesses","currentness":"CURRENT","physical_evidence":"runproc records","test_coverage":"E2E fake CLI + mismatch controls","fail_closed_behavior":"reject","status":"RESOLVED"},
+    {"edge_id":"e09","from":"route","to":"state_guard","type":"WRITES_STATE","direct_or_transitive":"DIRECT","required_by":"one-submit-only","contract":"O_EXCL persistent invocation ID","currentness":"CURRENT","physical_evidence":"guard_create","test_coverage":"duplicate control","fail_closed_behavior":"duplicate rejected","status":"RESOLVED"},
+    {"edge_id":"e10","from":"route","to":"result_contract","type":"PRODUCES","direct_or_transitive":"DIRECT","required_by":"Main evidence","contract":"same-run result evidence","currentness":"CURRENT","physical_evidence":"governed_return.json","test_coverage":"result controls","fail_closed_behavior":"mismatch rejected","status":"RESOLVED"},
+    {"edge_id":"e11","from":"route","to":"artifact_contract","type":"PRODUCES","direct_or_transitive":"DIRECT","required_by":"artifact closure","contract":"per-file SHA256","currentness":"CURRENT","physical_evidence":"artifact_manifest.json","test_coverage":"artifact controls","fail_closed_behavior":"missing rejected","status":"RESOLVED"},
+    {"edge_id":"e12","from":"artifact_contract","to":"return_artifact","type":"BINDS","direct_or_transitive":"DIRECT","required_by":"hashed return","contract":"artifact manifest SHA embedded in return","currentness":"CURRENT","physical_evidence":"artifact_manifest_sha256","test_coverage":"hash closure","fail_closed_behavior":"no closure no pass","status":"RESOLVED"},
+    {"edge_id":"e13","from":"github_actions","to":"workflow","type":"ROUTES_TO","direct_or_transitive":"DIRECT","required_by":"Category C transport","contract":"push or workflow_dispatch","currentness":"CURRENT","physical_evidence":"workflow triggers","test_coverage":"CI/native run pending exact commit","fail_closed_behavior":"no trigger no execution","status":"RESOLVED"}
+  ],
+  "closure": {
+    "undeclared_dependency_count": 0,
+    "unresolved_transitive_dependency_count": 0,
+    "untested_dependency_count": 0,
+    "implicit_environment_assumption_count": 0,
+    "unknown_blast_radius_edge_count": 0,
+    "dependency_closure": "PASS"
+  },
+  "change_impact": {
+    "analysis_status": "PASS",
+    "changed_dependency_ids": ["workflow","route","invocation_contract","mission_contract","result_contract","artifact_contract","state_guard","return_artifact"],
+    "impacted_dependency_ids": ["github_actions","windows_runner","python314","v06_package","v06_cli"],
+    "protected_predecessor_workflow_modified": false,
+    "v06_product_modified": false,
+    "d10_product_modified": false,
+    "desktop_commander_dependency_count": 0
+  }
+}

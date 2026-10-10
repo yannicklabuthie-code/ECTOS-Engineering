@@ -1,0 +1,104 @@
+name: ECTOS D10 V06 Invocation Route Category C V01
+
+on:
+  push:
+    branches:
+      - methodology/d10-v06-invocation-route-category-c-v01
+    paths:
+      - '.github/workflows/ectos-d10-v06-invocation-route-category-c-v01.yml'
+      - 'engineering/d10-v06-invocation-route/category-c/v01/**'
+  workflow_dispatch:
+    inputs:
+      invocation_ref:
+        description: Exact invocation commit SHA whose parent is the admitted tooling successor
+        required: true
+        type: string
+      invocation_path:
+        description: Repository-relative governed invocation object path
+        required: true
+        default: governance/d10-v06-invocations/invocation.json
+        type: string
+      invocation_sha256:
+        description: Exact SHA256 of the governed invocation object
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  ECTOS_EXPECTED_REPOSITORY: yannicklabuthie-code/ECTOS-Engineering
+  ECTOS_EXPECTED_RUNNER_NAME: SUCCEESMINDSET-ECTOS-PS51
+  ECTOS_EXPECTED_MACHINE_NAME: SUCCEESMINDSET
+  ECTOS_PYTHON: 'C:\Python314\python.exe'
+
+jobs:
+  engineering-assurance:
+    if: github.event_name == 'push'
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact tooling commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Verify exact Windows runner identity
+        shell: cmd
+        run: |
+          if /I not "%RUNNER_NAME%"=="%ECTOS_EXPECTED_RUNNER_NAME%" exit /b 41
+          if /I not "%COMPUTERNAME%"=="%ECTOS_EXPECTED_MACHINE_NAME%" exit /b 42
+          if not exist "%ECTOS_PYTHON%" exit /b 43
+          "%ECTOS_PYTHON%" --version
+      - name: Run non-D10 engineering assurance
+        shell: cmd
+        run: |
+          "%ECTOS_PYTHON%" engineering\d10-v06-invocation-route\category-c\v01\tests\run_assurance.py
+      - name: Upload engineering assurance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-d10-category-c-v01-engineering-${{ github.run_id }}-${{ github.run_attempt }}
+          path: engineering/d10-v06-invocation-route/category-c/v01/engineering_test_report.json
+          if-no-files-found: error
+          retention-days: 30
+
+  governed-v06-invocation:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 30
+    steps:
+      - name: Reject non-SHA invocation ref
+        shell: cmd
+        run: |
+          "%ECTOS_PYTHON%" -c "import re,sys;sys.exit(0 if re.fullmatch(r'[0-9a-fA-F]{40}',r'${{ inputs.invocation_ref }}') else 44)"
+      - name: Checkout exact invocation commit with parent
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.invocation_ref }}
+          fetch-depth: 2
+      - name: Verify exact Windows runner identity
+        shell: cmd
+        run: |
+          if /I not "%RUNNER_NAME%"=="%ECTOS_EXPECTED_RUNNER_NAME%" exit /b 41
+          if /I not "%COMPUTERNAME%"=="%ECTOS_EXPECTED_MACHINE_NAME%" exit /b 42
+          if not exist "%ECTOS_PYTHON%" exit /b 43
+      - name: Validate exact governed invocation object
+        shell: cmd
+        env:
+          GITHUB_ACTIONS: 'true'
+        run: |
+          "%ECTOS_PYTHON%" engineering\d10-v06-invocation-route\category-c\v01\route.py validate --invocation "${{ inputs.invocation_path }}" --expected-invocation-sha256 "${{ inputs.invocation_sha256 }}"
+      - name: Execute governed V06 chain
+        shell: cmd
+        env:
+          GITHUB_ACTIONS: 'true'
+        run: |
+          "%ECTOS_PYTHON%" engineering\d10-v06-invocation-route\category-c\v01\route.py execute --invocation "${{ inputs.invocation_path }}" --output "%RUNNER_TEMP%\ectos-category-c-return"
+      - name: Upload hashed governed return
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-d10-category-c-v01-return-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}\ectos-category-c-return
+          if-no-files-found: error
+          retention-days: 30

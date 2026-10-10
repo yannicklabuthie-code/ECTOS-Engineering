@@ -1,0 +1,12 @@
+{
+  "contract_id": "ECTOS_D10_V06_CATEGORY_C_MISSION_INPUT_CONTRACT_V01",
+  "transport": "BASE64_EXACT_BYTES_IN_GOVERNED_INVOCATION_OBJECT",
+  "required_mission_fields": ["mission_id", "successor_id", "phases"],
+  "required_phase_fields": ["command", "working_directory", "timeout_seconds"],
+  "optional_phase_fields": ["env", "required_artifacts"],
+  "command_shape": "NONEMPTY_ARRAY_NO_SHELL_STRING_EVAL",
+  "mission_sha256": "REQUIRED_AND_RECOMPUTED_BEFORE_SUBMIT",
+  "windows_materialization": "TOOLING_WRITES_EXACT_VERIFIED_MISSION_BYTES",
+  "owner_manual_mission_file_creation_required": false,
+  "mutation_after_sha_validation": "PROHIBITED"
+}

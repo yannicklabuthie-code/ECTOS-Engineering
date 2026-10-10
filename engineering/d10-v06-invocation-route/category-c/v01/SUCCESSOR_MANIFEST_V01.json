@@ -1,0 +1,69 @@
+{
+  "d10_product_mutation_count": 0,
+  "desktop_commander_dependency_count": 0,
+  "manifest_id": "ECTOS_D10_V06_INVOCATION_ROUTE_CATEGORY_C_SUCCESSOR_MANIFEST_V01",
+  "manifest_self_excluded": true,
+  "member_count": 11,
+  "members": [
+    {
+      "path": ".github/workflows/ectos-d10-v06-invocation-route-category-c-v01.yml",
+      "sha256": "9C0BA860FFC951DBE85805CCC2ADB554840E40C675E44B7D7E623E15B4DD3EF4",
+      "size": 4096
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/ARTIFACT_CONTRACT_V01.json",
+      "sha256": "D1CADDF180E8EA67994B53B6F149974A20B2AC95D6383D629EEB51C4AFB4BD70",
+      "size": 392
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/DEPENDENCY_GRAPH_V01.json",
+      "sha256": "8E3B746377A0AA5E257298667CBEBAB1C93AF0F3F46426DCE0C45B4D6AAE41BD",
+      "size": 10210
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/INVOCATION_CONTRACT_V01.json",
+      "sha256": "DA4710818587664B14E09330FC2B62608F04408A0B08C8A5A999EC836B5C9504",
+      "size": 1497
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/MISSION_INPUT_CONTRACT_V01.json",
+      "sha256": "B7EE91F449356CD2494617BFAA0338D4DBA2CBB082B02EF91C5CAA58610F560B",
+      "size": 651
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/README.md",
+      "sha256": "A573B32399F6C8A0ED0823C154725786FB667D702921B9AF1ECADB4331354E69",
+      "size": 1733
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/RESULT_CONTRACT_V01.json",
+      "sha256": "24EE459A0C9D0D6863E5E2E1B5BB559460684BF9407DF3744DD16C7A8F80CC7F",
+      "size": 817
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/fixtures/NON_D10_INVOCATION_FIXTURE_V01.json",
+      "sha256": "5D2FF43677559115DFD7DED29861CB1F621228F0BE4659170302EFF657815309",
+      "size": 642
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/route.py",
+      "sha256": "8BF11A175A264B90628AE244E703F5B64B14835831DD14558CF66EE436F7C995",
+      "size": 13295
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/tests/run_assurance.py",
+      "sha256": "38CAFEA668DA8FE720423B65C9192C844D8D0F5E898AABCE51ED87F934F4992B",
+      "size": 726
+    },
+    {
+      "path": "engineering/d10-v06-invocation-route/category-c/v01/tests/test_route.py",
+      "sha256": "D84F7D55F4F219D8645C3CA262151367DBDB1D3E41E2F6E9F93BC68191D98ADA",
+      "size": 9981
+    }
+  ],
+  "real_d10_phase_a_execution_count": 0,
+  "real_d10_phase_b_execution_count": 0,
+  "successor_id": "ECTOS_D10_V06_INVOCATION_ROUTE_CATEGORY_C_V01",
+  "v06_product_mutation_count": 0,
+  "version": "V01"
+}
