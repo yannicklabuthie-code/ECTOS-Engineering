@@ -38,10 +38,10 @@ Describe 'ECTOS DEV V1 top-level entrypoint' {
         $LASTEXITCODE | Should Be 40
     }
     It 'rejects empty target with deterministic exit 40' {
-        $e=Join-Path $TestDrive 'e2';$w=Join-Path $TestDrive 'w2'
-        $command="& '$entry' -TargetId ([string]::Empty) -WorkspaceRoot '$w' -EvidenceRoot '$e'"
-        $encoded=[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($command))
-        & powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encoded 2>$null | Out-Null
+        $e=Join-Path $TestDrive 'e2';$w=Join-Path $TestDrive 'w2';$wrapper=Join-Path $TestDrive 'empty-wrapper.ps1'
+        $wrapperText="& '{0}' -TargetId ([string]::Empty) -WorkspaceRoot '{1}' -EvidenceRoot '{2}'`nexit `$LASTEXITCODE" -f $entry,$w,$e
+        [IO.File]::WriteAllText($wrapper,$wrapperText,(New-Object Text.UTF8Encoding($false)))
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $wrapper 2>$null | Out-Null
         $LASTEXITCODE | Should Be 40
     }
     It 'executes registered selftest target end-to-end' {
