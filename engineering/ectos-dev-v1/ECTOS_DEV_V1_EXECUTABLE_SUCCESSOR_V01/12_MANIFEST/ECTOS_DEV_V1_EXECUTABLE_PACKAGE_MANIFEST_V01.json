@@ -1,0 +1,133 @@
+{
+    "schema_id":  "ECTOS_DEV_V1_EXECUTABLE_PACKAGE_MANIFEST_V01",
+    "package_id":  "ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01",
+    "version":  "V01",
+    "source_repository":  "yannicklabuthie-code/ECTOS-Engineering",
+    "source_commit":  "5b7d033d4602e39a42558f015ad0e531001b60dd",
+    "source_tree":  "ae461eaf6d5a56a0c87f37486cdc496dc5f458c3",
+    "payload_member_count":  20,
+    "package_sha256":  "EDC46366703ED950F5EA900A3D56581F9EC99C5A8063815438EBD718B05888EB",
+    "package_sha256_algorithm":  "SHA256(sorted(path NUL size NUL sha256 LF))",
+    "entrypoint":  "09_ENTRYPOINT/Invoke-ECTOSDevV1.ps1",
+    "target_runtime":  "WindowsPowerShellDesktop5.1",
+    "supported_os":  "Windows",
+    "logical_components":  [
+                               "01_LDEV01_ENGINEERING_STATE",
+                               "02_LDEV02_POLICY_AND_LEARNING",
+                               "03_LDEV03_BUILD_DEFINITION",
+                               "04_ECTOS_BUILDER",
+                               "05_BUILD_PACKAGE_FACTORY",
+                               "06_QUALIFICATION_FACTORY",
+                               "07_CONTRACTS",
+                               "08_CONFIG",
+                               "09_ENTRYPOINT",
+                               "10_SELFTEST",
+                               "11_EVIDENCE",
+                               "12_MANIFEST"
+                           ],
+    "dependency_graph":  "12_MANIFEST/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json",
+    "qualification_boundary":  "PRODUCER_HANDOFF_ONLY_NO_INDEPENDENT_QUALIFICATION",
+    "rollback":  "DELETE_SUCCESSOR_WORKTREE_OR_RESET_BRANCH_TO_BASE_WITH_MAIN_AUTHORITY",
+    "members":  [
+                    {
+                        "path":  "01_LDEV01_ENGINEERING_STATE/Invoke-LDEV01.ps1",
+                        "sha256":  "44328E3D0D78B4126BFFF653AE966B64E050FAAA5F5CF63B730EFE5885DB8AD9",
+                        "size_bytes":  1551
+                    },
+                    {
+                        "path":  "02_LDEV02_POLICY_AND_LEARNING/Invoke-LDEV02.ps1",
+                        "sha256":  "FBFAD589CD381A4DB3ABC42CB9E4D32DC8CDD9CB23AD7DB461BB7638B7DEDE64",
+                        "size_bytes":  1343
+                    },
+                    {
+                        "path":  "03_LDEV03_BUILD_DEFINITION/Invoke-LDEV03.ps1",
+                        "sha256":  "E0DBC2CF19A8A81B0AA2A7A130447A46AAEDA1A2C415DCED97BBC06941D0799C",
+                        "size_bytes":  1530
+                    },
+                    {
+                        "path":  "04_ECTOS_BUILDER/Invoke-ECTOSBuilder.ps1",
+                        "sha256":  "F8EFA8CE0EB9FC7E730311A54880060CBFAA88397C9007A26E0322503105438D",
+                        "size_bytes":  979
+                    },
+                    {
+                        "path":  "05_BUILD_PACKAGE_FACTORY/Invoke-BPF.ps1",
+                        "sha256":  "3D8550A65072595AF46261FAAC1238EED1D2BD02F3FB30895896665D10F8FB90",
+                        "size_bytes":  2546
+                    },
+                    {
+                        "path":  "06_QUALIFICATION_FACTORY/Invoke-QF.ps1",
+                        "sha256":  "2ABFEAC019E0DFDF8F884500DA46BF7479FD9865996D44272D3924E88D7D791E",
+                        "size_bytes":  2135
+                    },
+                    {
+                        "path":  "07_CONTRACTS/ECTOS_DEV_CAPABILITY_CLASSIFICATION_V01.json",
+                        "sha256":  "49731917F3C9CB8502C3C7F61AE934B3601B0D88EC9EF159C743679C18234BE7",
+                        "size_bytes":  1163
+                    },
+                    {
+                        "path":  "07_CONTRACTS/ECTOS_DEV_EXECUTABLE_CHAIN_CONTRACT_V01.json",
+                        "sha256":  "EBC6909DEC618856CB88CEAA0EBCE00EF16964065A8A77FA35ADFE996B0CA420",
+                        "size_bytes":  729
+                    },
+                    {
+                        "path":  "08_CONFIG/build-recipe.selftest.json",
+                        "sha256":  "66426B05CBCA8649C0237686CDBF8BA3ACF520CC370DD57700A67A51ECFE4A2E",
+                        "size_bytes":  483
+                    },
+                    {
+                        "path":  "08_CONFIG/qualification-profile.selftest.json",
+                        "sha256":  "5268D54EE6BD255BD42644192998233B5ADA2662EE42A122D48CC5263A9FC604",
+                        "size_bytes":  461
+                    },
+                    {
+                        "path":  "08_CONFIG/rule-profile.selftest.json",
+                        "sha256":  "AEADCB16977EF3C6FE6D61AC37BC74C10195141181613DCFE66047768798A653",
+                        "size_bytes":  356
+                    },
+                    {
+                        "path":  "08_CONFIG/targets.json",
+                        "sha256":  "E516CE44414E40AD778285108D7D5DBC797CCC3A5D94D31C0806E63866185BBC",
+                        "size_bytes":  817
+                    },
+                    {
+                        "path":  "09_ENTRYPOINT/Invoke-ECTOSDevV1.ps1",
+                        "sha256":  "B561DA9573EFF9D77F608441EDB8BF63F2005EF499F830817F789ABB770972E6",
+                        "size_bytes":  3305
+                    },
+                    {
+                        "path":  "10_SELFTEST/ECTOSDev.Tests.ps1",
+                        "sha256":  "2706BB38F50054201335134737A124A64D03E9A3312D21C2E6D46593E8F5529F",
+                        "size_bytes":  5083
+                    },
+                    {
+                        "path":  "10_SELFTEST/Invoke-StaticRuleGate.ps1",
+                        "sha256":  "F2C4975B8FEE0AB511209D9152440BA1A5E1A9B9FD898EC90B48F78F321C6427",
+                        "size_bytes":  2246
+                    },
+                    {
+                        "path":  "10_SELFTEST/Run-ProducerSelfTest.ps1",
+                        "sha256":  "F04EDDDCC64E18241C24E09C2D32D5902F4A0CDB3C2B7BBF1BC429EBD6D34D0D",
+                        "size_bytes":  3914
+                    },
+                    {
+                        "path":  "10_SELFTEST/fixture_source/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json",
+                        "sha256":  "70E7529DFA544D3D2DFD67F9AC8C10175684F7B7515217771AC9867249677B3C",
+                        "size_bytes":  2542
+                    },
+                    {
+                        "path":  "10_SELFTEST/fixture_source/ectos-package-manifest.json",
+                        "sha256":  "A2C1CE8667A3D8B6EF5F3B82557B5CD7BAE8EB1A347873CE55CC78327C7B232A",
+                        "size_bytes":  942
+                    },
+                    {
+                        "path":  "10_SELFTEST/fixture_source/main.ps1",
+                        "sha256":  "50B5B843DB6C14533CE83D86C10F2E951C1170093967038D271833621CF1C97B",
+                        "size_bytes":  320
+                    },
+                    {
+                        "path":  "11_EVIDENCE/README.md",
+                        "sha256":  "D307D94BACC4D4DBA38417F7CC256C6AE4749126171B74DACBAF2625AE1E9A57",
+                        "size_bytes":  353
+                    }
+                ]
+}
