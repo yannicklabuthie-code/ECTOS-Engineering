@@ -4,15 +4,15 @@
                     "package_id":  "ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01",
                     "package_name":  "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01",
                     "version":  "V01",
-                    "package_sha256":  "1D73CC39F176418D99F2BE088093A6DA031E511E61F4B8DA4A1D99B84000FD3A",
+                    "package_sha256":  "E497A7E4E5A4D56E5FB907814F4AD7475FDD1C4DEE3DC07F6FFC57345E69A5D9",
                     "environment":  "ECTOS_DEV",
                     "producer":  "ECTOS_DEV_EXECUTABLE_ENGINEERING_PRODUCER",
                     "source_repository":  "yannicklabuthie-code/ECTOS-Engineering",
-                    "source_commit":  "131d7211f72962f6af744ece12289015115bbf18"
+                    "source_commit":  "5c852e4d1f9acc0839225bd260a62d8b70c7fd2e"
                 },
     "nodes":  [
                   {
-                      "physical_evidence":  "payload commit 131d7211f72962f6af744ece12289015115bbf18",
+                      "physical_evidence":  "payload commit 5c852e4d1f9acc0839225bd260a62d8b70c7fd2e",
                       "type":  "PACKAGE",
                       "locator":  "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01",
                       "external_ref":  null,
