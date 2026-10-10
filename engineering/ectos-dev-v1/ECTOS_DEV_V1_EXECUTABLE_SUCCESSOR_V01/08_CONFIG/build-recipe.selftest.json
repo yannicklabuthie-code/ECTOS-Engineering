@@ -1,0 +1,14 @@
+{
+  "schema_id": "ECTOS_DEV_BUILD_RECIPE_V01",
+  "recipe_id": "ECTOS_DEV_SELFTEST_BUILD_RECIPE_V01",
+  "target_id": "ECTOS_DEV_SELFTEST_PS51",
+  "package_id": "ECTOS_DEV_SELFTEST_PRODUCT_V01",
+  "package_version": "1.0.0",
+  "source_files": [
+    "main.ps1",
+    "ectos-package-manifest.json",
+    "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json"
+  ],
+  "expected_outputs": ["package_directory","package_zip","build_manifest","sha256"],
+  "materialization_owner": "BUILD_PACKAGE_FACTORY"
+}

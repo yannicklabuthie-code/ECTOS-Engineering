@@ -1,0 +1,21 @@
+{
+  "contract_id": "ECTOS_DEV_EXECUTABLE_CHAIN_CONTRACT_V01",
+  "version": "V01",
+  "status": "CURRENT_CANDIDATE",
+  "chain": ["LDEV-01","LDEV-02","LDEV-03","ECTOS_BUILDER","BUILD_PACKAGE_FACTORY","QUALIFICATION_FACTORY_HANDOFF"],
+  "authority_separation": {
+    "producer_is_qualifier": false,
+    "build_is_qualification": false,
+    "qualification_is_release": false,
+    "qf_primary_debugger": false
+  },
+  "genericity": {
+    "target_registration_source": "08_CONFIG/targets.json",
+    "new_target_requires_generic_code_change": false,
+    "product_specific_logic_in_generic_components": false
+  },
+  "final_e2e": {
+    "purpose": "CONFIRM_ALREADY_PROVEN_ENGINEERING_CHAIN",
+    "basic_defect_discovery": "PROHIBITED"
+  }
+}

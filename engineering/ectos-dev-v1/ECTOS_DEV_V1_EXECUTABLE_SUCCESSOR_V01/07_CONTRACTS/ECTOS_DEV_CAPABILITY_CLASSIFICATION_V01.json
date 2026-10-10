@@ -1,0 +1,14 @@
+{
+  "schema_id": "ECTOS_DEV_CAPABILITY_CLASSIFICATION_V01",
+  "mission_id": "ECTOS-DEV-V1-EXECUTABLE-ASSEMBLY-01",
+  "classifications": [
+    {"capability":"LDEV-01","classification":"EXISTS_ADAPT","reuse":"Git source identity, dependency graph and repository/state primitives"},
+    {"capability":"LDEV-02","classification":"EXISTS_ADAPT","reuse":"Current PS5.1 profile, active rules, fixtures and defect catalogs"},
+    {"capability":"LDEV-03","classification":"MISSING_IMPLEMENT","reuse":"Accepted architecture and build-definition contract only"},
+    {"capability":"ECTOS_BUILDER","classification":"MISSING_IMPLEMENT","reuse":"Accepted orchestration interface contract only"},
+    {"capability":"BUILD_PACKAGE_FACTORY","classification":"MISSING_IMPLEMENT","reuse":"Accepted BPF input/output contract only"},
+    {"capability":"QUALIFICATION_FACTORY","classification":"EXISTS_ADAPT","reuse":"Phase01 assurance gates and accepted QF design; independent qualification remains separate"}
+  ],
+  "rim_implementation": "NOT_REQUIRED",
+  "rim_reason": "Exact RIM implementation/mutation authority is not proven and is not required for this executable successor."
+}

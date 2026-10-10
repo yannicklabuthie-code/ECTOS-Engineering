@@ -1,0 +1,10 @@
+{
+  "profile_id": "ECTOS_DEV_SELFTEST_QF_HANDOFF_PROFILE_V01",
+  "mode": "HANDOFF_ONLY",
+  "required_inputs": ["package","package_sha256","manifest","dependency_graph","entrypoint"],
+  "qualification_execution_authority_required": true,
+  "producer_may_qualify": false,
+  "accepted_handoff_state": "HANDOFF_READY_FOR_INDEPENDENT_QUALIFICATION",
+  "phase01_adapter": "engineering/phase01/RUN_ECTOS_DEV_MINIMUM_CONTROL.ps1",
+  "phase01_pester_minimum": "6.0.0"
+}

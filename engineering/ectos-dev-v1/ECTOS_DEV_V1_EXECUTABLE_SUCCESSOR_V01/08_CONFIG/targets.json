@@ -1,0 +1,16 @@
+{
+  "schema_id": "ECTOS_DEV_TARGET_REGISTRY_V01",
+  "targets": [
+    {
+      "target_id": "ECTOS_DEV_SELFTEST_PS51",
+      "source_root": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01/10_SELFTEST/fixture_source",
+      "dependencies": [
+        "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+        "governance/ECTOS_PACKAGE_DEPENDENCY_GRAPH_CONTRACT_V01.md"
+      ],
+      "rule_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01/08_CONFIG/rule-profile.selftest.json",
+      "build_recipe_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01/08_CONFIG/build-recipe.selftest.json",
+      "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SUCCESSOR_V01/08_CONFIG/qualification-profile.selftest.json"
+    }
+  ]
+}

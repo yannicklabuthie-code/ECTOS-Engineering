@@ -9,3 +9,5 @@
 /uac/*.json text eol=lf
 /uac/**/*.json text eol=lf
 /.gitattributes text eol=lf
+
+/engineering/ectos-dev-v1/** text eol=lf

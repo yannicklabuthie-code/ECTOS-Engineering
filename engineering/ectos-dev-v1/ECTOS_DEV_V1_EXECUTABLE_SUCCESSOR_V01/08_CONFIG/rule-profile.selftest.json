@@ -1,0 +1,10 @@
+{
+  "profile_id": "ECTOS_DEV_SELFTEST_RULE_PROFILE_V01",
+  "rules": [
+    "PS51-R001","PS51-R002","PS51-R003","PS51-R004","PS51-R005",
+    "PS51-R006","PS51-R007","PS51-R008","PS51-R009","PS51-R010"
+  ],
+  "source_profile": "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+  "promotion_authority": "ECTOS_FACTORY",
+  "dev_self_promotion": false
+}
