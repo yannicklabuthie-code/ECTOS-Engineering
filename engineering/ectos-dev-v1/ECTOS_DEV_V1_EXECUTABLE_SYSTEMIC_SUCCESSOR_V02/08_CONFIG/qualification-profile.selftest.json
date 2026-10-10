@@ -1,0 +1,27 @@
+{
+  "profile_id": "ECTOS_DEV_SELFTEST_QF_HANDOFF_PROFILE_V03",
+  "mode": "HANDOFF_ONLY",
+  "required_inputs": [
+    "package",
+    "package_sha256",
+    "manifest",
+    "dependency_graph",
+    "entrypoint",
+    "trust_base_receipt",
+    "selftest_receipt",
+    "graph_closure_receipt",
+    "final_closure_receipt",
+    "environment_contract",
+    "evidence_contract"
+  ],
+  "qualification_execution_authority_required": true,
+  "producer_may_qualify": false,
+  "accepted_handoff_state": "HANDOFF_READY_FOR_INDEPENDENT_QUALIFICATION",
+  "manifest_schema_id": "ECTOS_COMMON_PACKAGE_MANIFEST_V0",
+  "graph_schema_id": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01",
+  "graph_in_package_state": "NOT_PROVEN_PENDING_EXTERNAL_QUALIFICATION",
+  "environment_contract": {"target_os":"WINDOWS","target_runtime":"WINDOWS_POWERSHELL_DESKTOP_5_1"},
+  "evidence_contract": {"detached":true,"package_mutation_allowed":false},
+  "phase01_adapter": "engineering/phase01/RUN_ECTOS_DEV_MINIMUM_CONTROL.ps1",
+  "phase01_pester_minimum": "6.0.0"
+}

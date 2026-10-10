@@ -1,0 +1,16 @@
+{
+  "profile_id": "ECTOS_DEV_SELFTEST_RULE_PROFILE_V02",
+  "language": "POWERSHELL",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "current_selector": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER.json",
+  "expected_current_pointer": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json",
+  "governed_profile": "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+  "profile_sha256": "4B9A8830292CC811B141B4DAE91F2B816A3448921EE3B3ED25DA412C17A78625",
+  "ruleset_sha256": "2FD86D22587B2E694FC62C3B734DED1A7430831BFC0E34B5C176327012907525",
+  "rules": [
+    "PS51-R001","PS51-R002","PS51-R003","PS51-R004","PS51-R005",
+    "PS51-R006","PS51-R007","PS51-R008","PS51-R009","PS51-R010"
+  ],
+  "promotion_authority": "ECTOS_FACTORY",
+  "dev_self_promotion": false
+}

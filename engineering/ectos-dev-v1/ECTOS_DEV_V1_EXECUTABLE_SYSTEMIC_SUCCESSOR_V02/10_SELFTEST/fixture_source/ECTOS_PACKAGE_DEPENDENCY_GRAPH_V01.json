@@ -1,0 +1,36 @@
+{
+  "schema_id": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01",
+  "package": {
+    "package_id": "ECTOS_DEV_SELFTEST_PRODUCT_V02",
+    "package_name": "ECTOS DEV V1 systemic selftest product",
+    "version": "2.0.0",
+    "package_sha256": null,
+    "environment": "ECTOS_DEV_SELFTEST",
+    "producer": "ECTOS_DEV_EXECUTABLE_ENGINEERING_PRODUCER",
+    "source_repository": "yannicklabuthie-code/ECTOS-Engineering",
+    "source_commit": null
+  },
+  "nodes": [
+    {"dependency_id":"PKG","type":"PACKAGE","name":"ECTOS_DEV_SELFTEST_PRODUCT_V02","locator":".","currentness":"CURRENT","physical_evidence":"build-definition exact source hash set","test_coverage":"producer systemic selftest","fail_closed_behavior":"deny QF handoff","impact_if_changed":"rerun complete producer selftest","external_ref":null},
+    {"dependency_id":"ENTRY","type":"SOURCE_FILE","name":"main.ps1","locator":"main.ps1","currentness":"CURRENT","physical_evidence":"authorized source hash + copied package bytes","test_coverage":"native PS5.1 startability","fail_closed_behavior":"deny QF handoff","impact_if_changed":"rerun parser and startability","external_ref":null},
+    {"dependency_id":"PS51","type":"OS_RUNTIME","name":"Windows PowerShell Desktop 5.1","locator":"powershell.exe","currentness":"CURRENT","physical_evidence":"native host receipt","test_coverage":"producer native selftest","fail_closed_behavior":"deny producer readiness","impact_if_changed":"rerun native assurance","external_ref":null}
+  ],
+  "edges": [
+    {"edge_id":"E1","from":"PKG","to":"ENTRY","type":"LOADS","direct_or_transitive":"DIRECT","required_by":"package entrypoint","contract":"manifest.entrypoint","currentness":"CURRENT","physical_evidence":"manifest + package member","test_coverage":"QF physical handoff validation","fail_closed_behavior":"deny handoff","status":"RESOLVED"},
+    {"edge_id":"E2","from":"ENTRY","to":"PS51","type":"EXECUTES_ON","direct_or_transitive":"DIRECT","required_by":"runtime contract","contract":"WindowsPowerShell5.1","currentness":"CURRENT","physical_evidence":"manifest runtime claim","test_coverage":"native startability","fail_closed_behavior":"deny readiness","status":"RESOLVED"}
+  ],
+  "closure": {
+    "dependency_closure": "NOT_PROVEN",
+    "undeclared_dependency_count": 0,
+    "unresolved_transitive_dependency_count": 0,
+    "untested_dependency_count": 0,
+    "implicit_environment_assumption_count": 0,
+    "unknown_blast_radius_edge_count": 0
+  },
+  "change_impact": {
+    "predecessor_package_sha256": null,
+    "changed_dependency_ids": ["PKG","ENTRY"],
+    "impacted_dependency_ids": ["PS51"],
+    "analysis_status": "PASS"
+  }
+}
