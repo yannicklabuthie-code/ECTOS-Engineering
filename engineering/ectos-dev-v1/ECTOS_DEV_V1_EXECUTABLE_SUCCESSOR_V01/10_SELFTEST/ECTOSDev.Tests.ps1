@@ -1,5 +1,6 @@
 $packageRoot = Split-Path $PSScriptRoot -Parent
 $repoRoot = (Resolve-Path (Join-Path $packageRoot '..\..\..')).Path
+$ErrorActionPreference = 'Continue'
 . (Join-Path $packageRoot '01_LDEV01_ENGINEERING_STATE\Invoke-LDEV01.ps1')
 . (Join-Path $packageRoot '02_LDEV02_POLICY_AND_LEARNING\Invoke-LDEV02.ps1')
 . (Join-Path $packageRoot '03_LDEV03_BUILD_DEFINITION\Invoke-LDEV03.ps1')
