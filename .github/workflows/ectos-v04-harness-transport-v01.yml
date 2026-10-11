@@ -1,0 +1,144 @@
+name: ECTOS V04 Harness Transport Engineering V01
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ectos-v04-harness-transport-${{ github.event.pull_request.head.sha }}
+  cancel-in-progress: false
+
+jobs:
+  systemic-engineering-assurance:
+    name: ectos/v04-harness-transport-systemic-engineering-assurance
+    runs-on: [self-hosted, Windows, X64, ectos-ps51]
+    timeout-minutes: 40
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 1
+
+      - name: Prove runner and commit identity
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          Set-StrictMode -Version 2.0
+          $expected='${{ github.event.pull_request.head.sha }}'
+          $actual=(git rev-parse HEAD).Trim()
+          if($actual -cne $expected){throw ('CHECKOUT_COMMIT_MISMATCH_'+$actual+'_'+$expected)}
+          if($PSVersionTable.PSEdition -cne 'Desktop'){throw 'NATIVE_PS51_EDITION_REQUIRED'}
+          if($PSVersionTable.PSVersion.Major -ne 5 -or $PSVersionTable.PSVersion.Minor -ne 1){throw 'NATIVE_PS51_VERSION_REQUIRED'}
+          $systemRoot=[Environment]::GetEnvironmentVariable('SystemRoot')
+          $native=Join-Path $systemRoot 'System32\WindowsPowerShell\v1.0\powershell.exe'
+          if(-not(Test-Path -LiteralPath $native -PathType Leaf)){throw 'NATIVE_PS51_EXE_NOT_FOUND'}
+          $resultRoot=Join-Path '${{ runner.temp }}' 'ectos-v04-harness-transport-v01'
+          if(Test-Path -LiteralPath $resultRoot){Remove-Item -LiteralPath $resultRoot -Recurse -Force}
+          New-Item -ItemType Directory -Path $resultRoot -Force|Out-Null
+          $identity=[pscustomobject][ordered]@{
+            workflow='ectos-v04-harness-transport-v01.yml'
+            commit_sha=$actual
+            runner_name='${{ runner.name }}'
+            runner_os='${{ runner.os }}'
+            runner_arch='${{ runner.arch }}'
+            computer_name=[Environment]::MachineName
+            ps_edition=$PSVersionTable.PSEdition
+            ps_version=$PSVersionTable.PSVersion.ToString()
+            native_ps51_executable=$native
+            native_ps51_executable_sha256=(Get-FileHash -LiteralPath $native -Algorithm SHA256).Hash.ToUpperInvariant()
+          }
+          $identity|ConvertTo-Json -Depth 6|Set-Content -LiteralPath (Join-Path $resultRoot 'RUNNER_IDENTITY.json') -Encoding UTF8
+          Write-Output ('RUNNER_NAME=${{ runner.name }}')
+          Write-Output ('COMPUTER_NAME='+[Environment]::MachineName)
+          Write-Output ('COMMIT_SHA='+$actual)
+          Write-Output ('PSEDITION='+$PSVersionTable.PSEdition)
+          Write-Output ('PSVERSION='+$PSVersionTable.PSVersion.ToString())
+
+      - name: Assert governed ruleset workspace byte identity
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          $rules=@(git ls-files 'rules/powershell/*.json')
+          if($rules.Count -ne 10){throw ('RULESET_MEMBER_COUNT_'+$rules.Count)}
+          $eolPass=0
+          $rawPass=0
+          foreach($rule in $rules){
+            $eol=(git ls-files --eol -- $rule)
+            if($eol -match 'w/lf'){$eolPass++}
+            $workspace=(git hash-object --no-filters -- $rule).Trim()
+            $head=(git rev-parse ('HEAD:'+$rule)).Trim()
+            if($workspace -ceq $head){$rawPass++}
+          }
+          if($eolPass -ne 10){throw ('RULESET_W_LF_COUNT_'+$eolPass)}
+          if($rawPass -ne 10){throw ('RULESET_RAW_OBJECT_MATCH_COUNT_'+$rawPass)}
+          Write-Output 'RULESET_WORKSPACE_IDENTITY=PASS'
+
+      - name: Native PS51 static rule and parse gate
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $root='${{ github.workspace }}\engineering\v04-harness-transport-v01'
+          $results='${{ runner.temp }}\ectos-v04-harness-transport-v01'
+          & "$root\tests\Invoke-ECTOSV04HarnessStaticGateV01.ps1" -RepoRoot '${{ github.workspace }}' -EngineeringRoot $root -ResultsRoot $results
+
+      - name: PSScriptAnalyzer exact version gate
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          $module='C:\ECTOS_TOOLCACHE\PSScriptAnalyzer\1.25.0\PSScriptAnalyzer.psd1'
+          if(-not(Test-Path -LiteralPath $module -PathType Leaf)){throw 'PSSCRIPTANALYZER_1_25_0_NOT_FOUND'}
+          Import-Module -Name $module -Force -ErrorAction Stop
+          $command=Get-Command Invoke-ScriptAnalyzer -ErrorAction Stop
+          if([string]$command.Version -cne '1.25.0'){throw ('PSSCRIPTANALYZER_VERSION_MISMATCH_'+[string]$command.Version)}
+          $root='${{ github.workspace }}\engineering\v04-harness-transport-v01'
+          $findings=@(Invoke-ScriptAnalyzer -Path $root -Recurse -Severity Error -ErrorAction Stop)
+          $results='${{ runner.temp }}\ectos-v04-harness-transport-v01'
+          $status='PASS'
+          if($findings.Count -ne 0){$status='FAIL'}
+          $report=[pscustomobject][ordered]@{version=[string]$command.Version;error_finding_count=$findings.Count;status=$status}
+          if($findings.Count -ne 0){$findings|Export-Csv -LiteralPath (Join-Path $results 'PSSCRIPTANALYZER_FINDINGS.csv') -NoTypeInformation -Encoding UTF8}
+          $report|ConvertTo-Json -Depth 5|Set-Content -LiteralPath (Join-Path $results 'PSSCRIPTANALYZER.json') -Encoding UTF8
+          if($findings.Count -ne 0){throw ('PSSCRIPTANALYZER_ERROR_FINDING_COUNT_'+$findings.Count)}
+          Write-Output 'PSSCRIPTANALYZER=PASS'
+
+      - name: Run full synthetic harness transport engineering campaign
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $root='${{ github.workspace }}\engineering\v04-harness-transport-v01'
+          $results='${{ runner.temp }}\ectos-v04-harness-transport-v01'
+          & "$root\tests\Invoke-ECTOSV04HarnessTransportEngineeringTestsV01.ps1" -EngineeringRoot $root -ResultsRoot (Join-Path $results 'campaign')
+
+      - name: Prove tested successor bytes unchanged after campaign
+        if: always()
+        shell: powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File {0}
+        run: |
+          $ErrorActionPreference='Stop'
+          $root='${{ github.workspace }}\engineering\v04-harness-transport-v01'
+          $results='${{ runner.temp }}\ectos-v04-harness-transport-v01'
+          $members=@(Get-ChildItem -LiteralPath $root -Recurse -File -ErrorAction Stop|Sort-Object FullName)
+          $rows=New-Object System.Collections.ArrayList
+          foreach($member in $members){
+            $relative=$member.FullName.Substring($root.Length).TrimStart('\')
+            [void]$rows.Add([pscustomobject][ordered]@{
+              relative_path=$relative
+              size_bytes=[int64]$member.Length
+              sha256=(Get-FileHash -LiteralPath $member.FullName -Algorithm SHA256).Hash.ToUpperInvariant()
+            })
+          }
+          $closure=[pscustomobject][ordered]@{member_count=$rows.Count;members=@($rows);status='PASS'}
+          $closure|ConvertTo-Json -Depth 10|Set-Content -LiteralPath (Join-Path $results 'TESTED_BYTE_CLOSURE.json') -Encoding UTF8
+          if(@(git status --porcelain=v1 -- engineering/v04-harness-transport-v01).Count -ne 0){throw 'TEST_CAMPAIGN_MUTATED_SUCCESSOR_SOURCE'}
+          Write-Output 'TESTED_BYTES_STABLE=PASS'
+
+      - name: Upload systemic engineering evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ectos-v04-harness-transport-v01-${{ github.event.pull_request.head.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/ectos-v04-harness-transport-v01
+          retention-days: 30
+          if-no-files-found: error
