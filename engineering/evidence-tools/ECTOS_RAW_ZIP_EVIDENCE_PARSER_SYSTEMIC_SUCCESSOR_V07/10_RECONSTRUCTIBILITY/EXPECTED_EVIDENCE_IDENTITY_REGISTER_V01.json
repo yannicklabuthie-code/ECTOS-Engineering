@@ -1,0 +1,406 @@
+{
+    "register_id":  "EXPECTED_EVIDENCE_IDENTITY_REGISTER_V01",
+    "entry_count":  50,
+    "entries":  [
+                    {
+                        "fixture_id":  "RZP-POS-ARCHIVE-COMMENT",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-ASCII-NAME",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-DATA-DESCRIPTOR",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-DEFLATED-ONE",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-DIRECTORY",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-EMPTY-ARCHIVE",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-ENTRY-COMMENT",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-EXTERNAL-ATTR",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-EXTRA-FIELDS",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-FIXED-TIMESTAMP",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-MIXED-COMPRESSION",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-MULTIPLE",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-STORED-ONE",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-UTF8-NAME",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "RZP-POS-ZIP64",
+                        "family":  "POSITIVE",
+                        "expected_result":  "PASS",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N01_BAD_SIGNATURE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INVALID_SIGNATURE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N02_TRUNCATED_LOCAL_HEADER",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_TRUNCATED_LOCAL_HEADER",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N03_TRUNCATED_CENTRAL_HEADER",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_TRUNCATED_CENTRAL_HEADER",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N04_TRUNCATED_EOCD",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_TRUNCATED_EOCD",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N05_BAD_EOCD",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INVALID_EOCD",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N06_BAD_OFFSET",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_OFFSET_OUT_OF_RANGE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N07_BAD_LENGTH",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_SIZE_OUT_OF_RANGE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N08_INTEGER_BOUNDARY_OVERFLOW",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INTEGER_OVERFLOW",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N09_OVERLAP",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_OVERLAPPING_RECORDS",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N10_DUPLICATE_RECORD",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_DUPLICATE_RECORD",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N11_CENTRAL_LOCAL_NAME_MISMATCH",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_LOCAL_CENTRAL_NAME_MISMATCH",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N12_CENTRAL_LOCAL_METHOD_MISMATCH",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_LOCAL_CENTRAL_METHOD_MISMATCH",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N13_CENTRAL_LOCAL_FLAG_MISMATCH",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_LOCAL_CENTRAL_FLAG_MISMATCH",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N14_CRC_MISMATCH",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_CRC_CONTRACT_MISMATCH",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N15_SIZE_MISMATCH",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_SIZE_CONTRACT_MISMATCH",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N16_CORRUPT_EXTRA_FIELD",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_MALFORMED_EXTRA_FIELD",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N17_BAD_ZIP64",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INVALID_ZIP64",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N18_UNEXPECTED_ZIP64",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_UNEXPECTED_ZIP64",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N19_MALFORMED_DESCRIPTOR",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_MALFORMED_DATA_DESCRIPTOR",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N20_TRAILING_GARBAGE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_UNCLASSIFIED_TRAILING_BYTES",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N21_UNSUPPORTED_STRUCTURE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_UNSUPPORTED_STRUCTURE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N22_BAD_ENCODING",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_ENCODING_ERROR",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N23_MULTI_DISK",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_MULTI_DISK_UNSUPPORTED",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N24_AMBIGUOUS_STRUCTURE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_AMBIGUOUS_STRUCTURE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N25_INPUT_MISSING",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INPUT_NOT_FOUND",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N26_INPUT_READ_FAILURE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INPUT_READ_ERROR",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N27_INPUT_CHANGED_DURING_PARSE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_INPUT_CHANGED_DURING_PARSE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "N28_EVIDENCE_OUTPUT_FAILURE",
+                        "family":  "NEGATIVE",
+                        "expected_result":  "FAIL",
+                        "expected_failure_id":  "RZP_EVIDENCE_EMISSION_ERROR",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "FP01_WRONG_FAILURE_FOR_INVALID_SIGNATURE",
+                        "family":  "FALSE_PASS",
+                        "expected_result":  "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+                        "expected_failure_id":  "RZP_INVALID_SIGNATURE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "FP02_NO_FAILURE_FOR_INVALID_SIGNATURE",
+                        "family":  "FALSE_PASS",
+                        "expected_result":  "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+                        "expected_failure_id":  "RZP_INVALID_SIGNATURE",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "FP03_GENERIC_EXCEPTION_FOR_INVALID_ZIP64",
+                        "family":  "FALSE_PASS",
+                        "expected_result":  "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+                        "expected_failure_id":  "RZP_INVALID_ZIP64",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "FP04_WRONG_FAILURE_FOR_NAME_MISMATCH",
+                        "family":  "FALSE_PASS",
+                        "expected_result":  "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+                        "expected_failure_id":  "RZP_LOCAL_CENTRAL_NAME_MISMATCH",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "FP05_WRONG_FAILURE_FOR_DESCRIPTOR",
+                        "family":  "FALSE_PASS",
+                        "expected_result":  "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+                        "expected_failure_id":  "RZP_MALFORMED_DATA_DESCRIPTOR",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "FP06_PARTIAL_PASS_WITH_TRAILING_BYTES",
+                        "family":  "FALSE_PASS",
+                        "expected_result":  "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+                        "expected_failure_id":  "RZP_UNCLASSIFIED_TRAILING_BYTES",
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    },
+                    {
+                        "fixture_id":  "REGRESSION_FRAMEWORK_V01",
+                        "family":  "REGRESSION",
+                        "expected_result":  "FRAMEWORK_READY",
+                        "expected_failure_id":  null,
+                        "expected_evidence_content_identity_sha256":  null,
+                        "identity_state":  "NOT_PROVEN_UNTIL_INDEPENDENT_QUALIFICATION"
+                    }
+                ]
+}

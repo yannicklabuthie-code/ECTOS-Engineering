@@ -1,0 +1,23 @@
+{
+  "profile_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_FACTORY_PROFILE_V01",
+  "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
+  "tool_version": "2.0.0",
+  "package_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_V02",
+  "factory_role": "GENERIC_TOOL_PACKAGE_CONSUMER",
+  "admission_precondition": "INDEPENDENT_QUALIFICATION_PASS",
+  "required_package_binding": [
+    "package_manifest_sha256",
+    "dependency_graph_sha256",
+    "entrypoint_sha256",
+    "qualification_receipt_sha256"
+  ],
+  "runtime_contract": {
+    "os": "WINDOWS",
+    "powershell": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+    "third_party_runtime_modules": []
+  },
+  "ua01_probe_execution_authorized_by_profile": false,
+  "product_v02_mutation_allowed": false,
+  "cloud_specific_logic_allowed": false,
+  "registration_state": "DESCRIPTOR_ONLY_NOT_INSTALLED"
+}

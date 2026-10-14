@@ -1,0 +1,55 @@
+{
+  "count": 6,
+  "family": "FALSE_PASS",
+  "fixtures": [
+    {
+      "expected_failure_id": "RZP_INVALID_SIGNATURE",
+      "expected_result": "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+      "file": "FP01_WRONG_FAILURE_FOR_INVALID_SIGNATURE.json",
+      "fixture_id": "FP01_WRONG_FAILURE_FOR_INVALID_SIGNATURE",
+      "sha256": "5AC9C6D78E0CEAE1CD0E716FD33C06775B7E3DC8C46EC12832FDBF5A60554F43",
+      "size_bytes": 186
+    },
+    {
+      "expected_failure_id": "RZP_INVALID_SIGNATURE",
+      "expected_result": "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+      "file": "FP02_NO_FAILURE_FOR_INVALID_SIGNATURE.json",
+      "fixture_id": "FP02_NO_FAILURE_FOR_INVALID_SIGNATURE",
+      "sha256": "265A066B11CF2CB6CDBA98182CA56AC6306F7590FC099A59593B0CC5C671406C",
+      "size_bytes": 164
+    },
+    {
+      "expected_failure_id": "RZP_INVALID_ZIP64",
+      "expected_result": "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+      "file": "FP03_GENERIC_EXCEPTION_FOR_INVALID_ZIP64.json",
+      "fixture_id": "FP03_GENERIC_EXCEPTION_FOR_INVALID_ZIP64",
+      "sha256": "A90FC800FA7795132B9420E7C6A05184B4E5BAB4CFD2D1BDA25FD9C31696E3B7",
+      "size_bytes": 182
+    },
+    {
+      "expected_failure_id": "RZP_LOCAL_CENTRAL_NAME_MISMATCH",
+      "expected_result": "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+      "file": "FP04_WRONG_FAILURE_FOR_NAME_MISMATCH.json",
+      "fixture_id": "FP04_WRONG_FAILURE_FOR_NAME_MISMATCH",
+      "sha256": "2C2590414D96D19BB67ECBD782522F5BE961D2E757769690CEFF3163829D66E2",
+      "size_bytes": 195
+    },
+    {
+      "expected_failure_id": "RZP_MALFORMED_DATA_DESCRIPTOR",
+      "expected_result": "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+      "file": "FP05_WRONG_FAILURE_FOR_DESCRIPTOR.json",
+      "fixture_id": "FP05_WRONG_FAILURE_FOR_DESCRIPTOR",
+      "sha256": "5A4B917CF108FB82ED920E7F49921CD6158B567A94D3BBDC50FCF4916D87EF75",
+      "size_bytes": 191
+    },
+    {
+      "expected_failure_id": "RZP_UNCLASSIFIED_TRAILING_BYTES",
+      "expected_result": "TEST_MUST_FAIL_IF_ACTUAL_DIFFERS",
+      "file": "FP06_PARTIAL_PASS_WITH_TRAILING_BYTES.json",
+      "fixture_id": "FP06_PARTIAL_PASS_WITH_TRAILING_BYTES",
+      "sha256": "BD4EFB1B83A6F2E1C63F9BB7061E7BA21B67B28AEA888AE4EB6C3166D9243CD1",
+      "size_bytes": 174
+    }
+  ],
+  "manifest_id": "ECTOS_RAW_ZIP_FALSE_PASS_FIXTURE_MANIFEST_V01"
+}

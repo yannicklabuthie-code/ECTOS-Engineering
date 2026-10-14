@@ -1,0 +1,112 @@
+{
+  "count": 15,
+  "family": "POSITIVE",
+  "fixtures": [
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-ARCHIVE-COMMENT.zip",
+      "fixture_id": "RZP-POS-ARCHIVE-COMMENT",
+      "sha256": "90605696F66CA4B3F173A154A0435CB7A5CC7A29C46C343B29F28FF909F8EEEC",
+      "size_bytes": 116
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-ASCII-NAME.zip",
+      "fixture_id": "RZP-POS-ASCII-NAME",
+      "sha256": "30E02DFDC24C0639BBE531864B48CD830890E41EC4A6BB4373CA0BED880DE4F4",
+      "size_bytes": 131
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-DATA-DESCRIPTOR.zip",
+      "fixture_id": "RZP-POS-DATA-DESCRIPTOR",
+      "sha256": "7A59BC816E6412AA1FC072B96BD7E33119C5241BD98D84850A6DEEE87EFFEC69",
+      "size_bytes": 143
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-DEFLATED-ONE.zip",
+      "fixture_id": "RZP-POS-DEFLATED-ONE",
+      "sha256": "F1B85F449D10E25D829B959DA7AE029FCD2D4B2EB375BB5A37DFDC0BE621FAB7",
+      "size_bytes": 118
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-DIRECTORY.zip",
+      "fixture_id": "RZP-POS-DIRECTORY",
+      "sha256": "91A877074AB9D8050517F92CC1ED042C13B9C852D1F686F9E22E8FB6CA49C041",
+      "size_bytes": 201
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-EMPTY-ARCHIVE.zip",
+      "fixture_id": "RZP-POS-EMPTY-ARCHIVE",
+      "sha256": "8739C76E681F900923B900C9DF0EF75CF421D39CABB54650C4B9AD19B6A76D85",
+      "size_bytes": 22
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-ENTRY-COMMENT.zip",
+      "fixture_id": "RZP-POS-ENTRY-COMMENT",
+      "sha256": "3F77480B8676F002E1309326D4507049BFB565D67CF2656790444D61405E7BB9",
+      "size_bytes": 134
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-EXTERNAL-ATTR.zip",
+      "fixture_id": "RZP-POS-EXTERNAL-ATTR",
+      "sha256": "A7FB3251310230D41E18A825E6A01EDAFB35003B4788FAFDF035F0D4918CB79B",
+      "size_bytes": 115
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-EXTRA-FIELDS.zip",
+      "fixture_id": "RZP-POS-EXTRA-FIELDS",
+      "sha256": "5358A116CB5751B78990813D27588850C9731ABE465D839E4C07C3823370CA50",
+      "size_bytes": 133
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-FIXED-TIMESTAMP.zip",
+      "fixture_id": "RZP-POS-FIXED-TIMESTAMP",
+      "sha256": "7BEFFE95A406BB0494CDCAFDAF86B36228DBFCE256BE3A28E7A241AC7E90373E",
+      "size_bytes": 115
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-MIXED-COMPRESSION.zip",
+      "fixture_id": "RZP-POS-MIXED-COMPRESSION",
+      "sha256": "2EF010F4494ABFF5740474DE62D46382AD8744A36EE0A08108F310E74654B52E",
+      "size_bytes": 233
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-MULTIPLE.zip",
+      "fixture_id": "RZP-POS-MULTIPLE",
+      "sha256": "314E60E9415537F1BD3DF937348BC0FF9A26DD168CFAD21F1C51C53E929064A8",
+      "size_bytes": 318
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-STORED-ONE.zip",
+      "fixture_id": "RZP-POS-STORED-ONE",
+      "sha256": "67B5DFC8E4EFD13E3553014B7C3CEFAAB2843701F203DB55D8AAA91BB19B3DB6",
+      "size_bytes": 111
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-UTF8-NAME.zip",
+      "fixture_id": "RZP-POS-UTF8-NAME",
+      "sha256": "C256E319D5A76E95BEC78F770FFE90E3C1A825E869620414E503657A406D3EC3",
+      "size_bytes": 142
+    },
+    {
+      "expected_result": "PASS",
+      "file": "RZP-POS-ZIP64.zip",
+      "fixture_id": "RZP-POS-ZIP64",
+      "sha256": "82F1062E21DDEB1844701AC27145D83888A02E4BECC677F3F61627623CE2259A",
+      "size_bytes": 243
+    }
+  ],
+  "manifest_id": "ECTOS_RAW_ZIP_POSITIVE_FIXTURE_MANIFEST_V01"
+}

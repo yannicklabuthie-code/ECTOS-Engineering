@@ -1,0 +1,159 @@
+{
+  "graph_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_DEPENDENCY_GRAPH_V01",
+  "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
+  "version": "2.0.0",
+  "closure_state": "PRODUCER_SELFTEST_CLOSED_PENDING_INDEPENDENT_QUALIFICATION",
+  "runtime_external_dependencies": [
+    "WINDOWS",
+    "WINDOWS_POWERSHELL_DESKTOP_5_1",
+    ".NET_FRAMEWORK"
+  ],
+  "third_party_runtime_module_dependencies": [],
+  "qualification_only_external_dependencies": [
+    "PESTER",
+    "PSSCRIPTANALYZER"
+  ],
+  "nodes": [
+    "ENTRYPOINT",
+    "PRIMITIVES",
+    "STRUCTURE_PARSER",
+    "STRUCTURE_VALIDATOR",
+    "EVIDENCE_CONVERTER",
+    "SCHEMA",
+    "ERROR_CATALOG",
+    "POSITIVE_FIXTURES",
+    "NEGATIVE_FIXTURES",
+    "FALSE_PASS_FIXTURES",
+    "REGRESSION_FIXTURES",
+    "SELFTEST",
+    "PESTER_TESTS",
+    "QUALIFICATION_PROFILE",
+    "RECONSTRUCTIBILITY",
+    "TEST_ORACLE",
+    "PACKAGE_MANIFEST",
+    "FACTORY_PROFILE",
+    "TOOL_REGISTRY"
+  ],
+  "edges": [
+    {
+      "from": "ENTRYPOINT",
+      "to": "PRIMITIVES",
+      "type": "DOT_SOURCE"
+    },
+    {
+      "from": "ENTRYPOINT",
+      "to": "STRUCTURE_PARSER",
+      "type": "DOT_SOURCE"
+    },
+    {
+      "from": "ENTRYPOINT",
+      "to": "STRUCTURE_VALIDATOR",
+      "type": "DOT_SOURCE"
+    },
+    {
+      "from": "ENTRYPOINT",
+      "to": "EVIDENCE_CONVERTER",
+      "type": "DOT_SOURCE"
+    },
+    {
+      "from": "STRUCTURE_PARSER",
+      "to": "PRIMITIVES",
+      "type": "FUNCTION_CALL"
+    },
+    {
+      "from": "STRUCTURE_VALIDATOR",
+      "to": "STRUCTURE_PARSER",
+      "type": "OBJECT_CONTRACT"
+    },
+    {
+      "from": "EVIDENCE_CONVERTER",
+      "to": "PRIMITIVES",
+      "type": "FUNCTION_CALL"
+    },
+    {
+      "from": "SELFTEST",
+      "to": "ENTRYPOINT",
+      "type": "PROCESS_CONTRACT"
+    },
+    {
+      "from": "SELFTEST",
+      "to": "POSITIVE_FIXTURES",
+      "type": "FIXTURE_INPUT"
+    },
+    {
+      "from": "SELFTEST",
+      "to": "NEGATIVE_FIXTURES",
+      "type": "FIXTURE_INPUT"
+    },
+    {
+      "from": "PESTER_TESTS",
+      "to": "ERROR_CATALOG",
+      "type": "ORACLE_CATALOG"
+    },
+    {
+      "from": "PESTER_TESTS",
+      "to": "FALSE_PASS_FIXTURES",
+      "type": "FALSE_PASS_ORACLE"
+    },
+    {
+      "from": "QUALIFICATION_PROFILE",
+      "to": "SELFTEST",
+      "type": "NON_SUBSTITUTIVE_INPUT"
+    },
+    {
+      "from": "RECONSTRUCTIBILITY",
+      "to": "POSITIVE_FIXTURES",
+      "type": "BYTE_IDENTITY"
+    },
+    {
+      "from": "RECONSTRUCTIBILITY",
+      "to": "NEGATIVE_FIXTURES",
+      "type": "BYTE_IDENTITY"
+    },
+    {
+      "from": "RECONSTRUCTIBILITY",
+      "to": "FALSE_PASS_FIXTURES",
+      "type": "BYTE_IDENTITY"
+    },
+    {
+      "from": "RECONSTRUCTIBILITY",
+      "to": "REGRESSION_FIXTURES",
+      "type": "BYTE_IDENTITY"
+    },
+    {
+      "from": "SELFTEST",
+      "to": "TEST_ORACLE",
+      "type": "EXACT_FAILURE_ORACLE"
+    },
+    {
+      "from": "PACKAGE_MANIFEST",
+      "to": "ENTRYPOINT",
+      "type": "MEMBER_IDENTITY"
+    },
+    {
+      "from": "PACKAGE_MANIFEST",
+      "to": "QUALIFICATION_PROFILE",
+      "type": "MEMBER_IDENTITY"
+    },
+    {
+      "from": "PACKAGE_MANIFEST",
+      "to": "FACTORY_PROFILE",
+      "type": "MEMBER_IDENTITY"
+    },
+    {
+      "from": "PACKAGE_MANIFEST",
+      "to": "TOOL_REGISTRY",
+      "type": "MEMBER_IDENTITY"
+    },
+    {
+      "from": "FACTORY_PROFILE",
+      "to": "QUALIFICATION_PROFILE",
+      "type": "ADMISSION_PRECONDITION"
+    },
+    {
+      "from": "TOOL_REGISTRY",
+      "to": "ENTRYPOINT",
+      "type": "ENTRYPOINT_BINDING"
+    }
+  ]
+}

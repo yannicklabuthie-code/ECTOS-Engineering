@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ECTOS_RAW_ZIP_EVIDENCE_SCHEMA_V01",
+  "title": "ECTOS Raw ZIP Evidence V01",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "schema_version",
+    "tool_id",
+    "tool_version",
+    "tool_sha256",
+    "runtime_identity",
+    "input_path",
+    "parse_status",
+    "failure_count",
+    "failures",
+    "archive",
+    "entries",
+    "coverage",
+    "currentness",
+    "evidence_content_identity_sha256",
+    "timestamp_utc"
+  ],
+  "properties": {
+    "schema_id": {"const": "ECTOS_RAW_ZIP_EVIDENCE_V01"},
+    "schema_version": {"const": "1.0.0"},
+    "tool_id": {"const": "ECTOS_RAW_ZIP_EVIDENCE_PARSER"},
+    "tool_version": {"type": "string"},
+    "tool_sha256": {"type": "string", "pattern": "^[A-F0-9]{64}$"},
+    "runtime_identity": {"type": "object"},
+    "input_path": {"type": "string"},
+    "input_size": {"type": ["string", "null"], "pattern": "^[0-9]+$"},
+    "input_sha256": {"type": ["string", "null"], "pattern": "^[A-F0-9]{64}$"},
+    "parse_status": {"enum": ["PASS", "FAIL"]},
+    "failure_count": {"type": "integer", "minimum": 0},
+    "failures": {"type": "array"},
+    "archive": {"type": ["object", "null"]},
+    "entries": {"type": "array"},
+    "coverage": {"type": "object"},
+    "currentness": {"type": "object"},
+    "evidence_content_identity_sha256": {"type": ["string", "null"], "pattern": "^[A-F0-9]{64}$"},
+    "timestamp_utc": {"type": "string"}
+  },
+  "definitions": {
+    "parsed_value": {
+      "type": "object",
+      "required": ["type", "required", "nullable", "source_offset", "source_length", "raw_value", "normalized_value", "proof_state"],
+      "properties": {
+        "type": {"type": "string"},
+        "required": {"type": "boolean"},
+        "nullable": {"type": "boolean"},
+        "source_offset": {"type": ["string", "null"]},
+        "source_length": {"type": ["string", "null"]},
+        "raw_value": {"type": ["string", "null"]},
+        "normalized_value": {},
+        "proof_state": {"enum": ["PHYSICALLY_PARSED", "DERIVED_VERIFIED", "NOT_PRESENT_BY_CONTRACT", "NOT_PROVEN"]}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

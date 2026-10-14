@@ -1,0 +1,15 @@
+{
+  "manifest_id": "RECONSTRUCTIBILITY_MANIFEST_V01",
+  "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
+  "version": "2.0.0",
+  "fixture_identity_register": "FIXTURE_BYTE_IDENTITY_REGISTER_V01.json",
+  "expected_evidence_identity_register": "EXPECTED_EVIDENCE_IDENTITY_REGISTER_V01.json",
+  "fixture_manifests": [
+    "05_FIXTURES/POSITIVE_FIXTURE_MANIFEST_V01.json",
+    "05_FIXTURES/NEGATIVE_FIXTURE_MANIFEST_V01.json",
+    "05_FIXTURES/FALSE_PASS_FIXTURE_MANIFEST_V01.json",
+    "05_FIXTURES/REGRESSION_FIXTURE_MANIFEST_V01.json"
+  ],
+  "source_identity_rule": "path+NUL+raw_bytes+NUL sorted",
+  "qualification_required_for_expected_evidence_identities": true
+}

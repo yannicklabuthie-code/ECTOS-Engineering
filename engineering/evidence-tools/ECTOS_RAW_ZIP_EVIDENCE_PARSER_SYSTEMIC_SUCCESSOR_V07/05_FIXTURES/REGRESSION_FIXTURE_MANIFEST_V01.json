@@ -1,0 +1,14 @@
+{
+  "count": 1,
+  "family": "REGRESSION",
+  "fixtures": [
+    {
+      "expected_result": "FRAMEWORK_READY",
+      "file": "REGRESSION_FRAMEWORK_V01.json",
+      "fixture_id": "REGRESSION_FRAMEWORK_V01",
+      "sha256": "35E4BFD13A33A5CB21481184BFB0F8426E6622CB263A0019A514754A125ABA90",
+      "size_bytes": 235
+    }
+  ],
+  "manifest_id": "ECTOS_RAW_ZIP_REGRESSION_FIXTURE_MANIFEST_V01"
+}

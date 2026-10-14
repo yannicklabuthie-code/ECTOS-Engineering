@@ -1,0 +1,231 @@
+{
+  "count": 28,
+  "family": "NEGATIVE",
+  "fixtures": [
+    {
+      "expected_failure_id": "RZP_INVALID_SIGNATURE",
+      "expected_result": "FAIL",
+      "file": "N01_BAD_SIGNATURE.zip",
+      "fixture_id": "N01_BAD_SIGNATURE",
+      "sha256": "9699E65CA2C9A95FA152DE46A34AC9B2B09633EF6734235BBCE92ABB60057621",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_TRUNCATED_LOCAL_HEADER",
+      "expected_result": "FAIL",
+      "file": "N02_TRUNCATED_LOCAL_HEADER.zip",
+      "fixture_id": "N02_TRUNCATED_LOCAL_HEADER",
+      "sha256": "B1E0ACCD91B3360C360A15AE15029C1750FB895D01C979043CFCDBF23934071C",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_TRUNCATED_CENTRAL_HEADER",
+      "expected_result": "FAIL",
+      "file": "N03_TRUNCATED_CENTRAL_HEADER.zip",
+      "fixture_id": "N03_TRUNCATED_CENTRAL_HEADER",
+      "sha256": "C0B1916308C99FF4E151B4524606EA90683CA8AFF1423A519CDF197297FC96FF",
+      "size_bytes": 36
+    },
+    {
+      "expected_failure_id": "RZP_TRUNCATED_EOCD",
+      "expected_result": "FAIL",
+      "file": "N04_TRUNCATED_EOCD.zip",
+      "fixture_id": "N04_TRUNCATED_EOCD",
+      "sha256": "6034C8C636D498F2687A93507503B75469E66691C7A936C71D63D993370DF62D",
+      "size_bytes": 12
+    },
+    {
+      "expected_failure_id": "RZP_INVALID_EOCD",
+      "expected_result": "FAIL",
+      "file": "N05_BAD_EOCD.zip",
+      "fixture_id": "N05_BAD_EOCD",
+      "sha256": "545080E77C5D29ED860A4F0CB3CFBA397FA4DD7410802CBDD5666D8EE957BCF2",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_OFFSET_OUT_OF_RANGE",
+      "expected_result": "FAIL",
+      "file": "N06_BAD_OFFSET.zip",
+      "fixture_id": "N06_BAD_OFFSET",
+      "sha256": "CEFD154B1A29F192BC6599A7793E6CBB636589E4D5E0A10944C4B34F2B1CDEB5",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_SIZE_OUT_OF_RANGE",
+      "expected_result": "FAIL",
+      "file": "N07_BAD_LENGTH.zip",
+      "fixture_id": "N07_BAD_LENGTH",
+      "sha256": "72088EB01C04E67327675A8F4F5BEA834BFA8B42B6B1478F18A710DC5288D623",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_INTEGER_OVERFLOW",
+      "expected_result": "FAIL",
+      "file": "N08_INTEGER_BOUNDARY_OVERFLOW.zip",
+      "fixture_id": "N08_INTEGER_BOUNDARY_OVERFLOW",
+      "sha256": "67C16147B5906A5B50FE99124DCF241EE6EA772EA17AA8F4DCCAD08622955867",
+      "size_bytes": 243
+    },
+    {
+      "expected_failure_id": "RZP_OVERLAPPING_RECORDS",
+      "expected_result": "FAIL",
+      "file": "N09_OVERLAP.zip",
+      "fixture_id": "N09_OVERLAP",
+      "sha256": "E6F47BE54BECBA5DFC0514CC6D640977DE7D0E197BA9DF8F875131939ABB4412",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_DUPLICATE_RECORD",
+      "expected_result": "FAIL",
+      "file": "N10_DUPLICATE_RECORD.zip",
+      "fixture_id": "N10_DUPLICATE_RECORD",
+      "sha256": "8197BC26D9C1A8CB762E3720427ED4056080805AEF7B67A1ADCA3DD0EBD53CE1",
+      "size_bytes": 160
+    },
+    {
+      "expected_failure_id": "RZP_LOCAL_CENTRAL_NAME_MISMATCH",
+      "expected_result": "FAIL",
+      "file": "N11_CENTRAL_LOCAL_NAME_MISMATCH.zip",
+      "fixture_id": "N11_CENTRAL_LOCAL_NAME_MISMATCH",
+      "sha256": "5851ED8FEEB5821EE498CC7A091016810ED7C719B98A34ACB7AD0866E3A2B155",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_LOCAL_CENTRAL_METHOD_MISMATCH",
+      "expected_result": "FAIL",
+      "file": "N12_CENTRAL_LOCAL_METHOD_MISMATCH.zip",
+      "fixture_id": "N12_CENTRAL_LOCAL_METHOD_MISMATCH",
+      "sha256": "162B9EC6002DF3A2F31BC4EE5EB83D125B9CC06D87374788FC273BAEDB590EA9",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_LOCAL_CENTRAL_FLAG_MISMATCH",
+      "expected_result": "FAIL",
+      "file": "N13_CENTRAL_LOCAL_FLAG_MISMATCH.zip",
+      "fixture_id": "N13_CENTRAL_LOCAL_FLAG_MISMATCH",
+      "sha256": "C40633509EE21EAA7891020B6B7EDA8B0495DEB5953368FC4CAF48C7F4D410CA",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_CRC_CONTRACT_MISMATCH",
+      "expected_result": "FAIL",
+      "file": "N14_CRC_MISMATCH.zip",
+      "fixture_id": "N14_CRC_MISMATCH",
+      "sha256": "5215ADD56DA510D62D9BF1E6B3C61C44DFAE86EAB64E17A2754A442C69FB40E2",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_SIZE_CONTRACT_MISMATCH",
+      "expected_result": "FAIL",
+      "file": "N15_SIZE_MISMATCH.zip",
+      "fixture_id": "N15_SIZE_MISMATCH",
+      "sha256": "9C8162EB0B2EA7EADE9538F3505ED889C516F9E7DF7730F8FC2171AC930138E4",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_MALFORMED_EXTRA_FIELD",
+      "expected_result": "FAIL",
+      "file": "N16_CORRUPT_EXTRA_FIELD.zip",
+      "fixture_id": "N16_CORRUPT_EXTRA_FIELD",
+      "sha256": "24E9D413887C04F043CD5E999D49C9A414AF6A9F554DC0D4F6F53B00252AD7B5",
+      "size_bytes": 113
+    },
+    {
+      "expected_failure_id": "RZP_INVALID_ZIP64",
+      "expected_result": "FAIL",
+      "file": "N17_BAD_ZIP64.zip",
+      "fixture_id": "N17_BAD_ZIP64",
+      "sha256": "1357C3AE7BF8CC36374BC3C9E09D088E30A7541C643761B3973FD3E13B474560",
+      "size_bytes": 243
+    },
+    {
+      "expected_failure_id": "RZP_UNEXPECTED_ZIP64",
+      "expected_result": "FAIL",
+      "file": "N18_UNEXPECTED_ZIP64.zip",
+      "fixture_id": "N18_UNEXPECTED_ZIP64",
+      "sha256": "45E7CB8B6B943CE50E4FE73B1DDEFC3CCD8426A49C7EC6D8884AE8B94FF1E2D3",
+      "size_bytes": 243
+    },
+    {
+      "expected_failure_id": "RZP_MALFORMED_DATA_DESCRIPTOR",
+      "expected_result": "FAIL",
+      "file": "N19_MALFORMED_DESCRIPTOR.zip",
+      "fixture_id": "N19_MALFORMED_DESCRIPTOR",
+      "sha256": "5C3DFBFC1C1B87F52F80582D892A5E1C670935798A3C5AD076661CBB177AB507",
+      "size_bytes": 143
+    },
+    {
+      "expected_failure_id": "RZP_UNCLASSIFIED_TRAILING_BYTES",
+      "expected_result": "FAIL",
+      "file": "N20_TRAILING_GARBAGE.zip",
+      "fixture_id": "N20_TRAILING_GARBAGE",
+      "sha256": "F3A4A364F9AA02C82C32FB61D0BE27E2643C56BD01CEDC2C285D94FF2E2CE0F1",
+      "size_bytes": 118
+    },
+    {
+      "expected_failure_id": "RZP_UNSUPPORTED_STRUCTURE",
+      "expected_result": "FAIL",
+      "file": "N21_UNSUPPORTED_STRUCTURE.zip",
+      "fixture_id": "N21_UNSUPPORTED_STRUCTURE",
+      "sha256": "175B37B7E2C274B9FEDE1C2C450C018DA6399EC94EFAD3335A02CB82060328CA",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_ENCODING_ERROR",
+      "expected_result": "FAIL",
+      "file": "N22_BAD_ENCODING.zip",
+      "fixture_id": "N22_BAD_ENCODING",
+      "sha256": "C723309EC5C4EFC45AC90B949D815F7F62A3482726D9973925710A2DB3A0873B",
+      "size_bytes": 109
+    },
+    {
+      "expected_failure_id": "RZP_MULTI_DISK_UNSUPPORTED",
+      "expected_result": "FAIL",
+      "file": "N23_MULTI_DISK.zip",
+      "fixture_id": "N23_MULTI_DISK",
+      "sha256": "9D0AD2E352E84654C3E2BFCF4FF05693D563D99B1741D3B95A1D138BDEA88A4C",
+      "size_bytes": 111
+    },
+    {
+      "expected_failure_id": "RZP_AMBIGUOUS_STRUCTURE",
+      "expected_result": "FAIL",
+      "file": "N24_AMBIGUOUS_STRUCTURE.zip",
+      "fixture_id": "N24_AMBIGUOUS_STRUCTURE",
+      "sha256": "4B2C20CB0BE035A456BFA019FB624E84E1EA523F165D722B777B0F47A4B760F1",
+      "size_bytes": 133
+    },
+    {
+      "expected_failure_id": "RZP_INPUT_NOT_FOUND",
+      "expected_result": "FAIL",
+      "file": "N25_INPUT_MISSING.json",
+      "fixture_id": "N25_INPUT_MISSING",
+      "sha256": "1F5C425EBBF4DDCAFC67C3EA5CB2A47B3F87242A950CB3FD0E1C8B508B0EE61F",
+      "size_bytes": 103
+    },
+    {
+      "expected_failure_id": "RZP_INPUT_READ_ERROR",
+      "expected_result": "FAIL",
+      "file": "N26_INPUT_READ_FAILURE.json",
+      "fixture_id": "N26_INPUT_READ_FAILURE",
+      "sha256": "BA21DB3CC11ED14406C97CA9DA31C342F6D5E67D00C092DE086BD22B81EE9D4D",
+      "size_bytes": 109
+    },
+    {
+      "expected_failure_id": "RZP_INPUT_CHANGED_DURING_PARSE",
+      "expected_result": "FAIL",
+      "file": "N27_INPUT_CHANGED_DURING_PARSE.json",
+      "fixture_id": "N27_INPUT_CHANGED_DURING_PARSE",
+      "sha256": "1DA30C025DE295FAA0489CC375E56E27566BF9AE71F8292B5B68292CB93ABFA7",
+      "size_bytes": 127
+    },
+    {
+      "expected_failure_id": "RZP_EVIDENCE_EMISSION_ERROR",
+      "expected_result": "FAIL",
+      "file": "N28_EVIDENCE_OUTPUT_FAILURE.json",
+      "fixture_id": "N28_EVIDENCE_OUTPUT_FAILURE",
+      "sha256": "778AC8E3AE925B3A1F2BBD6B548B8BAB02C88DAFA1F682D98FDBEFE2987E0B97",
+      "size_bytes": 121
+    }
+  ],
+  "manifest_id": "ECTOS_RAW_ZIP_NEGATIVE_FIXTURE_MANIFEST_V01"
+}

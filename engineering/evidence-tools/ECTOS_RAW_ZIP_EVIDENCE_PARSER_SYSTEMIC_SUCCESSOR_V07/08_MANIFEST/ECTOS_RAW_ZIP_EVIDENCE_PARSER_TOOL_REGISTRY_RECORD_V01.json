@@ -1,0 +1,17 @@
+{
+  "record_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_TOOL_REGISTRY_RECORD_V01",
+  "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
+  "tool_version": "2.0.0",
+  "package_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_V02",
+  "tool_class": "EVIDENCE_VALIDATION_TOOL",
+  "entrypoint": "01_TOOL/Invoke-ECTOSRawZipEvidenceParser.ps1",
+  "target_os": "WINDOWS",
+  "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+  "currentness_state": "IMPLEMENTED_NOT_QUALIFIED",
+  "producer_self_qualification": false,
+  "qualification_required_before_admission": true,
+  "registration_state": "PROPOSED_NOT_ADMITTED",
+  "ua01_consumer_binding": "ELIGIBLE_ONLY_AFTER_INDEPENDENT_QUALIFICATION_PASS",
+  "generic_tool": true,
+  "v02_product_mutation_required": false
+}

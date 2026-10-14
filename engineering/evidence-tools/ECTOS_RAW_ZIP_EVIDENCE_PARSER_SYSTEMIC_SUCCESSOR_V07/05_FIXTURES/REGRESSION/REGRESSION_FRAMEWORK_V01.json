@@ -1,0 +1,1 @@
+{"current_regression_case_count":0,"framework_id":"ECTOS_RAW_ZIP_REGRESSION_FRAMEWORK_V01","rule":"Every future parser defect requires a minimal reproducer, expected failure ID, positive neighbor fixture, and immutable byte identity."}
