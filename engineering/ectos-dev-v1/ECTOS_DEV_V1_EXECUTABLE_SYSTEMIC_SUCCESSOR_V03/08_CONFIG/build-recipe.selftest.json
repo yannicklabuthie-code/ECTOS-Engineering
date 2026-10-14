@@ -6,9 +6,18 @@
   "package_id": "ECTOS_DEV_SELFTEST_PRODUCT_V02",
   "package_version": "2.0.0",
   "source_files": [
-    {"path":"main.ps1","sha256":"50B5B843DB6C14533CE83D86C10F2E951C1170093967038D271833621CF1C97B"},
-    {"path":"ectos-package-manifest.json","sha256":"E924793CAF065CB0F4AB270C0AAC371756EAE15298A870880F90F3C652D6793D"},
-    {"path":"ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json","sha256":"4EF44AE83467A445352EDCA41EF4DE6B8C1AB2A21669DFA311326C4C0E2D8303"}
+    {
+      "path": "main.ps1",
+      "sha256": "50B5B843DB6C14533CE83D86C10F2E951C1170093967038D271833621CF1C97B"
+    },
+    {
+      "path": "ectos-package-manifest.json",
+      "sha256": "E924793CAF065CB0F4AB270C0AAC371756EAE15298A870880F90F3C652D6793D"
+    },
+    {
+      "path": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V01.json",
+      "sha256": "05230CAEC8DB359A97851537CCAE7A2648A4EFF2E89E358B6B7BFA0202A45E88"
+    }
   ],
   "toolchain_identity": {
     "target_os": "WINDOWS",
@@ -19,10 +28,22 @@
     "ruleset_sha256": "2FD86D22587B2E694FC62C3B734DED1A7430831BFC0E34B5C176327012907525"
   },
   "dependency_lock": [
-    {"path":"profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json","git_blob":"f24e13f8945e1a93b190ab9237070096995d45a4"},
-    {"path":"governance/ECTOS_PACKAGE_DEPENDENCY_GRAPH_CONTRACT_V01.md","git_blob":"545a9420ec2750927734fcf9a3059aa74779b2ec"},
-    {"path":"ECTOS_AGENT_CODE_RULE_SOURCE_POINTER.json","git_blob":"febab347c5e985e0e84e563e866d1a855f650f2e"},
-    {"path":"ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json","git_blob":"a1df18e284aba58290247fbbd64ed1d6458ca96f"}
+    {
+      "path": "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+      "git_blob": "f24e13f8945e1a93b190ab9237070096995d45a4"
+    },
+    {
+      "path": "governance/ECTOS_PACKAGE_DEPENDENCY_GRAPH_CONTRACT_V01.md",
+      "git_blob": "545a9420ec2750927734fcf9a3059aa74779b2ec"
+    },
+    {
+      "path": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER.json",
+      "git_blob": "febab347c5e985e0e84e563e866d1a855f650f2e"
+    },
+    {
+      "path": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json",
+      "git_blob": "a1df18e284aba58290247fbbd64ed1d6458ca96f"
+    }
   ],
   "workspace_definition": {
     "source_scope": "DECLARED_SOURCE_ROOT_ONLY",
@@ -38,14 +59,18 @@
     "archive_metadata_policy": "GOVERNED_FIXED"
   },
   "expected_output_contract": [
-    "package_directory","package_zip","build_output_manifest","source_verification_receipt",
-    "package_member_set_sha256","package_sha256"
+    "package_directory",
+    "package_zip",
+    "build_output_manifest",
+    "source_verification_receipt",
+    "package_member_set_sha256",
+    "package_sha256"
   ],
   "replay_definition": {
     "same_authorized_source_bytes_same_materialization_profile_same_package_identity": true,
     "required_replay_count": 2
   },
   "rollback_profile": "DELETE_EPHEMERAL_BUILD_WORKSPACE",
-  "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V02/08_CONFIG/qualification-profile.selftest.json",
+  "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03/08_CONFIG/qualification-profile.selftest.json",
   "materialization_owner": "BUILD_PACKAGE_FACTORY"
 }
