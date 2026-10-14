@@ -1,8 +1,8 @@
 {
   "schema_id": "ECTOS_PACKAGE_DEPENDENCY_GRAPH_V02",
   "package": {
-    "package_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04",
-    "version": "V04",
+    "package_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V05",
+    "version": "V05",
     "environment": "ECTOS_DEV",
     "source_repository": "yannicklabuthie-code/ECTOS-Engineering",
     "source_binding_mode": "DETACHED_FINAL_CLOSURE_RECEIPT"
@@ -292,7 +292,7 @@
     "post_freeze_physical_pass_must_be_external": true
   },
   "change_impact": {
-    "predecessor_package_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03",
+    "predecessor_package_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04",
     "changed_dependency_ids": [
       "LDEV01",
       "LDEV02",
@@ -313,6 +313,6 @@
       "PESTER",
       "PHASE01"
     ],
-    "analysis_status": "COMPLETE_FOR_SYSTEMIC_SUCCESSOR_V04"
+    "analysis_status": "COMPLETE_FOR_SYSTEMIC_SUCCESSOR_V05"
   }
 }

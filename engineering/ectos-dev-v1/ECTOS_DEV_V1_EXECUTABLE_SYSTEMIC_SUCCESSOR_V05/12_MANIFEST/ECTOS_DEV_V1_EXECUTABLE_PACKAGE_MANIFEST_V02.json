@@ -1,10 +1,10 @@
 {
   "schema_id": "ECTOS_DEV_V1_EXECUTABLE_PACKAGE_MANIFEST_V02",
-  "package_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04",
-  "version": "V04",
+  "package_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V05",
+  "version": "V05",
   "source_repository": "yannicklabuthie-code/ECTOS-Engineering",
   "source_binding_mode": "DETACHED_FINAL_CLOSURE_RECEIPT",
-  "predecessor_commit": "c9bb5442b1c5b08aeb3f2c1afd9d8bbab604816b",
+  "predecessor_commit": "31a752115c4c2ee4489c78dcacc8fe6e96a0be62",
   "final_member_count": 22,
   "identity_algorithm": "ECTOS_DETERMINISTIC_PACKAGE_IDENTITY_V02",
   "entrypoint": "09_ENTRYPOINT/Invoke-ECTOSDevV1.ps1",
@@ -38,5 +38,5 @@
     "12_MANIFEST/ECTOS_DEV_V1_EXECUTABLE_PACKAGE_MANIFEST_V02.json",
     "12_MANIFEST/ECTOS_PACKAGE_DEPENDENCY_GRAPH_V02.json"
   ],
-  "rollback": "DELETE_V04_WORKTREE_OR_RESET_V04_BRANCH_TO_PREDECESSOR_ONLY_WITH_MAIN_AUTHORITY"
+  "rollback": "DELETE_V05_WORKTREE_OR_RESET_V05_BRANCH_TO_PREDECESSOR_ONLY_WITH_MAIN_AUTHORITY"
 }

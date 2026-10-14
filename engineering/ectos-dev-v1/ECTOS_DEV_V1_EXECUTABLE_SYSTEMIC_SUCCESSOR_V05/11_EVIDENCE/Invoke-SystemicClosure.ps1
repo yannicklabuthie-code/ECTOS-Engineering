@@ -22,6 +22,14 @@ function Write-ECTOSClosureJson {
     param([Parameter(Mandatory=$true)][string]$Path,[Parameter(Mandatory=$true)]$Value)
     [IO.File]::WriteAllText($Path,($Value|ConvertTo-Json -Depth 50),(New-Object Text.UTF8Encoding($false)))
 }
+function Invoke-ECTOSClosureGitText {
+    param([Parameter(Mandatory=$true)][string]$RepositoryRoot,[Parameter(Mandatory=$true)][string[]]$Arguments)
+    $output = & git -C $RepositoryRoot @Arguments 2>$null
+    $exitCode = $LASTEXITCODE
+    if ($exitCode -ne 0) { throw ('CLOSURE_GIT_COMMAND_FAIL:' + ($Arguments -join ' ')) }
+    return ([string]($output -join "`n")).Trim()
+}
+
 function Get-ECTOSPackageIdentity {
     param([Parameter(Mandatory=$true)][string]$Root,[Parameter(Mandatory=$true)][string]$Repo)
     $rootPath=(Resolve-Path -LiteralPath $Root).Path.TrimEnd('\');$repoPath=(Resolve-Path -LiteralPath $Repo).Path.TrimEnd('\')
@@ -33,16 +41,16 @@ function Get-ECTOSPackageIdentity {
     foreach($file in $files){
         $relative=$file.FullName.Substring($rootPath.Length).TrimStart('\').Replace('\','/');$repoRelative=$relativeRoot+'/'+$relative
         $rawSha=(Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash
-        $workspaceObject=(& git -C $repoPath hash-object --no-filters $file.FullName 2>$null|Select-Object -First 1)
-        $committedObject=(& git -C $repoPath rev-parse ('HEAD:'+$repoRelative) 2>$null|Select-Object -First 1)
-        if($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace([string]$committedObject)){throw ('CLOSURE_MEMBER_NOT_COMMITTED:'+$relative)}
+        $workspaceObject=Invoke-ECTOSClosureGitText -RepositoryRoot $repoPath -Arguments @('hash-object','--no-filters',$file.FullName)
+        $committedObject=Invoke-ECTOSClosureGitText -RepositoryRoot $repoPath -Arguments @('rev-parse',('HEAD:'+$repoRelative))
+        if([string]::IsNullOrWhiteSpace([string]$committedObject)){throw ('CLOSURE_MEMBER_NOT_COMMITTED:'+$relative)}
         if(([string]$workspaceObject).Trim() -ne ([string]$committedObject).Trim()){$rawFailures+=$relative}
         $records += [pscustomobject][ordered]@{path=$relative;size_bytes=$file.Length;sha256=$rawSha;git_blob=([string]$committedObject).Trim()}
     }
     if($rawFailures.Count -ne 0){throw ('CLOSURE_RAW_BYTE_IDENTITY_FAIL:'+($rawFailures -join ','))}
     $builder=New-Object Text.StringBuilder
     foreach($record in @($records|Sort-Object path)){[void]$builder.Append([string]$record.path);[void]$builder.Append([char]0);[void]$builder.Append([string]$record.size_bytes);[void]$builder.Append([char]0);[void]$builder.Append([string]$record.sha256);[void]$builder.Append([char]10)}
-    $memberSetSha=Get-ECTOSClosureSha256Text -Text $builder.ToString();$tree=(& git -C $repoPath rev-parse ('HEAD:'+$relativeRoot) 2>$null|Select-Object -First 1).Trim();$commit=(& git -C $repoPath rev-parse HEAD 2>$null|Select-Object -First 1).Trim()
+    $memberSetSha=Get-ECTOSClosureSha256Text -Text $builder.ToString();$tree=Invoke-ECTOSClosureGitText -RepositoryRoot $repoPath -Arguments @('rev-parse',('HEAD:'+$relativeRoot));$commit=Invoke-ECTOSClosureGitText -RepositoryRoot $repoPath -Arguments @('rev-parse','HEAD')
     $packageIdentity=Get-ECTOSClosureSha256Text -Text ('ECTOS_PACKAGE_CONTENT_IDENTITY_V02'+[char]0+$memberSetSha+[char]0+$tree)
     [pscustomobject][ordered]@{relative_root=$relativeRoot;source_commit=$commit;final_subtree_tree_id=$tree;final_member_count=22;final_member_set=@($records|Sort-Object path);final_member_set_sha256=$memberSetSha;package_content_identity=$packageIdentity;post_freeze_package_mutation_count=0}
 }
@@ -52,7 +60,7 @@ $manifestPath=Join-Path $PackageRoot '12_MANIFEST\ECTOS_DEV_V1_EXECUTABLE_PACKAG
 if(-not(Test-Path -LiteralPath $manifestPath -PathType Leaf)){throw 'CLOSURE_MANIFEST_MISSING'};if(-not(Test-Path -LiteralPath $graphPath -PathType Leaf)){throw 'CLOSURE_GRAPH_MISSING'}
 $manifestSha=(Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash;$graphSha=(Get-FileHash -LiteralPath $graphPath -Algorithm SHA256).Hash
 $manifest=Get-Content -LiteralPath $manifestPath -Raw|ConvertFrom-Json;$graph=Get-Content -LiteralPath $graphPath -Raw|ConvertFrom-Json
-if([string]$manifest.schema_id -ne 'ECTOS_DEV_V1_EXECUTABLE_PACKAGE_MANIFEST_V02' -or [string]$manifest.package_id -ne 'ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04'){throw 'CLOSURE_MANIFEST_SCHEMA_FAIL'}
+if([string]$manifest.schema_id -ne 'ECTOS_DEV_V1_EXECUTABLE_PACKAGE_MANIFEST_V02' -or [string]$manifest.package_id -ne 'ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V05'){throw 'CLOSURE_MANIFEST_SCHEMA_FAIL'}
 if([int]$manifest.final_member_count -ne 22 -or @($manifest.members).Count -ne 22){throw 'CLOSURE_MANIFEST_MEMBER_COUNT_FAIL'}
 $actualPaths=@($identity.final_member_set|ForEach-Object{[string]$_.path}|Sort-Object);$declaredPaths=@($manifest.members|ForEach-Object{[string]$_}|Sort-Object)
 if(($actualPaths -join [char]0) -ne ($declaredPaths -join [char]0)){throw 'CLOSURE_MANIFEST_MEMBER_SET_FAIL'}
@@ -88,7 +96,7 @@ if([string]$trust.status -ne 'PASS_PHYSICALLY_PROVEN' -or [string]$trust.package
 if([string]$selftest.schema_id -ne 'ECTOS_PRODUCER_PREQUALIFICATION_SELFTEST_RECEIPT_V02' -or [string]$selftest.status -ne 'PASS_PHYSICALLY_PROVEN' -or [string]$selftest.package_content_identity -ne [string]$identity.package_content_identity){throw 'FINAL_CLOSURE_SELFTEST_BINDING_FAIL'}
 $graphReceipt=[pscustomobject][ordered]@{schema_id='ECTOS_DETACHED_GRAPH_CLOSURE_RECEIPT_V02';status='PASS_PHYSICALLY_PROVEN';run_id=[Guid]::NewGuid().ToString('N');closure_timestamp_utc=[DateTime]::UtcNow.ToString('o');package_content_identity=[string]$identity.package_content_identity;final_member_set_sha256=[string]$identity.final_member_set_sha256;dependency_graph_sha256=$graphSha;graph_declaration_state=[string]$graph.closure.declaration_state;graph_closure_state='PASS_PHYSICALLY_PROVEN';post_freeze_package_mutation_count=0}
 $graphReceiptPath=Join-Path $OutputRoot 'ECTOS_DETACHED_GRAPH_CLOSURE_RECEIPT_V02.json';Write-ECTOSClosureJson -Path $graphReceiptPath -Value $graphReceipt
-$finalReceipt=[pscustomobject][ordered]@{schema_id='ECTOS_DEV_FINAL_CLOSURE_RECEIPT_V02';status='PASS_PHYSICALLY_PROVEN';run_id=[Guid]::NewGuid().ToString('N');closure_timestamp_utc=[DateTime]::UtcNow.ToString('o');successor_id='ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04';package_content_identity=[string]$identity.package_content_identity;final_member_set_sha256=[string]$identity.final_member_set_sha256;final_member_count=22;all_member_sha256=@($identity.final_member_set);manifest_sha256=$manifestSha;dependency_graph_sha256=$graphSha;final_subtree_tree_id=[string]$identity.final_subtree_tree_id;source_commit=[string]$identity.source_commit;identity_algorithm_version='ECTOS_DETERMINISTIC_PACKAGE_IDENTITY_V02';trust_base_receipt_sha256=(Get-FileHash -LiteralPath $TrustBaseReceiptPath -Algorithm SHA256).Hash;selftest_receipt_sha256=(Get-FileHash -LiteralPath $SelftestReceiptPath -Algorithm SHA256).Hash;graph_closure_receipt_sha256=(Get-FileHash -LiteralPath $graphReceiptPath -Algorithm SHA256).Hash;post_freeze_package_mutation_count=0;host_identity=[Environment]::MachineName;runtime_identity=($PSVersionTable.PSEdition+'|'+$PSVersionTable.PSVersion.ToString())}
+$finalReceipt=[pscustomobject][ordered]@{schema_id='ECTOS_DEV_FINAL_CLOSURE_RECEIPT_V02';status='PASS_PHYSICALLY_PROVEN';run_id=[Guid]::NewGuid().ToString('N');closure_timestamp_utc=[DateTime]::UtcNow.ToString('o');successor_id='ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V05';package_content_identity=[string]$identity.package_content_identity;final_member_set_sha256=[string]$identity.final_member_set_sha256;final_member_count=22;all_member_sha256=@($identity.final_member_set);manifest_sha256=$manifestSha;dependency_graph_sha256=$graphSha;final_subtree_tree_id=[string]$identity.final_subtree_tree_id;source_commit=[string]$identity.source_commit;identity_algorithm_version='ECTOS_DETERMINISTIC_PACKAGE_IDENTITY_V02';trust_base_receipt_sha256=(Get-FileHash -LiteralPath $TrustBaseReceiptPath -Algorithm SHA256).Hash;selftest_receipt_sha256=(Get-FileHash -LiteralPath $SelftestReceiptPath -Algorithm SHA256).Hash;graph_closure_receipt_sha256=(Get-FileHash -LiteralPath $graphReceiptPath -Algorithm SHA256).Hash;post_freeze_package_mutation_count=0;host_identity=[Environment]::MachineName;runtime_identity=($PSVersionTable.PSEdition+'|'+$PSVersionTable.PSVersion.ToString())}
 $finalReceiptPath=Join-Path $OutputRoot 'ECTOS_DEV_FINAL_CLOSURE_RECEIPT_V02.json';Write-ECTOSClosureJson -Path $finalReceiptPath -Value $finalReceipt
 [pscustomobject][ordered]@{status='PASS_PHYSICALLY_PROVEN';mode='FinalClosure';final_receipt_path=$finalReceiptPath;final_receipt_sha256=(Get-FileHash -LiteralPath $finalReceiptPath -Algorithm SHA256).Hash;graph_receipt_path=$graphReceiptPath;graph_receipt_sha256=(Get-FileHash -LiteralPath $graphReceiptPath -Algorithm SHA256).Hash;package_content_identity=[string]$identity.package_content_identity}|ConvertTo-Json -Compress
 exit 0

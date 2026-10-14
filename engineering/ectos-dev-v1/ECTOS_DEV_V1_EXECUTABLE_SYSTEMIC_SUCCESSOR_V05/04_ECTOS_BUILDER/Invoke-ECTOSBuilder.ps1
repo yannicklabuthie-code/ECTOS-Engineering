@@ -7,6 +7,14 @@ function Get-ECTOSBuilderSha256 {
     finally { $sha.Dispose() }
 }
 
+function Invoke-ECTOSBuilderGitText {
+    param([Parameter(Mandatory=$true)][string]$RepositoryRoot,[Parameter(Mandatory=$true)][string[]]$Arguments)
+    $output = & git -C $RepositoryRoot @Arguments 2>$null
+    $exitCode = $LASTEXITCODE
+    if ($exitCode -ne 0) { throw ('BUILDER_GIT_COMMAND_FAIL:' + ($Arguments -join ' ')) }
+    return ([string]($output -join "`n")).Trim()
+}
+
 function Invoke-ECTOSBuilder {
     [CmdletBinding()]
     param(
@@ -33,8 +41,8 @@ function Invoke-ECTOSBuilder {
 
     foreach ($dependency in @($LDEV03.dependency_lock)) {
         $path = [string]$dependency.path
-        $actualBlob = (& git -C $RepositoryRoot rev-parse ('HEAD:' + $path.Replace('\','/')) 2>$null | Select-Object -First 1)
-        if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace([string]$actualBlob)) { throw ('BUILDER_DEPENDENCY_NOT_RESOLVED:' + $path) }
+        $actualBlob = Invoke-ECTOSBuilderGitText -RepositoryRoot $RepositoryRoot -Arguments @('rev-parse',('HEAD:' + $path.Replace('\','/')))
+        if ([string]::IsNullOrWhiteSpace([string]$actualBlob)) { throw ('BUILDER_DEPENDENCY_NOT_RESOLVED:' + $path) }
         if ([string]$actualBlob.Trim() -ne [string]$dependency.git_blob) { throw ('BUILDER_DEPENDENCY_LOCK_MISMATCH:' + $path) }
     }
 

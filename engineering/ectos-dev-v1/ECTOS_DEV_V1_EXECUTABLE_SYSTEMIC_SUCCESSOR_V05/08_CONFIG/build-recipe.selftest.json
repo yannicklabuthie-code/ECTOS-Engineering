@@ -71,6 +71,6 @@
     "required_replay_count": 2
   },
   "rollback_profile": "DELETE_EPHEMERAL_BUILD_WORKSPACE",
-  "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04/08_CONFIG/qualification-profile.selftest.json",
+  "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V05/08_CONFIG/qualification-profile.selftest.json",
   "materialization_owner": "BUILD_PACKAGE_FACTORY"
 }
