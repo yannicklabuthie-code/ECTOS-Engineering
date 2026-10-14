@@ -96,7 +96,7 @@ catch {
         schema_id = 'ECTOS_RAW_ZIP_EVIDENCE_V01'
         schema_version = '1.0.0'
         tool_id = 'ECTOS_RAW_ZIP_EVIDENCE_PARSER'
-        tool_version = '2.0.0'
+        tool_version = '2.1.0'
         tool_sha256 = $toolSha256
         runtime_identity = $runtimeIdentity
         input_path = $InputPath

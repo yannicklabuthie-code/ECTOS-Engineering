@@ -1,7 +1,7 @@
 {
   "graph_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_DEPENDENCY_GRAPH_V01",
   "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "closure_state": "PRODUCER_SELFTEST_CLOSED_PENDING_INDEPENDENT_QUALIFICATION",
   "runtime_external_dependencies": [
     "WINDOWS",
@@ -32,7 +32,8 @@
     "TEST_ORACLE",
     "PACKAGE_MANIFEST",
     "FACTORY_PROFILE",
-    "TOOL_REGISTRY"
+    "TOOL_REGISTRY",
+    "CHECKOUT_BYTE_POLICY"
   ],
   "edges": [
     {
@@ -154,6 +155,11 @@
       "from": "TOOL_REGISTRY",
       "to": "ENTRYPOINT",
       "type": "ENTRYPOINT_BINDING"
+    },
+    {
+      "from": "PACKAGE_MANIFEST",
+      "to": "CHECKOUT_BYTE_POLICY",
+      "type": "EXACT_BYTE_CHECKOUT_POLICY"
     }
   ]
 }

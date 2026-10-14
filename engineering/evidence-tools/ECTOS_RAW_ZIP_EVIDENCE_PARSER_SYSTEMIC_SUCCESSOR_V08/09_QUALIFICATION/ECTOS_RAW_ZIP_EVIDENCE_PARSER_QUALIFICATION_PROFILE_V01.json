@@ -1,12 +1,15 @@
 {
   "profile_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_QUALIFICATION_PROFILE_V01",
   "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
-  "tool_version": "2.0.0",
+  "tool_version": "2.1.0",
   "target_os": "WINDOWS",
   "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
   "producer_selftest_is_qualification": false,
   "producer_may_self_qualify": false,
   "required_gates": [
+    "PACKAGE_CONTENT_IDENTITY_BINDING",
+    "FRESH_CHECKOUT_EXACT_BYTE_IDENTITY",
+    "CANONICAL_COMMIT_BINDING",
     "PACKAGE_IDENTITY",
     "MANIFEST_CLOSURE",
     "DEPENDENCY_GRAPH_CLOSURE",
@@ -31,5 +34,9 @@
     "known_blocking_defect_count": 0,
     "unknown_evidence_count": 0
   },
-  "receipt_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_INDEPENDENT_QUALIFICATION_RECEIPT_V01"
+  "receipt_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_INDEPENDENT_QUALIFICATION_RECEIPT_V01",
+  "required_external_bindings": [
+    "candidate_commit_sha256_identity",
+    "engineering_package_content_identity_sha256"
+  ]
 }

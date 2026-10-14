@@ -1,8 +1,8 @@
 {
   "profile_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_FACTORY_PROFILE_V01",
   "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
-  "tool_version": "2.0.0",
-  "package_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_V02",
+  "tool_version": "2.1.0",
+  "package_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_V03",
   "factory_role": "GENERIC_TOOL_PACKAGE_CONSUMER",
   "admission_precondition": "INDEPENDENT_QUALIFICATION_PASS",
   "required_package_binding": [

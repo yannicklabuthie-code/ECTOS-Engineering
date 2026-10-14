@@ -1,7 +1,7 @@
 # ECTOS Raw ZIP Binary Contract V01
 
 TOOL_ID=ECTOS_RAW_ZIP_EVIDENCE_PARSER
-VERSION=2.0.0
+VERSION=2.1.0
 
 ## Binary invariants
 - ZIP multibyte integers are little-endian.

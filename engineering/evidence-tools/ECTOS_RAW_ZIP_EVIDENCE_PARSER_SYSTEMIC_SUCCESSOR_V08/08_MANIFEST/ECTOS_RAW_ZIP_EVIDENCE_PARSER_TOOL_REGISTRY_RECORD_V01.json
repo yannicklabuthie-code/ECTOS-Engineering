@@ -1,8 +1,8 @@
 {
   "record_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_TOOL_REGISTRY_RECORD_V01",
   "tool_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER",
-  "tool_version": "2.0.0",
-  "package_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_V02",
+  "tool_version": "2.1.0",
+  "package_id": "ECTOS_RAW_ZIP_EVIDENCE_PARSER_V03",
   "tool_class": "EVIDENCE_VALIDATION_TOOL",
   "entrypoint": "01_TOOL/Invoke-ECTOSRawZipEvidenceParser.ps1",
   "target_os": "WINDOWS",
