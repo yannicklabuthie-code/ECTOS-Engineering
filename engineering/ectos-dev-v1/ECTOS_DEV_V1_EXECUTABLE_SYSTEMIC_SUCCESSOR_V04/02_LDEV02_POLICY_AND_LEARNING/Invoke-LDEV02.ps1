@@ -7,34 +7,63 @@ function Get-ECTOSPolicySha256 {
     finally { $sha.Dispose() }
 }
 
-function ConvertTo-ECTOSCanonicalValue {
-    param($Value)
-    if ($null -eq $Value) { return $null }
-    if ($Value -is [string] -or $Value -is [ValueType]) { return $Value }
+function ConvertTo-ECTOSCanonicalJsonString {
+    param([Parameter(Mandatory=$true)][AllowEmptyString()][string]$Value)
+    $builder = New-Object Text.StringBuilder
+    [void]$builder.Append('"')
+    foreach ($character in $Value.ToCharArray()) {
+        $code = [int][char]$character
+        switch ($code) {
+            8  { [void]$builder.Append('\b'); continue }
+            9  { [void]$builder.Append('\t'); continue }
+            10 { [void]$builder.Append('\n'); continue }
+            12 { [void]$builder.Append('\f'); continue }
+            13 { [void]$builder.Append('\r'); continue }
+            34 { [void]$builder.Append('\"'); continue }
+            92 { [void]$builder.Append('\\'); continue }
+        }
+        if ($code -lt 32) { [void]$builder.Append(('\u' + $code.ToString('x4'))); continue }
+        [void]$builder.Append($character)
+    }
+    [void]$builder.Append('"')
+    return $builder.ToString()
+}
+
+function ConvertTo-ECTOSCanonicalJson {
+    param([AllowNull()]$Value)
+    if ($null -eq $Value) { return 'null' }
+    if ($Value -is [bool]) { if ($Value) { return 'true' }; return 'false' }
+    if ($Value -is [string]) { return ConvertTo-ECTOSCanonicalJsonString -Value $Value }
+    if ($Value -is [byte] -or $Value -is [sbyte] -or $Value -is [int16] -or $Value -is [uint16] -or $Value -is [int32] -or $Value -is [uint32] -or $Value -is [int64] -or $Value -is [uint64] -or $Value -is [single] -or $Value -is [double] -or $Value -is [decimal]) {
+        return [Convert]::ToString($Value,[Globalization.CultureInfo]::InvariantCulture)
+    }
     if ($Value -is [System.Collections.IDictionary]) {
-        $ordered = [ordered]@{}
-        foreach ($key in @($Value.Keys | Sort-Object)) { $ordered[$key] = ConvertTo-ECTOSCanonicalValue -Value $Value[$key] }
-        return $ordered
+        [string[]]$names = @($Value.Keys | ForEach-Object { [string]$_ })
+        [Array]::Sort($names,[StringComparer]::Ordinal)
+        $parts = @()
+        foreach ($name in $names) { $parts += ((ConvertTo-ECTOSCanonicalJsonString -Value $name) + ':' + (ConvertTo-ECTOSCanonicalJson -Value $Value[$name])) }
+        return '{' + [string]::Join(',',$parts) + '}'
     }
-    if ($Value -is [System.Collections.IEnumerable] -and -not ($Value -is [pscustomobject])) {
-        $items = @()
-        foreach ($item in $Value) { $items += ,(ConvertTo-ECTOSCanonicalValue -Value $item) }
-        return $items
+    if ($Value -is [pscustomobject]) {
+        [string[]]$names = @($Value.PSObject.Properties.Name)
+        [Array]::Sort($names,[StringComparer]::Ordinal)
+        $parts = @()
+        foreach ($name in $names) { $parts += ((ConvertTo-ECTOSCanonicalJsonString -Value $name) + ':' + (ConvertTo-ECTOSCanonicalJson -Value $Value.$name)) }
+        return '{' + [string]::Join(',',$parts) + '}'
     }
-    $object = [ordered]@{}
-    foreach ($property in @($Value.PSObject.Properties.Name | Sort-Object)) {
-        $object[$property] = ConvertTo-ECTOSCanonicalValue -Value $Value.$property
+    if ($Value -is [System.Collections.IEnumerable]) {
+        $parts = @()
+        foreach ($item in $Value) { $parts += (ConvertTo-ECTOSCanonicalJson -Value $item) }
+        return '[' + [string]::Join(',',$parts) + ']'
     }
-    return $object
+    throw ('LDEV02_CANONICAL_JSON_TYPE_UNSUPPORTED:' + $Value.GetType().FullName)
 }
 
 function Get-ECTOSCanonicalProfileSha256 {
     param([Parameter(Mandatory=$true)]$Profile)
     $root = [ordered]@{}
-    foreach ($property in @($Profile.PSObject.Properties.Name | Where-Object { $_ -ne 'profile_sha256' } | Sort-Object)) {
-        $root[$property] = ConvertTo-ECTOSCanonicalValue -Value $Profile.$property
-    }
-    $json = $root | ConvertTo-Json -Depth 32 -Compress
+    foreach ($property in @($Profile.PSObject.Properties.Name | Where-Object { $_ -ne 'profile_sha256' })) { $root[$property] = $Profile.$property }
+    $json = ConvertTo-ECTOSCanonicalJson -Value $root
     return Get-ECTOSPolicySha256 -Bytes ([Text.Encoding]::UTF8.GetBytes($json))
 }
 
@@ -56,7 +85,7 @@ function Get-ECTOSRulesetSha256 {
 
 function Invoke-ECTOSLDEV02 {
     [CmdletBinding()]
-    param([Parameter(Mandatory=$true)]$Target,[Parameter(Mandatory=$true)][string]$RepositoryRoot)
+    param([Parameter(Mandatory=$true)][AllowNull()]$Target,[Parameter(Mandatory=$true)][string]$RepositoryRoot)
     if ($null -eq $Target) { throw 'LDEV02_TARGET_NULL' }
     foreach ($name in @('target_id','language','target_runtime','rule_profile_path')) {
         if (-not ($Target.PSObject.Properties.Name -contains $name)) { throw ('LDEV02_TARGET_FIELD_MISSING:' + $name) }

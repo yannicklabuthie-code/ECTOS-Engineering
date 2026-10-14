@@ -43,6 +43,12 @@ Describe 'ECTOS DEV V02 identity chain controls' -Tag TrustBase {
     It 'LDEV01 rejects null target with exact oracle' {
         Assert-ECTOSOracleMatch (Invoke-ECTOSFailureOracle -ExpectedFailureId 'LDEV01_TARGET_NULL' -Action {Invoke-ECTOSLDEV01 -Target $null -RepositoryRoot $repoRoot})
     }
+    It 'LDEV02 rejects null target with exact oracle' {
+        Assert-ECTOSOracleMatch (Invoke-ECTOSFailureOracle -ExpectedFailureId 'LDEV02_TARGET_NULL' -Action {Invoke-ECTOSLDEV02 -Target $null -RepositoryRoot $repoRoot})
+    }
+    It 'LDEV03 rejects null target with exact oracle' {
+        Assert-ECTOSOracleMatch (Invoke-ECTOSFailureOracle -ExpectedFailureId 'LDEV03_TARGET_NULL' -Action {Invoke-ECTOSLDEV03 -Target $null -RepositoryRoot $repoRoot})
+    }
     It 'LDEV01 rejects empty target id with exact oracle' {
         $bad=[pscustomobject]@{target_id='';source_repository_identity=$target.source_repository_identity;source_ref_policy='CURRENT_HEAD';predecessor_commit=$target.predecessor_commit;source_root=$target.source_root;source_members=$target.source_members;dependencies=$target.dependencies}
         Assert-ECTOSOracleMatch (Invoke-ECTOSFailureOracle -ExpectedFailureId 'LDEV01_TARGET_ID_EMPTY' -Action {Invoke-ECTOSLDEV01 -Target $bad -RepositoryRoot $repoRoot})

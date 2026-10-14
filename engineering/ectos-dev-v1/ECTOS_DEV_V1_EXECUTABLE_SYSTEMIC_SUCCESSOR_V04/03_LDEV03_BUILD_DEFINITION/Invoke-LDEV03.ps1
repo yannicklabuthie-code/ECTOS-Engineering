@@ -9,7 +9,7 @@ function Get-ECTOSBuildDefinitionSha256 {
 
 function Invoke-ECTOSLDEV03 {
     [CmdletBinding()]
-    param([Parameter(Mandatory=$true)]$Target,[Parameter(Mandatory=$true)][string]$RepositoryRoot)
+    param([Parameter(Mandatory=$true)][AllowNull()]$Target,[Parameter(Mandatory=$true)][string]$RepositoryRoot)
     if ($null -eq $Target) { throw 'LDEV03_TARGET_NULL' }
     if (-not ($Target.PSObject.Properties.Name -contains 'build_recipe_path')) { throw 'LDEV03_BUILD_RECIPE_PATH_MISSING' }
     $relative = [string]$Target.build_recipe_path

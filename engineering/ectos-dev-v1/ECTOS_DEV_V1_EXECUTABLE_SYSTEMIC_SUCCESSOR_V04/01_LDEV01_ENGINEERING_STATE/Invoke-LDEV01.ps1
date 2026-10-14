@@ -16,7 +16,7 @@ function Invoke-ECTOSGitText {
 
 function Invoke-ECTOSLDEV01 {
     [CmdletBinding()]
-    param([Parameter(Mandatory=$true)]$Target,[Parameter(Mandatory=$true)][string]$RepositoryRoot)
+    param([Parameter(Mandatory=$true)][AllowNull()]$Target,[Parameter(Mandatory=$true)][string]$RepositoryRoot)
     if ($null -eq $Target) { throw 'LDEV01_TARGET_NULL' }
     foreach ($name in @('target_id','source_repository_identity','source_ref_policy','predecessor_commit','source_root','source_members','dependencies')) {
         if (-not ($Target.PSObject.Properties.Name -contains $name)) { throw ('LDEV01_TARGET_FIELD_MISSING:' + $name) }

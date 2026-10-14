@@ -2,8 +2,8 @@
   "bundle_id": "ECTOS_DEV_SYSTEMIC_CONTRACT_BUNDLE_V02",
   "status": "CURRENT_CANDIDATE",
   "mission_id": "ECTOS-DEV-V1-EXECUTABLE-ASSEMBLY-01",
-  "successor_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03",
-  "predecessor_head": "3791408a81fa70f34cd8630fe279070f84ca0f75",
+  "successor_id": "ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04",
+  "predecessor_head": "c9bb5442b1c5b08aeb3f2c1afd9d8bbab604816b",
   "defect_count": 12,
   "authority_separation": {
     "producer_is_qualifier": false,

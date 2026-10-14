@@ -7,8 +7,8 @@
       "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
       "source_repository_identity": "yannicklabuthie-code/ECTOS-Engineering",
       "source_ref_policy": "CURRENT_HEAD",
-      "predecessor_commit": "3791408a81fa70f34cd8630fe279070f84ca0f75",
-      "source_root": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03/10_SELFTEST/fixture_source",
+      "predecessor_commit": "c9bb5442b1c5b08aeb3f2c1afd9d8bbab604816b",
+      "source_root": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04/10_SELFTEST/fixture_source",
       "source_members": [
         "main.ps1",
         "ectos-package-manifest.json",
@@ -24,9 +24,9 @@
           "git_blob": "545a9420ec2750927734fcf9a3059aa74779b2ec"
         }
       ],
-      "rule_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03/08_CONFIG/rule-profile.selftest.json",
-      "build_recipe_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03/08_CONFIG/build-recipe.selftest.json",
-      "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V03/08_CONFIG/qualification-profile.selftest.json"
+      "rule_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04/08_CONFIG/rule-profile.selftest.json",
+      "build_recipe_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04/08_CONFIG/build-recipe.selftest.json",
+      "qualification_profile_path": "engineering/ectos-dev-v1/ECTOS_DEV_V1_EXECUTABLE_SYSTEMIC_SUCCESSOR_V04/08_CONFIG/qualification-profile.selftest.json"
     }
   ]
 }
