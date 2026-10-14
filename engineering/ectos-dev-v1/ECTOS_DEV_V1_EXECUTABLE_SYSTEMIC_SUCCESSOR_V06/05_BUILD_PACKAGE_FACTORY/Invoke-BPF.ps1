@@ -54,7 +54,7 @@ function Invoke-ECTOSBPF {
     if(-not(Test-Path -LiteralPath $WorkspaceRoot -PathType Container)){New-Item -ItemType Directory -Path $WorkspaceRoot -Force|Out-Null}
     $packageRoot=Join-Path $WorkspaceRoot ([string]$BuildPlan.package_id)
     $zipPath=$packageRoot+'.zip'
-    if(Test-Path -LiteralPath $packageRoot -or Test-Path -LiteralPath $zipPath){throw 'BPF_OUTPUT_ALREADY_EXISTS'}
+    if((Test-Path -LiteralPath $packageRoot) -or (Test-Path -LiteralPath $zipPath)){throw 'BPF_OUTPUT_ALREADY_EXISTS'}
     New-Item -ItemType Directory -Path $packageRoot -Force|Out-Null
     $sourceRootFull=[IO.Path]::GetFullPath((Join-Path $RepositoryRoot ([string]$BuildPlan.source_root))).TrimEnd('\')
     $sourceRootBoundary=$sourceRootFull+'\'
