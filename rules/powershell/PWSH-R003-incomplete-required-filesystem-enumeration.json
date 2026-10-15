@@ -1,0 +1,15 @@
+{
+  "rule_id":"PWSH-R003","rule_version":"V01","language":"POWERSHELL","target_os":"LINUX","target_runtime_family":"POWERSHELL_CORE_PWSH",
+  "defect_family_id":"INCOMPLETE_FILESYSTEM_ENUMERATION","title":"Incomplete required filesystem enumeration","description":"Enumeration or path resolution failures must not silently omit required state.",
+  "bad_pattern":{"type":"runtime_condition","pattern":"path_enumeration_or_resolution_error"},
+  "approved_pattern":{"guidance":"Use explicit error handling, record unreachable paths, and fail closed when complete traversal is required."},
+  "detection_method":{"type":"runtime_condition","pattern":"path_enumeration_or_resolution_error"},
+  "severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R003",
+  "negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R003",
+  "static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required":true,
+  "source_classification":{"source_rule_id":"PS51-R004","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},
+  "currentness":"CURRENT","status":"ACTIVE"
+}

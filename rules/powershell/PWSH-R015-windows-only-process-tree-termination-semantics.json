@@ -1,0 +1,16 @@
+{
+  "rule_id": "PWSH-R015",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "PWSH_WINDOWS_ONLY_PROCESS_TREE_TERMINATION",
+  "title": "Windows-only process-tree termination semantics",
+  "description": "Linux/PWSH process control must not rely on Windows-only tree termination semantics.",
+  "bad_pattern": {"type":"process_contract","pattern":"windows_only_process_tree_termination"},
+  "approved_pattern": {"guidance":"Use a governed Linux termination domain and prove that no descendants survive timeout termination."},
+  "detection_method": {"type":"process_contract","pattern":"windows_only_process_tree_termination"},
+  "severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R015","negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R015","static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json","native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json","regression_required":true,
+  "source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"currentness":"CURRENT","status":"ACTIVE"
+}

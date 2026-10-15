@@ -1,0 +1,11 @@
+{
+  "validator_id": "ECTOS_PWSH_LINUX_REGRESSION_CONTRACT_V01",
+  "type": "REGRESSION_CONTRACT",
+  "positive_fixture_catalog": "fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json",
+  "negative_fixture_catalog": "fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json",
+  "rule_coverage_required": true,
+  "negative_must_fail_at_declared_rule": true,
+  "positive_must_not_trigger_declared_rule": true,
+  "required_cardinalities": ["null","empty","single","many"],
+  "ps51_r002_expected_successor_state": "NOT_APPLICABLE_CONFIRMED"
+}

@@ -1,0 +1,34 @@
+{
+  "rule_id": "PWSH-R005",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "AUTOMATIC_VARIABLE_COLLISION",
+  "title": "Automatic/reserved variable collision",
+  "description": "User-defined parameters or variables can collide with PowerShell automatic/reserved variables.",
+  "bad_pattern": {
+    "type": "ast_contract",
+    "pattern": "declared_symbol_matches_automatic_variable"
+  },
+  "approved_pattern": {
+    "guidance": "Rename user-defined symbols to non-reserved names and validate with AST/static analysis."
+  },
+  "detection_method": {
+    "type": "ast_contract",
+    "pattern": "declared_symbol_matches_automatic_variable"
+  },
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R005",
+  "negative_fixture": "fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R005",
+  "static_detector": "validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "source_classification": {
+    "source_rule_id": "PS51-R006",
+    "classification": "GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

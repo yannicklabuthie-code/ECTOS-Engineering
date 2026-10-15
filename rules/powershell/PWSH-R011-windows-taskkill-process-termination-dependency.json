@@ -1,0 +1,6 @@
+{
+  "rule_id":"PWSH-R011","rule_version":"V01","language":"POWERSHELL","target_os":"LINUX","target_runtime_family":"POWERSHELL_CORE_PWSH","defect_family_id":"PWSH_REQUIRES_TASKKILL_EXE","title":"Windows taskkill process termination dependency","description":"Linux/PWSH product code must not require taskkill.exe for process-tree termination.",
+  "bad_pattern":{"type":"token_or_dependency_contract","pattern":"taskkill.exe"},"approved_pattern":{"guidance":"Use a governed Linux process-group/cgroup/container termination mechanism and prove descendant termination."},"detection_method":{"type":"token_or_dependency_contract","pattern":"taskkill.exe"},"severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R011","negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R011","static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json","native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json","regression_required":true,
+  "source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"currentness":"CURRENT","status":"ACTIVE"
+}

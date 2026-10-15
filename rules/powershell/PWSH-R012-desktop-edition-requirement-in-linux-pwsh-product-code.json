@@ -1,0 +1,6 @@
+{
+  "rule_id":"PWSH-R012","rule_version":"V01","language":"POWERSHELL","target_os":"LINUX","target_runtime_family":"POWERSHELL_CORE_PWSH","defect_family_id":"PWSH_REQUIRES_PSEDITION_DESKTOP","title":"Desktop edition requirement in Linux/PWSH product code","description":"Linux/PWSH product code must not require PSEdition=Desktop.",
+  "bad_pattern":{"type":"semantic_contract","pattern":"PSEdition=Desktop"},"approved_pattern":{"guidance":"Require PSEdition=Core for the Linux/PWSH route where an edition check is needed."},"detection_method":{"type":"semantic_contract","pattern":"PSEdition=Desktop"},"severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R012","negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R012","static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json","native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json","regression_required":true,
+  "source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"currentness":"CURRENT","status":"ACTIVE"
+}

@@ -1,0 +1,6 @@
+{
+  "rule_id":"PWSH-R013","rule_version":"V01","language":"POWERSHELL","target_os":"LINUX","target_runtime_family":"POWERSHELL_CORE_PWSH","defect_family_id":"PWSH_REQUIRES_EXACT_WINDOWS_POWERSHELL_5_1","title":"Exact Windows PowerShell 5.1 requirement in Linux/PWSH product code","description":"Linux/PWSH product code must not require Windows PowerShell 5.1.",
+  "bad_pattern":{"type":"semantic_contract","pattern":"WINDOWS_POWERSHELL_DESKTOP_5_1"},"approved_pattern":{"guidance":"Bind the product to the Linux/PWSH runtime family and separately pin the exact product/container pwsh version."},"detection_method":{"type":"semantic_contract","pattern":"WINDOWS_POWERSHELL_DESKTOP_5_1"},"severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R013","negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R013","static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json","native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json","regression_required":true,
+  "source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"currentness":"CURRENT","status":"ACTIVE"
+}

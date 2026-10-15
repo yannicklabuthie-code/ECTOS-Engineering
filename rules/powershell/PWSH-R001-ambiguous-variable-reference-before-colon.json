@@ -1,0 +1,23 @@
+{
+  "rule_id": "PWSH-R001",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "AMBIGUOUS_VARIABLE_REFERENCE_BEFORE_COLON",
+  "title": "Ambiguous variable reference before colon",
+  "description": "Interpolated variable immediately followed by a colon can be parsed ambiguously; use explicit bracing.",
+  "bad_pattern": {"type": "regex", "pattern": "\\$[A-Za-z_][A-Za-z0-9_]*:"},
+  "approved_pattern": {"guidance": "Use braced variable interpolation before a literal colon, e.g. \"${Name}:\"."},
+  "detection_method": {"type": "regex", "pattern": "\\$[A-Za-z_][A-Za-z0-9_]*:"},
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R001",
+  "negative_fixture": "fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R001",
+  "static_detector": "validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "source_classification": {"source_rule_id": "PS51-R001", "classification": "GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

@@ -1,0 +1,11 @@
+{
+  "validator_id": "ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01",
+  "type": "STATIC_CONTRACT",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "input": ["product_source_roots","current_ruleset","forbidden_patterns"],
+  "scope_exclusions": ["rules/","fixtures/","validators/"],
+  "requirements": ["parse_source_text_without_execution","evaluate_rule_detection_methods","emit_rule_id_and_evidence_location","fail_build_when_active_build_blocking_rule_matches","detect_windows_only_runtime_dependencies","detect_cross_runtime_proof_substitution"],
+  "psscriptanalyzer": {"required": true, "compatibility_rules": "WHERE_APPLICABLE"},
+  "self_reference_isolation_required": true
+}

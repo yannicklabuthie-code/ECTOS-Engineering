@@ -1,0 +1,12 @@
+{
+  "manifest_id": "ECTOS_POWERSHELL_PWSH_LINUX_RULESET_MANIFEST_V01",
+  "ruleset_id": "ECTOS_POWERSHELL_PWSH_LINUX_RULESET",
+  "ruleset_version": "V01",
+  "ruleset_sha256": "63814F85FF64A979EDF7E15C990FEB296B6DF6BBD2495AC05506029468379F34",
+  "rule_count": 16,
+  "active_rule_ids": ["PWSH-R001","PWSH-R002","PWSH-R003","PWSH-R004","PWSH-R005","PWSH-R006","PWSH-R007","PWSH-R008","PWSH-R009","PWSH-R010","PWSH-R011","PWSH-R012","PWSH-R013","PWSH-R014","PWSH-R015","PWSH-R016"],
+  "profile": "profiles/powershell/ECTOS_POWERSHELL_PWSH_LINUX_PROFILE.json",
+  "agent_consumption_contract": "profiles/powershell/ECTOS_AGENT_PWSH_LINUX_CONSUMPTION_CONTRACT_V01.json",
+  "currentness_state": "CURRENT",
+  "ps51_r002_successor_state": "NOT_APPLICABLE_CONFIRMED"
+}

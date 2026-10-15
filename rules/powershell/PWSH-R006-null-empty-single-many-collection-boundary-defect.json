@@ -1,0 +1,34 @@
+{
+  "rule_id": "PWSH-R006",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "COLLECTION_CARDINALITY_BOUNDARY",
+  "title": "Null/empty/single/many collection boundary defect",
+  "description": "Pipeline or parameter binding can collapse, unwrap, or mis-handle collection cardinalities.",
+  "bad_pattern": {
+    "type": "contract_test",
+    "pattern": "null_empty_single_many_collection_binding"
+  },
+  "approved_pattern": {
+    "guidance": "Normalize collection inputs explicitly and test null, empty, single, and many cardinalities."
+  },
+  "detection_method": {
+    "type": "contract_test",
+    "pattern": "null_empty_single_many_collection_binding"
+  },
+  "severity": "HIGH",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R006",
+  "negative_fixture": "fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R006",
+  "static_detector": "validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "source_classification": {
+    "source_rule_id": "PS51-R007",
+    "classification": "GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

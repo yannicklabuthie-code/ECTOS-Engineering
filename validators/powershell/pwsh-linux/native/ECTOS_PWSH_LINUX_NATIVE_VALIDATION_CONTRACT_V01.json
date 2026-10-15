@@ -1,0 +1,7 @@
+{
+  "validator_id":"ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01","type":"NATIVE_RUNTIME_CONTRACT","required_environment":{"os":"LINUX","psedition":"Core","executable":"pwsh","exact_version":"PRODUCT_OR_CONTAINER_MUST_PIN_SEPARATELY"},
+  "required_checks":["native_linux_pwsh_parse_zero_errors","entrypoint_startability_where_applicable","capture_exit_code_stdout_stderr","capture_timeout_and_working_directory","capture_created_output_identity_where_applicable","capture_exact_byte_handoff_where_applicable","capture_exact_pwsh_version","capture_runtime_or_image_identity"],
+  "process_control":{"windows_taskkill_allowed":false,"full_descendant_termination_required_on_timeout":true},
+  "substitution":{"windows_powershell_5_1_proof":false,"pwsh_proof_as_ps51_proof":false},
+  "classification_evidence":{"ps51_r002_successor_state":"NOT_APPLICABLE_CONFIRMED","observed_runtime":{"container_image":"mcr.microsoft.com/powershell:7.4-ubuntu-22.04","ps_version":"7.4.6","psedition":"Core","platform":"Unix","inline_if_result":"A"},"version_pin_effect":"NONE"}
+}

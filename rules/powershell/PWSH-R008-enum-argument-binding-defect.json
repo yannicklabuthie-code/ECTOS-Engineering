@@ -1,0 +1,34 @@
+{
+  "rule_id": "PWSH-R008",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "ENUM_ARGUMENT_BINDING",
+  "title": "Enum argument binding defect",
+  "description": "Enum-valued arguments can fail or coerce unexpectedly when the interface contract is ambiguous.",
+  "bad_pattern": {
+    "type": "contract_test",
+    "pattern": "enum_argument_binding"
+  },
+  "approved_pattern": {
+    "guidance": "Use explicit enum types/values and validate accepted and rejected values."
+  },
+  "detection_method": {
+    "type": "contract_test",
+    "pattern": "enum_argument_binding"
+  },
+  "severity": "MEDIUM",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R008",
+  "negative_fixture": "fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R008",
+  "static_detector": "validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "source_classification": {
+    "source_rule_id": "PS51-R009",
+    "classification": "GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

@@ -1,0 +1,23 @@
+{
+  "fixture_catalog_id": "ECTOS_PWSH_LINUX_POSITIVE_FIXTURES_V01",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "cases": [
+    {"fixture_id": "PWSH-R001-POS", "rule_id": "PWSH-R001", "expected": "PASS", "sample": "Write-Output \"${Name}:\""},
+    {"fixture_id": "PWSH-R002-POS", "rule_id": "PWSH-R002", "expected": "PASS", "sample": "param([string]$Root); if (-not $Root) { $Root = $PSScriptRoot }"},
+    {"fixture_id": "PWSH-R003-POS", "rule_id": "PWSH-R003", "expected": "PASS", "sample": "try { Get-ChildItem -LiteralPath $Root -ErrorAction Stop } catch { throw \"PATH_ENUMERATION_NOT_COMPLETE\" }"},
+    {"fixture_id": "PWSH-R004-POS", "rule_id": "PWSH-R004", "expected": "PASS", "sample": "SCAN_SCOPE=PRODUCT_SOURCE_ONLY; EXCLUDE=RULES,DETECTORS,FIXTURES"},
+    {"fixture_id": "PWSH-R005-POS", "rule_id": "PWSH-R005", "expected": "PASS", "sample": "$processIdValue = 42"},
+    {"fixture_id": "PWSH-R006-POS", "rule_id": "PWSH-R006", "expected": "PASS", "sample": "$items = @($InputItems); if ($null -eq $InputItems) { $items = @() }"},
+    {"fixture_id": "PWSH-R007-POS", "rule_id": "PWSH-R007", "expected": "PASS", "sample": "$normalized = @($GenericList)"},
+    {"fixture_id": "PWSH-R008-POS", "rule_id": "PWSH-R008", "expected": "PASS", "sample": "[MyEnum]$mode = [MyEnum]::Safe"},
+    {"fixture_id": "PWSH-R009-POS", "rule_id": "PWSH-R009", "expected": "PASS", "sample": "$escaped = [regex]::Escape($Name); $pattern = \"^${escaped}:$\""},
+    {"fixture_id": "PWSH-R010-POS", "rule_id": "PWSH-R010", "expected": "PASS", "sample": "$pwsh = (Get-Command pwsh -ErrorAction Stop).Source"},
+    {"fixture_id": "PWSH-R011-POS", "rule_id": "PWSH-R011", "expected": "PASS", "sample": "$terminationDomain = \"linux-process-group\""},
+    {"fixture_id": "PWSH-R012-POS", "rule_id": "PWSH-R012", "expected": "PASS", "sample": "if ($PSVersionTable.PSEdition -ne \"Core\") { throw \"PWSH_CORE_REQUIRED\" }"},
+    {"fixture_id": "PWSH-R013-POS", "rule_id": "PWSH-R013", "expected": "PASS", "sample": "$runtimeFamily = \"POWERSHELL_CORE_PWSH\""},
+    {"fixture_id": "PWSH-R014-POS", "rule_id": "PWSH-R014", "expected": "PASS", "sample": "$child = Join-Path $Root \"child\""},
+    {"fixture_id": "PWSH-R015-POS", "rule_id": "PWSH-R015", "expected": "PASS", "sample": "$terminationDomain = \"cgroup-or-process-group\""},
+    {"fixture_id": "PWSH-R016-POS", "rule_id": "PWSH-R016", "expected": "PASS", "sample": "$proof = [pscustomobject]@{os=\"LINUX\";psedition=\"Core\";runtime=\"PWSH\"}"}
+  ]
+}

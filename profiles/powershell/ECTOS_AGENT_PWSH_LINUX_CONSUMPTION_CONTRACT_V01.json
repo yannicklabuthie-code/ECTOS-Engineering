@@ -1,0 +1,17 @@
+{
+  "contract_id": "ECTOS_AGENT_PWSH_LINUX_RULESET_CONSUMPTION_V01",
+  "selector": {"language":"POWERSHELL","target_os":"LINUX","target_runtime_family":"POWERSHELL_CORE_PWSH","engineering_profile":"ECTOS_POWERSHELL_PWSH_LINUX_PROFILE"},
+  "retrieve": {
+    "coding_standard":"standards/powershell/pwsh-linux/POWERSHELL_PWSH_LINUX_CODING_STANDARD_V01.md",
+    "rule_set":["rules/powershell/PWSH-R001-ambiguous-variable-reference-before-colon.json","rules/powershell/PWSH-R002-unsafe-context-sensitive-default-parameter-path-initialization.json","rules/powershell/PWSH-R003-incomplete-required-filesystem-enumeration.json","rules/powershell/PWSH-R004-self-referential-static-scan-false-positive.json","rules/powershell/PWSH-R005-automatic-reserved-variable-collision.json","rules/powershell/PWSH-R006-null-empty-single-many-collection-boundary-defect.json","rules/powershell/PWSH-R007-generic-list-binding-defect.json","rules/powershell/PWSH-R008-enum-argument-binding-defect.json","rules/powershell/PWSH-R009-string-interpolation-regex-boundary-defect.json","rules/powershell/PWSH-R010-windows-powershell-executable-dependency-in-linux-pwsh-product-code.json","rules/powershell/PWSH-R011-windows-taskkill-process-termination-dependency.json","rules/powershell/PWSH-R012-desktop-edition-requirement-in-linux-pwsh-product-code.json","rules/powershell/PWSH-R013-exact-windows-powershell-5-1-requirement-in-linux-pwsh-product-code.json","rules/powershell/PWSH-R014-windows-only-production-path-semantics.json","rules/powershell/PWSH-R015-windows-only-process-tree-termination-semantics.json","rules/powershell/PWSH-R016-silent-substitution-of-ps5-1-proof-with-pwsh-proof.json"],
+    "forbidden_patterns":"standards/powershell/pwsh-linux/POWERSHELL_PWSH_LINUX_FORBIDDEN_PATTERNS_V01.json",
+    "approved_patterns":"standards/powershell/pwsh-linux/POWERSHELL_PWSH_LINUX_APPROVED_PATTERNS_V01.md",
+    "defect_catalog":"standards/powershell/pwsh-linux/POWERSHELL_PWSH_LINUX_ERROR_CATALOG_V01.json",
+    "runtime_requirements":"standards/powershell/pwsh-linux/POWERSHELL_PWSH_LINUX_RUNTIME_COMPATIBILITY_V01.md",
+    "validation_requirements":["validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json","validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json","validators/powershell/pwsh-linux/regression/ECTOS_PWSH_LINUX_REGRESSION_CONTRACT_V01.json"],
+    "regression_fixtures":["fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json","fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json"],
+    "handoff_requirements":"standards/powershell/pwsh-linux/POWERSHELL_PWSH_LINUX_CODING_STANDARD_V01.md#exact-byte-principle"
+  },
+  "pre_generation":["IDENTIFY_TARGET_OS","IDENTIFY_TARGET_RUNTIME_FAMILY","IDENTIFY_PRODUCT_EXACT_PWSH_VERSION_POLICY","LOAD_CURRENT_GOVERNED_PROFILE","VERIFY_PROFILE_SHA256","LOAD_CURRENT_RULE_SET","VERIFY_RULESET_SHA256","LOAD_FORBIDDEN_PATTERNS","LOAD_APPROVED_PATTERNS","LOAD_DEFECT_FAMILIES","VERIFY_WORKSPACE_BYTE_IDENTITY"],
+  "agent_ruleset_consumption":"MANDATORY","agent_memory_only":"INSUFFICIENT","chat_prompt_only":"INSUFFICIENT"
+}

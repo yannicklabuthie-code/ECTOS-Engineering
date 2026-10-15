@@ -1,0 +1,21 @@
+{
+  "rule_id": "PWSH-R002",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "CONTEXT_SENSITIVE_DEFAULT_PARAMETER_PATH",
+  "title": "Unsafe context-sensitive default parameter/path initialization",
+  "description": "Context-sensitive values such as $PSScriptRoot must not be relied upon in unsafe default parameter initialization constructs.",
+  "bad_pattern": {"type":"ast_contract","pattern":"parameter_default_references_PSScriptRoot"},
+  "approved_pattern": {"guidance":"Resolve context-sensitive paths inside the executable body after parameter binding."},
+  "detection_method": {"type":"ast_contract","pattern":"parameter_default_references_PSScriptRoot"},
+  "severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R002",
+  "negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R002",
+  "static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required":true,
+  "source_classification":{"source_rule_id":"PS51-R003","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},
+  "currentness":"CURRENT","status":"ACTIVE"
+}

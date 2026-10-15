@@ -1,0 +1,34 @@
+{
+  "rule_id": "PWSH-R007",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "GENERIC_LIST_BINDING",
+  "title": "Generic list binding defect",
+  "description": "Generic list values can bind differently than expected across PowerShell call boundaries.",
+  "bad_pattern": {
+    "type": "contract_test",
+    "pattern": "generic_list_binding"
+  },
+  "approved_pattern": {
+    "guidance": "Normalize to an explicitly supported collection shape at interface boundaries."
+  },
+  "detection_method": {
+    "type": "contract_test",
+    "pattern": "generic_list_binding"
+  },
+  "severity": "MEDIUM",
+  "build_blocking": true,
+  "positive_fixture": "fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R007",
+  "negative_fixture": "fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R007",
+  "static_detector": "validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json",
+  "native_runtime_check": "validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json",
+  "regression_required": true,
+  "source_classification": {
+    "source_rule_id": "PS51-R008",
+    "classification": "GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"
+  },
+  "currentness": "CURRENT",
+  "status": "ACTIVE"
+}

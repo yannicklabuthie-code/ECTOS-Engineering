@@ -1,0 +1,16 @@
+{
+  "rule_id": "PWSH-R010",
+  "rule_version": "V01",
+  "language": "POWERSHELL",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "defect_family_id": "PWSH_REQUIRES_POWERSHELL_EXE",
+  "title": "Windows PowerShell executable dependency in Linux/PWSH product code",
+  "description": "Linux/PWSH product code must not require powershell.exe unless an explicit separate Windows contract governs that path.",
+  "bad_pattern": {"type":"token_or_dependency_contract","pattern":"powershell.exe"},
+  "approved_pattern": {"guidance":"Invoke the governed PowerShell Core executable/runtime abstraction; keep Windows execution behind an explicit separate Windows contract."},
+  "detection_method": {"type":"token_or_dependency_contract","pattern":"powershell.exe"},
+  "severity":"HIGH","build_blocking":true,
+  "positive_fixture":"fixtures/powershell/pwsh-linux/positive/PWSH_LINUX_POSITIVE_FIXTURES_V01.json#PWSH-R010","negative_fixture":"fixtures/powershell/pwsh-linux/negative/PWSH_LINUX_NEGATIVE_FIXTURES_V01.json#PWSH-R010","static_detector":"validators/powershell/pwsh-linux/static/ECTOS_PWSH_LINUX_STATIC_DETECTOR_CONTRACT_V01.json","native_runtime_check":"validators/powershell/pwsh-linux/native/ECTOS_PWSH_LINUX_NATIVE_VALIDATION_CONTRACT_V01.json","regression_required":true,
+  "source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"currentness":"CURRENT","status":"ACTIVE"
+}

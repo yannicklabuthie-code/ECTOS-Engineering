@@ -1,0 +1,46 @@
+{
+  "pointer_id": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V03",
+  "status": "CURRENT",
+  "repository": "yannicklabuthie-code/ECTOS-Engineering",
+  "branch": "main",
+  "scope": "POWERSHELL_MULTI_RUNTIME_CODE_RULE_SOURCE",
+  "predecessor": "ECTOS_AGENT_CODE_RULE_SOURCE_POINTER_V02.json",
+  "predecessor_resolution": "PRESERVED_AND_STILL_ACTIVE_FOR_PS51_ROUTE",
+  "bootstrap_instruction": "AGENTS.md",
+  "agent_routing_method": "governance/code-rule-routing/ECTOS_AGENT_CODE_RULE_CONSUMPTION_AND_ROUTING_METHOD_V03.md",
+  "routes": [
+    {
+      "language": "POWERSHELL",
+      "target_os": "WINDOWS",
+      "target_runtime": "WINDOWS_POWERSHELL_DESKTOP_5_1",
+      "profile": "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.json",
+      "profile_sha_sidecar": "profiles/powershell/ECTOS_POWERSHELL_PS51_PROFILE.sha256",
+      "agent_consumption_contract": "profiles/powershell/ECTOS_AGENT_CONSUMPTION_CONTRACT_V01.json",
+      "ruleset_manifest": "profiles/powershell/ECTOS_POWERSHELL_PS51_RULESET_MANIFEST_V01.json",
+      "ruleset_sha_sidecar": "rules/powershell/RULESET_V01.sha256",
+      "workspace_identity_contract": "validators/powershell/identity/ECTOS_RULESET_WORKSPACE_IDENTITY_CONTRACT_V01.json"
+    },
+    {
+      "language": "POWERSHELL",
+      "target_os": "LINUX",
+      "target_runtime_family": "POWERSHELL_CORE_PWSH",
+      "profile": "profiles/powershell/ECTOS_POWERSHELL_PWSH_LINUX_PROFILE.json",
+      "profile_sha_sidecar": "profiles/powershell/ECTOS_POWERSHELL_PWSH_LINUX_PROFILE.sha256",
+      "agent_consumption_contract": "profiles/powershell/ECTOS_AGENT_PWSH_LINUX_CONSUMPTION_CONTRACT_V01.json",
+      "ruleset_manifest": "profiles/powershell/ECTOS_POWERSHELL_PWSH_LINUX_RULESET_MANIFEST_V01.json",
+      "ruleset_sha_sidecar": "rules/powershell/PWSH_LINUX_RULESET_V01.sha256",
+      "workspace_identity_contract": "validators/powershell/identity/ECTOS_PWSH_LINUX_RULESET_WORKSPACE_IDENTITY_CONTRACT_V01.json"
+    }
+  ],
+  "workspace_attributes": ".gitattributes",
+  "pre_generation_consumption": "MANDATORY",
+  "workspace_byte_identity_verification": "MANDATORY_BEFORE_RULE_COMPLIANCE_CLAIM",
+  "post_generation_assurance": "MANDATORY_WHERE_APPLICABLE",
+  "agent_memory_only": "INSUFFICIENT",
+  "chat_prompt_only": "INSUFFICIENT",
+  "fail_closed": "Missing or unverifiable routing, currentness, profile identity, ruleset identity, referenced rule objects, workspace-byte evidence, native-runtime evidence, or integration evidence blocks compliance claims.",
+  "future_factory_role": "CONSUMER_AND_ENFORCER",
+  "factory_is_rule_source": false,
+  "authorized_work_branch": "ectos/pwsh-linux-profile-v01",
+  "currentness_scope": "CURRENT_CANDIDATE_ON_AUTHORIZED_WORK_BRANCH; MAIN_PUBLICATION_NOT_EXECUTED"
+}

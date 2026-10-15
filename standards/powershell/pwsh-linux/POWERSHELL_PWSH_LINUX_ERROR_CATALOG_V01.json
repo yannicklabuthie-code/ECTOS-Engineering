@@ -1,0 +1,24 @@
+{
+  "catalog_id": "ECTOS_PWSH_LINUX_DEFECT_FAMILY_CATALOG",
+  "catalog_version": "V01",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "families": [
+    {"defect_family_id":"AMBIGUOUS_VARIABLE_REFERENCE_BEFORE_COLON","rule_id":"PWSH-R001","source_classification":{"source_rule_id":"PS51-R001","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"CONTEXT_SENSITIVE_DEFAULT_PARAMETER_PATH","rule_id":"PWSH-R002","source_classification":{"source_rule_id":"PS51-R003","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"INCOMPLETE_FILESYSTEM_ENUMERATION","rule_id":"PWSH-R003","source_classification":{"source_rule_id":"PS51-R004","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"SELF_REFERENTIAL_STATIC_SCAN_FALSE_POSITIVE","rule_id":"PWSH-R004","source_classification":{"source_rule_id":"PS51-R005","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"AUTOMATIC_VARIABLE_COLLISION","rule_id":"PWSH-R005","source_classification":{"source_rule_id":"PS51-R006","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"COLLECTION_CARDINALITY_BOUNDARY","rule_id":"PWSH-R006","source_classification":{"source_rule_id":"PS51-R007","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"GENERIC_LIST_BINDING","rule_id":"PWSH-R007","source_classification":{"source_rule_id":"PS51-R008","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"ENUM_ARGUMENT_BINDING","rule_id":"PWSH-R008","source_classification":{"source_rule_id":"PS51-R009","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"STRING_INTERPOLATION_REGEX_BOUNDARY","rule_id":"PWSH-R009","source_classification":{"source_rule_id":"PS51-R010","classification":"GENERIC_SEMANTIC_REQUIRING_NEW_PWSH_GOVERNANCE"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_REQUIRES_POWERSHELL_EXE","rule_id":"PWSH-R010","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_REQUIRES_TASKKILL_EXE","rule_id":"PWSH-R011","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_REQUIRES_PSEDITION_DESKTOP","rule_id":"PWSH-R012","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_REQUIRES_EXACT_WINDOWS_POWERSHELL_5_1","rule_id":"PWSH-R013","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_WINDOWS_ONLY_PRODUCTION_PATH_SEMANTICS","rule_id":"PWSH-R014","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_WINDOWS_ONLY_PROCESS_TREE_TERMINATION","rule_id":"PWSH-R015","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"},
+    {"defect_family_id":"PWSH_FALSE_PS51_PROOF_SUBSTITUTION","rule_id":"PWSH-R016","source_classification":{"source_rule_id":null,"classification":"NEW_LINUX_PWSH_DEFECT_FAMILY"},"status":"ACTIVE"}
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "fixture_catalog_id": "ECTOS_PWSH_LINUX_NEGATIVE_FIXTURES_V01",
+  "target_os": "LINUX",
+  "target_runtime_family": "POWERSHELL_CORE_PWSH",
+  "cases": [
+    {"fixture_id": "PWSH-R001-NEG", "rule_id": "PWSH-R001", "expected": "FAIL", "sample": "Write-Output \"$Name:\""},
+    {"fixture_id": "PWSH-R002-NEG", "rule_id": "PWSH-R002", "expected": "FAIL", "sample": "param([string]$Root = (Join-Path $PSScriptRoot \"data\"))"},
+    {"fixture_id": "PWSH-R003-NEG", "rule_id": "PWSH-R003", "expected": "FAIL", "sample": "Get-ChildItem -LiteralPath $Root -ErrorAction SilentlyContinue"},
+    {"fixture_id": "PWSH-R004-NEG", "rule_id": "PWSH-R004", "expected": "FAIL", "sample": "SCAN_SCOPE=REPOSITORY_ROOT"},
+    {"fixture_id": "PWSH-R005-NEG", "rule_id": "PWSH-R005", "expected": "FAIL", "sample": "$PID = 42"},
+    {"fixture_id": "PWSH-R006-NEG", "rule_id": "PWSH-R006", "expected": "FAIL", "sample": "$first = $InputItems | Select-Object -First 1"},
+    {"fixture_id": "PWSH-R007-NEG", "rule_id": "PWSH-R007", "expected": "FAIL", "sample": "Invoke-Target -Items $GenericList"},
+    {"fixture_id": "PWSH-R008-NEG", "rule_id": "PWSH-R008", "expected": "FAIL", "sample": "$mode = \"Safe\""},
+    {"fixture_id": "PWSH-R009-NEG", "rule_id": "PWSH-R009", "expected": "FAIL", "sample": "$pattern = \"^$Name:$\""},
+    {"fixture_id": "PWSH-R010-NEG", "rule_id": "PWSH-R010", "expected": "FAIL", "sample": "$engine = \"powershell.exe\""},
+    {"fixture_id": "PWSH-R011-NEG", "rule_id": "PWSH-R011", "expected": "FAIL", "sample": "& taskkill.exe /PID $pid /T /F"},
+    {"fixture_id": "PWSH-R012-NEG", "rule_id": "PWSH-R012", "expected": "FAIL", "sample": "if ($PSVersionTable.PSEdition -ne \"Desktop\") { exit 1 }"},
+    {"fixture_id": "PWSH-R013-NEG", "rule_id": "PWSH-R013", "expected": "FAIL", "sample": "$requiredRuntime = \"WINDOWS_POWERSHELL_DESKTOP_5_1\""},
+    {"fixture_id": "PWSH-R014-NEG", "rule_id": "PWSH-R014", "expected": "FAIL", "sample": "$child = $Root + \"\\child\""},
+    {"fixture_id": "PWSH-R015-NEG", "rule_id": "PWSH-R015", "expected": "FAIL", "sample": "$termination = \"WINDOWS_JOB_OR_TASKKILL_ONLY\""},
+    {"fixture_id": "PWSH-R016-NEG", "rule_id": "PWSH-R016", "expected": "FAIL", "sample": "$proof = \"PS51_PASS\"; $runtime = \"pwsh\""}
+  ]
+}
