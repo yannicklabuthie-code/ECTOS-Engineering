@@ -1,0 +1,20 @@
+{
+  "source_set_id": "ECTOS_CLOUD_MATERIALIZATION_RULE_PROFILE_SOURCE_SET_V01",
+  "mission_id": "ECTOS-CLOUD-MATERIALIZATION-RULE-PROFILE-01",
+  "source_base_commit": "123bceed990db83bffc881360a2c7c9ab74441a8",
+  "successor_branch": "ectos/cloud-materialization-profile-v01",
+  "bundle_path": "governance/cloud-materialization/ECTOS_CLOUD_MATERIALIZATION_RULE_PROFILE_V01_SOURCE_BUNDLE.zip",
+  "bundle_size_bytes": 16174,
+  "bundle_sha256": "FE3890857CCD29B84ECE2419C0EDC4343B1E983A15EA772CA507032A6897B5F2",
+  "logical_member_count": 16,
+  "profile_id": "ECTOS_CLOUD_MATERIALIZATION_PROFILE",
+  "profile_sha256": "241C662A863133FE64F20AE5F0A7E97F514994B6012EECD7E4CEB9CF780C3A67",
+  "ruleset_id": "ECTOS_CLOUD_MATERIALIZATION_RULESET_V01",
+  "ruleset_sha256": "BB6AA7097E8E48EE2158ABB7F00E250ADB291A631552FB5050B0D371A0D03244",
+  "ruleset_member_count": 20,
+  "integration_state": "CANDIDATE_NON_MAIN_NOT_CURRENT",
+  "execution": "NO",
+  "qualification": "NO",
+  "cloud_build": "NO",
+  "cloud_deployment": "NO"
+}
