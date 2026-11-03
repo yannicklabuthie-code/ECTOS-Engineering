@@ -1,0 +1,29 @@
+name: OMNIGATE QC native V80 systemic engineering
+on:
+  pull_request:
+    paths:
+      - 'governance/omnigate/native_qc_v80/**'
+      - '.github/workflows/omnigate-qc-v80-native-engineering.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-windows-ps51:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned schema dependency
+        run: python -m pip install 'jsonschema==4.26.0' 'cryptography==46.0.3'
+      - name: Verify all V80 source bytes and exactly two corrections
+        run: python governance/omnigate/native_qc_v80/verify_manifest.py
+      - name: Native Windows PowerShell 5.1 parsing and fail-closed selftest
+        shell: pwsh
+        run: |
+          $ps51 = Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0\powershell.exe'
+          $test = Join-Path $env:GITHUB_WORKSPACE 'governance\omnigate\native_qc_v80\tests\Verify-V80-Native.ps1'
+          $work = Join-Path $env:RUNNER_TEMP 'qc-v80-boundary'
+          & $ps51 -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $test -WorkRoot $work
+          if ($LASTEXITCODE -ne 0) { throw 'V80_NATIVE_WINDOWS_TEST_FAILED' }

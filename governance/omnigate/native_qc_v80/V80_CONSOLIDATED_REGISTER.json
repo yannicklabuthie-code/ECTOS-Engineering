@@ -1,0 +1,27 @@
+{
+  "schema": "ECTOS_V80_ENGINEERING_CORRECTION_REGISTER",
+  "source_defects": 14,
+  "source_defects_independently_closed": 0,
+  "candidate_scope": "QC01_TO_QC06_NATIVE_CODE",
+  "implemented_changes": [
+    {
+      "component": "QC06",
+      "cause": "Mutation of frozen QH01 handoff object when verified external report is present",
+      "correction": "Local qualifier trust-scope variable; never mutate frozen handoff",
+      "proof": "PS51 parse and fail-closed selftest; signed-external positive scenario still not executed"
+    },
+    {
+      "component": "QC04",
+      "cause": "Unbounded timeout may overflow .NET WaitForExit millisecond conversion",
+      "correction": "Explicit maximum 86400 seconds",
+      "proof": "PS51 parse; boundary test of >86400 still pending"
+    }
+  ],
+  "source_unchanged_members": 28,
+  "known_authority_blockers": [
+    "QUALIFIER_KEY_V01_NOT_PROVEN",
+    "POSITIVE_ACTOR_INDEPENDENCE_NOT_PROVEN",
+    "SEVEN_UAC_ATTESTATIONS_NOT_PRESENT"
+  ],
+  "qualification": "BLOCKED_NOT_PROVEN"
+}
