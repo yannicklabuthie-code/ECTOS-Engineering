@@ -14,7 +14,7 @@
 
 1. **Conserver UAC GitHub comme preuve de provenance technique** : commit, arbre Git, approbation de règles et paquet exacts ; ne jamais lui attribuer automatiquement l'autorité métier OMNIGATE.
 2. **Récupérer, puis faire approuver une version exacte des exigences et des oracles QC02**. Les fichiers candidats existants V48 et la couverture V49 servent d'entrée. L'approbation du contenu appartient à l'autorité métier/owner et ne découle pas de la simple présence de fichiers.
-3. **Émettre les enveloppes d'autorité à travers un job GitHub protégé** avec auteur/émetteur contrôlé, empreintes préalablement approuvées, environnement nécessitant un reviewer indépendant, clé privée Ed25519 uniquement dans les secrets d'environnement, clé publique et empreinte épinglées séparément par l'administrateur de confiance Windows.
+3. **Émettre les enveloppes d'autorité à travers un job GitHub protégé** avec auteur/émetteur contrôlé, empreintes préalablement approuvées, conservation indépendante de la clé de signature, clé privée Ed25519 uniquement dans les secrets d'environnement, clé publique et empreinte épinglées séparément par l'administrateur de confiance Windows.
 4. **Provisionner la politique hôte protégée** `C:\ProgramData\ECTOS\governance\omni_trust_policy.json` via la gouvernance, avec pin public authentifié, validité et révocations. Ne jamais la dériver de l'enveloppe signée ni d'un fichier du paquet candidat.
 5. **Contrôler les 22 outils et attestations individuelles** : l'enveloppe de registre seule ne prouve pas les 22 provenances individuelles ni leur adéquation. Leur statut approuvé et l'identité hôte doivent être attestés séparément par le responsable de provenance.
 6. **Réutiliser le lanceur V59**, qui contrôle les références aux enveloppes puis la chaîne native V48. Le résultat producteur ne devient pas automatiquement une qualification indépendante.
@@ -23,7 +23,7 @@
 ## Prérequis de mise en œuvre (autorité, pas micro-tests)
 
 - Le Project Owner doit approuver **le contenu exact** des exigences (ou une révision explicitement adoptée) et désigner l'émetteur ; ce n'est pas un nouveau GO de test.
-- L'administrateur GitHub doit configurer l'environnement protégé `omnigate-governance-approval`, avec reviewer distinct, les variables de hash approuvées et le secret Ed25519 gouverné.
+- L'autorité de gouvernance doit confirmer les empreintes exactes des contenus et la clé publique avant activation. L'environnement GitHub `omnigate-governance-approval` doit contenir les variables de hash approuvées et le secret Ed25519 sous garde contrôlée. Aucun second collaborateur GitHub n'est requis par le registre UAC historique.
 - L'administrateur de confiance Windows doit provisionner le pin public et les politiques protégées, sans les copier depuis le candidat.
 - Le responsable de provenance doit attester les 22 outils, et l'autorité de qualification doit être distincte du producteur et de MAIN.
 
