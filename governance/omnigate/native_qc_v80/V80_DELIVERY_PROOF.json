@@ -1,0 +1,13 @@
+{
+  "package": "C:\\dev\\ECTOS_QC_V80_SYSTEMIC_CORRECTION\\ECTOS_QC_V80_SYSTEMIC_NATIVE_SUCCESSOR.zip",
+  "sha256": "51b5339080d63477c6782f668314bfee49decc7c3908d187f8369fd27238bbb5",
+  "members": 32,
+  "native_source_changes": [
+    "qualification_center/v01/QC-06-IndependentQualifier.ps1"
+  ],
+  "producer_full_chain": "PASS_2_AND_22_CONTROLS",
+  "native_negative": "7_OF_7_PASS",
+  "archive_tamper": "4_OF_4_PASS",
+  "official_qualification": "BLOCKED_NOT_PROVEN",
+  "main_admission": "NO"
+}

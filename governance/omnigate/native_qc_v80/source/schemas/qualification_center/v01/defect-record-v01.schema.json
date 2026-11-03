@@ -1,0 +1,11 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"ECTOS_QC_DEFECT_RECORD_V01",
+  "type":"object","additionalProperties":false,
+  "required":["defect_id","property_id","property_scope_class","defect_family_id","description","earliest_detectable_stage","latest_permitted_stage","actual_detection_stage","product_defect","process_defect","severity","status","evidence_ids"],
+  "properties":{
+    "defect_id":{"type":"string","minLength":1},"property_id":{"type":"string","minLength":1},"property_scope_class":{"enum":["LOCAL","INTERFACE","COMPOSITIONAL","SYSTEM","AUTHORITY","EVIDENCE","RUNTIME","ENVIRONMENTAL"]},
+    "defect_family_id":{"type":"string","minLength":1},"description":{"type":"string","minLength":1},"earliest_detectable_stage":{"type":"string","minLength":1},"latest_permitted_stage":{"type":"string","minLength":1},"actual_detection_stage":{"type":"string","minLength":1},
+    "product_defect":{"type":"boolean"},"process_defect":{"type":"boolean"},"severity":{"type":"string","minLength":1},"status":{"enum":["OPEN","CLOSED","BLOCKED","NOT_PROVEN"]},"evidence_ids":{"type":"array","items":{"type":"string"},"minItems":1,"uniqueItems":true}
+  }
+}

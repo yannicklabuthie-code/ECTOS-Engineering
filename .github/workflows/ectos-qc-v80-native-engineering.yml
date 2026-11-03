@@ -1,0 +1,35 @@
+name: ECTOS QC V80 systemic native engineering
+on:
+  pull_request:
+    paths:
+      - 'governance/omnigate/native_qc_v80/**'
+      - '.github/workflows/ectos-qc-v80-native-engineering.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-windows-ps51-v80:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned JSON schema and cryptography dependencies
+        run: python -m pip install 'jsonschema==4.26.0' 'cryptography==46.0.3'
+      - name: Verify exact native source and ZIP V80 hashes
+        run: python governance/omnigate/native_qc_v80/verify_manifest.py
+      - name: Run fail-closed Windows PowerShell 5.1 self-tests
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $ps51 = Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0\powershell.exe'
+          $root = Join-Path $env:GITHUB_WORKSPACE 'governance\omnigate\native_qc_v80\source\qualification_center\v01'
+          $selftest = Join-Path $root 'tests\Run-QC-V01-SelfTest.ps1'
+          $work = Join-Path $env:RUNNER_TEMP 'qc-v80-native-selftest'
+          & $ps51 -NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -File $selftest -WorkRoot $work
+          if ($LASTEXITCODE -ne 0) { throw 'QC_V80_NATIVE_SELFTEST_FAILED' }
+          $result = Get-Content -LiteralPath (Join-Path $work 'SELFTEST_RETURN.json') -Raw | ConvertFrom-Json
+          if ($result.final_state -ne 'PRODUCER_SELFTEST_PASS_FAIL_CLOSED') { throw 'QC_V80_NATIVE_SELFTEST_INVALID' }
+          if ($result.unapproved_qc02_contract -ne 'BLOCKED_AS_EXPECTED') { throw 'QC_V80_AUTHORITY_NEGATIVE_FAILED' }
+          Write-Output 'QC_V80_CI_PRODUCER_ONLY_PASS'

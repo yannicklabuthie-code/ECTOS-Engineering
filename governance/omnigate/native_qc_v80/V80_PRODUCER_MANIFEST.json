@@ -1,0 +1,261 @@
+{
+  "schema": "ECTOS_QC_V80_SYSTEMIC_CORRECTIVE_PRODUCER_MANIFEST",
+  "generated_at_utc": "2026-11-03T23:43:39.265065+00:00",
+  "source_predecessor_zip_sha256": "0c7664b6d53e49296f546ffebf5f40f47b16b11541b808777898c41816b9e339",
+  "scope": "QC_NATIVE_CHAIN_QC01_THROUGH_QC06_WITHOUT_QUALIFIER_SIGNING",
+  "changed_source_members": [
+    "qualification_center/v01/QC-06-IndependentQualifier.ps1"
+  ],
+  "native_member_count": 30,
+  "members": [
+    {
+      "path": "source/qualification_center/v01/authority_bridge_v46.py",
+      "size_bytes": 5518,
+      "sha256": "076453df6dbef4cd9674cf0afd87a8b14f0418c10862bc6dcba8e6de77813fab"
+    },
+    {
+      "path": "source/qualification_center/v01/fixtures/sample-target/sample-check.ps1",
+      "size_bytes": 287,
+      "sha256": "f48e0f8aba36e4b6b728c2d728c3fd0c3e068d7e5c5a5de1884178988e34df40"
+    },
+    {
+      "path": "source/qualification_center/v01/G00-Control-V48.py",
+      "size_bytes": 4683,
+      "sha256": "1bbac5cea6dad97d250dc5b256dacfcc396f63f6216585a10dcccdf410e288f0"
+    },
+    {
+      "path": "source/qualification_center/v01/independent_bridge_v47.py",
+      "size_bytes": 6974,
+      "sha256": "af530b4c0de1a8ee37658b153864b1b612ba70d7775b3b07be7810900c68e069"
+    },
+    {
+      "path": "source/qualification_center/v01/Invoke-G00-PythonControl-V48.ps1",
+      "size_bytes": 1603,
+      "sha256": "ced79097a691aa1803c370b3e047f14989c3707d9440e77f765d90253d88db9d"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-01-PackageDepthDiscovery.ps1",
+      "size_bytes": 9056,
+      "sha256": "9549733e9d282d434eb5c609c2385eaa059e35dce68f873bd0c3ac02c71a714b"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-02-QualificationContractCompiler.ps1",
+      "size_bytes": 12942,
+      "sha256": "bc02594fd643c759089da490a42dd1b96d7a421d2212f08b76f0b9302cc12609"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-03-ToolFitRouting.ps1",
+      "size_bytes": 13475,
+      "sha256": "a1c895eab7a0e3e405ec218cfd5a16ccb144835b1bf579643a2d887f9b4fd987"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-04-PreQfExecution.ps1",
+      "size_bytes": 16250,
+      "sha256": "033c8b0b1aef003d7f7657d23cd9349290fa1717391c3503ae156d68ab21e550"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-05-EvidenceClosure.ps1",
+      "size_bytes": 16217,
+      "sha256": "095a0b089bbc39cb8560fb9851de69ada295fb4669b8f0181ea0fbcecfc0fe4a"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-06-IndependentQualifier.ps1",
+      "size_bytes": 22693,
+      "sha256": "baa0d6ddbc68ae1efb09d46ef39a5a141c5cc91e05aafbea699cfe6495c52fd8"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-C0-PipelineController.ps1",
+      "size_bytes": 4569,
+      "sha256": "6d66ba65af95306edaaaa962331454b1b64fb62998af611a7414f45c9fa9e6ed"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-CT-ContractRecords.ps1",
+      "size_bytes": 3800,
+      "sha256": "bc5061cac7562ec2daaf8088131c1c21c8b009a4281c322e0dae697954d9370a"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-CT-VerifyContractRecords.ps1",
+      "size_bytes": 5774,
+      "sha256": "26287e6de6238bac47214ea94c5c882dfdec7774a8ca4f86107d34e9f2c935ab"
+    },
+    {
+      "path": "source/qualification_center/v01/QC.Common.psm1",
+      "size_bytes": 7233,
+      "sha256": "c2819ec3abc6f97a0caaf63fec39f37455da693a566fae4db6fcacb2f1971181"
+    },
+    {
+      "path": "source/qualification_center/v01/QH-01-FreezeHandoff.ps1",
+      "size_bytes": 6888,
+      "sha256": "17e007ffbf74c23277eee00cbad6204aca6b105c383415a90ce66fd8ca94c574"
+    },
+    {
+      "path": "source/qualification_center/v01/strict_authority_gate.py",
+      "size_bytes": 4867,
+      "sha256": "5b2fa48d3bc21c237672a663dbc1b08614d765baee1ffed35cca39cf061add76"
+    },
+    {
+      "path": "source/qualification_center/v01/tests/QC.V01.Tests.ps1",
+      "size_bytes": 675,
+      "sha256": "1e8d5d607cc6b49c167e9ed2208e4fb24fbf0a31de19a13a78e8ea141e908a64"
+    },
+    {
+      "path": "source/qualification_center/v01/tests/Run-QC-V01-SelfTest.ps1",
+      "size_bytes": 7918,
+      "sha256": "a98bdcda2e7a790a231b9a8cb1a5979146e2620cb2218343a403489f32333e80"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/causal-evidence-v01.schema.json",
+      "size_bytes": 3352,
+      "sha256": "9196dfdd59d5aefe2c102ee97bce7374ff591c6f6d9658b1dafbe1da5aa55444"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/defect-record-v01.schema.json",
+      "size_bytes": 1183,
+      "sha256": "f8293aaea98d7d52d79723f7aa83b27e99be99ce2ceff5394dc3a0d53825e1d2"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/escape-record-v01.schema.json",
+      "size_bytes": 1170,
+      "sha256": "dc7d70274e82888f8ff1058f691d57fd08942ac48d0ec71f1931187379bd44e9"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/execution-request-v01.schema.json",
+      "size_bytes": 2685,
+      "sha256": "f1b76e5c25be68fdadfbd2b7e5f3115a967d130fc430e5871c4c8ff339319716"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/execution-result-v01.schema.json",
+      "size_bytes": 3511,
+      "sha256": "ac893170cc18d29a6bc21107956eae0915291b619e57fc504df376bdc594d54d"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/property-contract-v01.schema.json",
+      "size_bytes": 4851,
+      "sha256": "9c293b5cf40bb726ef91aaae46180c3139911a9903816bd71f2438ee7bbdc93e"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/property-record-v01.schema.json",
+      "size_bytes": 2371,
+      "sha256": "4842f472ece0475d428408394cf9a132fb40779f1f1975f0ddac0f14e49580d3"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/qc-envelope-v01.schema.json",
+      "size_bytes": 2233,
+      "sha256": "130094012048fe0bc3a7116c6bf9c14ae6470be1b6670a3a4e224f761db09362"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/qc06-return-v01.schema.json",
+      "size_bytes": 4328,
+      "sha256": "5cf1ccb48f4b5fbc7712ae5d5a276761648f510ef9007a952f9e1edf063f751c"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/qh01-handoff-v01.schema.json",
+      "size_bytes": 2991,
+      "sha256": "89f9c54175bc319fd5952fae591a60a52e56e4e51ccdb9b353d43d6892ab20cb"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/tool-route-v01.schema.json",
+      "size_bytes": 4440,
+      "sha256": "aca09a3dc1c6a6f3e4fa3e523f0e42693dbebff506c1897761b505a2db0074ee"
+    }
+  ],
+  "historical_defect_register": [
+    {
+      "id": "QC-ID-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "V77 archive 30/30 plus 4 tamper rejections",
+      "official_closed": false
+    },
+    {
+      "id": "QC-IND-01",
+      "producer_status": "AUTHORITY_BLOCKED",
+      "evidence": "positive qualifier independence missing",
+      "official_closed": false
+    },
+    {
+      "id": "QC-NEG-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "QC06 mismatched target refused",
+      "official_closed": false
+    },
+    {
+      "id": "QC-CUR-01",
+      "producer_status": "AUTHORITY_BLOCKED",
+      "evidence": "current independent evidence currentness not proven",
+      "official_closed": false
+    },
+    {
+      "id": "QC-SCHEMA-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "24 native QC04 execution requests and results schema validated",
+      "official_closed": false
+    },
+    {
+      "id": "QC-SCHEMA-02",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "24 causal evidence instances validated by QC05",
+      "official_closed": false
+    },
+    {
+      "id": "QC-PLAN-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "2 and 22 exact cardinalities; missing and duplicate plan refused",
+      "official_closed": false
+    },
+    {
+      "id": "QC-EVID-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "QC05 tampered raw evidence checksum rejected",
+      "official_closed": false
+    },
+    {
+      "id": "QC-TEST-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "PS5.1 parser 14 files, 7 native negative and 4 archive negatives",
+      "official_closed": false
+    },
+    {
+      "id": "QC-STATE-01",
+      "producer_status": "PARTIAL_PRODUCER_PROOF",
+      "evidence": "QC06 locked without external provenance",
+      "official_closed": false
+    },
+    {
+      "id": "QC-STATE-02",
+      "producer_status": "PARTIAL_PRODUCER_PROOF",
+      "evidence": "QCCT gate detects envelope tamper",
+      "official_closed": false
+    },
+    {
+      "id": "QC-STATE-03",
+      "producer_status": "PARTIAL_PRODUCER_PROOF",
+      "evidence": "QC06 denies unsigned external report",
+      "official_closed": false
+    },
+    {
+      "id": "QC-GATE-01",
+      "producer_status": "PRODUCER_CHECK_PASS",
+      "evidence": "QH01 tampered QCCT record rejected",
+      "official_closed": false
+    },
+    {
+      "id": "QC-COMPLETE-01",
+      "producer_status": "OWNER_OBJECTIVE_PROOF_MISSING",
+      "evidence": "fixture contracts do not establish objective universe",
+      "official_closed": false
+    }
+  ],
+  "producer_proofs": {
+    "native_ps51_parse_errors": 0,
+    "native_ps1_count": 14,
+    "full_chain_2_controls": "QC04_QC05_QCCT_QH01_PASS_QC06_DENY_AS_EXPECTED",
+    "full_chain_22_controls": "QC04_QC05_QCCT_QH01_PASS_QC06_DENY_AS_EXPECTED",
+    "native_negative_cases": 7,
+    "native_negative_passes": 7,
+    "archive_tamper_cases": 4,
+    "archive_tamper_denials": 4
+  },
+  "independent_qualification": "NOT_GRANTED",
+  "main_admission": "NOT_GRANTED",
+  "deployment": "NONE"
+}
