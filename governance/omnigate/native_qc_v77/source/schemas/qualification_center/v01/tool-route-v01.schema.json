@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ECTOS_QC_TOOL_ROUTE_V01",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "route_id",
+    "property_id",
+    "control_id",
+    "tool_id",
+    "tool_version",
+    "tool_sha256",
+    "tool_trust_state",
+    "tool_currentness_state",
+    "platform_profile",
+    "runtime_profile",
+    "qualification_profile",
+    "host_id",
+    "host_trust_state",
+    "tool_target_fit",
+    "expected_evidence_schema_id",
+    "execution_authority_required",
+    "route_status",
+    "command_path",
+    "fixed_arguments",
+    "oracle_id",
+    "oracle_type",
+    "expected_property",
+    "oracle_specification",
+    "script_path",
+    "script_sha256",
+    "tool_provenance_ref",
+    "tool_provenance_sha256",
+    "trust_root_state"
+  ],
+  "properties": {
+    "route_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "property_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "control_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_sha256": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "tool_trust_state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_currentness_state": {
+      "enum": [
+        "CURRENT",
+        "HISTORICAL",
+        "SUPERSEDED",
+        "PARTIAL",
+        "NOT_PROVEN"
+      ]
+    },
+    "platform_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "qualification_profile": {
+      "type": "string",
+      "minLength": 1
+    },
+    "host_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "host_trust_state": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_target_fit": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "NOT_PROVEN"
+      ]
+    },
+    "expected_evidence_schema_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution_authority_required": {
+      "type": "string",
+      "minLength": 1
+    },
+    "route_status": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "NOT_PROVEN",
+        "NOT_EXECUTED",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "command_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "fixed_arguments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "oracle_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "oracle_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "expected_property": {
+      "type": "string",
+      "minLength": 1
+    },
+    "oracle_specification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "control_id",
+        "oracle_id",
+        "expected_exit",
+        "expected_stdout_contains",
+        "expected_stderr_contains"
+      ],
+      "properties": {
+        "control_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "oracle_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_exit": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "expected_stdout_contains": {
+          "type": "string"
+        },
+        "expected_stderr_contains": {
+          "type": "string"
+        }
+      }
+    },
+    "script_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "script_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "tool_provenance_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tool_provenance_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "trust_root_state": {
+      "enum": [
+        "NOT_PROVEN",
+        "EXTERNAL_ROOT_VERIFIED_FOR_STAGE"
+      ]
+    },
+    "execution_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform_profile",
+        "runtime_profile"
+      ],
+      "properties": {
+        "platform_profile": {
+          "const": "WINDOWS"
+        },
+        "runtime_profile": {
+          "const": "WINDOWS_POWERSHELL_DESKTOP_5_1"
+        }
+      }
+    }
+  }
+}
