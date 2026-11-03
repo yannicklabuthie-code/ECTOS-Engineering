@@ -1,0 +1,151 @@
+{
+  "schema": "ECTOS_V77_QC02_QC03_NATIVE_SYSTEMIC_SUCCESSOR_PRODUCER_MANIFEST",
+  "generated_at_utc": "2026-11-03T13:07:19.861842+00:00",
+  "target": "QC02_QC03_REUSABLE_NATIVE_SERVICES",
+  "source_baseline": "V48",
+  "original_bridge_sha256": "4037f65df490c6841fb1c9526293053b192afa96e2b0192059cb40dc9cf44ab8",
+  "successor_bridge_sha256": "076453df6dbef4cd9674cf0afd87a8b14f0418c10862bc6dcba8e6de77813fab",
+  "production_trust_root_before_after_sha256": "3a6874debf1e91882b6857c7e817d02872a6567cff8670bbdbb157d913dcd7cb",
+  "native_source_members": 30,
+  "members": [
+    {
+      "path": "source/qualification_center/v01/authority_bridge_v46.py",
+      "sha256": "076453df6dbef4cd9674cf0afd87a8b14f0418c10862bc6dcba8e6de77813fab"
+    },
+    {
+      "path": "source/qualification_center/v01/fixtures/sample-target/sample-check.ps1",
+      "sha256": "f48e0f8aba36e4b6b728c2d728c3fd0c3e068d7e5c5a5de1884178988e34df40"
+    },
+    {
+      "path": "source/qualification_center/v01/G00-Control-V48.py",
+      "sha256": "1bbac5cea6dad97d250dc5b256dacfcc396f63f6216585a10dcccdf410e288f0"
+    },
+    {
+      "path": "source/qualification_center/v01/independent_bridge_v47.py",
+      "sha256": "af530b4c0de1a8ee37658b153864b1b612ba70d7775b3b07be7810900c68e069"
+    },
+    {
+      "path": "source/qualification_center/v01/Invoke-G00-PythonControl-V48.ps1",
+      "sha256": "ced79097a691aa1803c370b3e047f14989c3707d9440e77f765d90253d88db9d"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-01-PackageDepthDiscovery.ps1",
+      "sha256": "9549733e9d282d434eb5c609c2385eaa059e35dce68f873bd0c3ac02c71a714b"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-02-QualificationContractCompiler.ps1",
+      "sha256": "bc02594fd643c759089da490a42dd1b96d7a421d2212f08b76f0b9302cc12609"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-03-ToolFitRouting.ps1",
+      "sha256": "a1c895eab7a0e3e405ec218cfd5a16ccb144835b1bf579643a2d887f9b4fd987"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-04-PreQfExecution.ps1",
+      "sha256": "033c8b0b1aef003d7f7657d23cd9349290fa1717391c3503ae156d68ab21e550"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-05-EvidenceClosure.ps1",
+      "sha256": "095a0b089bbc39cb8560fb9851de69ada295fb4669b8f0181ea0fbcecfc0fe4a"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-06-IndependentQualifier.ps1",
+      "sha256": "d19930cebed84980c48b6cb051dddb3eea5b96894a73c503d3678782cffe1ce4"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-C0-PipelineController.ps1",
+      "sha256": "6d66ba65af95306edaaaa962331454b1b64fb62998af611a7414f45c9fa9e6ed"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-CT-ContractRecords.ps1",
+      "sha256": "bc5061cac7562ec2daaf8088131c1c21c8b009a4281c322e0dae697954d9370a"
+    },
+    {
+      "path": "source/qualification_center/v01/QC-CT-VerifyContractRecords.ps1",
+      "sha256": "26287e6de6238bac47214ea94c5c882dfdec7774a8ca4f86107d34e9f2c935ab"
+    },
+    {
+      "path": "source/qualification_center/v01/QC.Common.psm1",
+      "sha256": "c2819ec3abc6f97a0caaf63fec39f37455da693a566fae4db6fcacb2f1971181"
+    },
+    {
+      "path": "source/qualification_center/v01/QH-01-FreezeHandoff.ps1",
+      "sha256": "17e007ffbf74c23277eee00cbad6204aca6b105c383415a90ce66fd8ca94c574"
+    },
+    {
+      "path": "source/qualification_center/v01/strict_authority_gate.py",
+      "sha256": "5b2fa48d3bc21c237672a663dbc1b08614d765baee1ffed35cca39cf061add76"
+    },
+    {
+      "path": "source/qualification_center/v01/tests/QC.V01.Tests.ps1",
+      "sha256": "1e8d5d607cc6b49c167e9ed2208e4fb24fbf0a31de19a13a78e8ea141e908a64"
+    },
+    {
+      "path": "source/qualification_center/v01/tests/Run-QC-V01-SelfTest.ps1",
+      "sha256": "a98bdcda2e7a790a231b9a8cb1a5979146e2620cb2218343a403489f32333e80"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/causal-evidence-v01.schema.json",
+      "sha256": "9196dfdd59d5aefe2c102ee97bce7374ff591c6f6d9658b1dafbe1da5aa55444"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/defect-record-v01.schema.json",
+      "sha256": "f8293aaea98d7d52d79723f7aa83b27e99be99ce2ceff5394dc3a0d53825e1d2"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/escape-record-v01.schema.json",
+      "sha256": "dc7d70274e82888f8ff1058f691d57fd08942ac48d0ec71f1931187379bd44e9"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/execution-request-v01.schema.json",
+      "sha256": "f1b76e5c25be68fdadfbd2b7e5f3115a967d130fc430e5871c4c8ff339319716"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/execution-result-v01.schema.json",
+      "sha256": "ac893170cc18d29a6bc21107956eae0915291b619e57fc504df376bdc594d54d"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/property-contract-v01.schema.json",
+      "sha256": "9c293b5cf40bb726ef91aaae46180c3139911a9903816bd71f2438ee7bbdc93e"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/property-record-v01.schema.json",
+      "sha256": "4842f472ece0475d428408394cf9a132fb40779f1f1975f0ddac0f14e49580d3"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/qc-envelope-v01.schema.json",
+      "sha256": "130094012048fe0bc3a7116c6bf9c14ae6470be1b6670a3a4e224f761db09362"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/qc06-return-v01.schema.json",
+      "sha256": "5cf1ccb48f4b5fbc7712ae5d5a276761648f510ef9007a952f9e1edf063f751c"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/qh01-handoff-v01.schema.json",
+      "sha256": "89f9c54175bc319fd5952fae591a60a52e56e4e51ccdb9b353d43d6892ab20cb"
+    },
+    {
+      "path": "source/schemas/qualification_center/v01/tool-route-v01.schema.json",
+      "sha256": "aca09a3dc1c6a6f3e4fa3e523f0e42693dbebff506c1897761b505a2db0074ee"
+    }
+  ],
+  "verification": {
+    "native_positive_qc02": "PASS_SYNTHETIC_FIXTURE",
+    "native_positive_qc03": "PASS_SYNTHETIC_FIXTURE",
+    "qc03_routes": 2,
+    "native_negative_challenges": 4,
+    "native_negative_denials": 4,
+    "unapproved_qc02_denied": true,
+    "native_ps51_selftest": "PASS",
+    "universal_2_tool_crypto": "8/8",
+    "universal_22_tool_crypto": "8/8"
+  },
+  "authorization": {
+    "producer_testing": "PASS",
+    "independent_qualification": "NOT_PERFORMED",
+    "main_admission": "NOT_GRANTED",
+    "cloud_deployment": "NONE",
+    "target_specific_approval": "NOT_INCLUDED"
+  },
+  "scope": "VERSIONED_ISOLATED_SOURCE_ONLY_NO_LIVE_MUTATION"
+}

@@ -1,0 +1,21 @@
+{
+  "exact_candidate": "C:\\dev\\ECTOS_QC_V80_SYSTEMIC_CORRECTION\\ECTOS_QC_V80_SYSTEMIC_NATIVE_SUCCESSOR.zip",
+  "exact_integrity": {
+    "sha256": "51b5339080d63477c6782f668314bfee49decc7c3908d187f8369fd27238bbb5",
+    "member_count": 32,
+    "manifest_members": 30,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "unsafe": [],
+    "bad_member_hashes": []
+  },
+  "tamper_challenges": {
+    "member_missing": true,
+    "member_modified": true,
+    "member_duplicated": true,
+    "unsafe_path": true
+  },
+  "tamper_passes": 4,
+  "tamper_total": 4
+}
