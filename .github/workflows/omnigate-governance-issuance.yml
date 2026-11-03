@@ -8,6 +8,9 @@ permissions:
   contents: read
   id-token: write
   attestations: write
+concurrency:
+  group: omnigate-governance-issuance
+  cancel-in-progress: false
 jobs:
   issue:
     if: github.repository == 'yannicklabuthie-code/ECTOS-Engineering' && github.ref == 'refs/heads/main'
@@ -18,6 +21,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Require independently approved source inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f authority_inputs/canonical_requirements.json
+          test -f authority_inputs/QC02_APPROVED_REQUIREMENTS.json
+          test -f authority_inputs/QC03_APPROVED_TOOL_REGISTRY.json
+          # A checkout cannot itself prove approval. Protected environment
+          # pins and required independent reviewer are additional gates.
       - name: Install pinned cryptographic dependency
         run: python -m pip install 'cryptography==46.0.3'
       - name: Issue owner-governance-authorized QC02 and QC03 envelopes

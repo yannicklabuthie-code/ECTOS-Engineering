@@ -32,3 +32,12 @@
 **Aucune approbation ni signature ne figure dans ce ZIP.** Ne pas déployer ce workflow avant adoption explicite des textes d'autorité compatibles par le propriétaire. La signature d'un artefact GitHub établit sa provenance, pas l'approbation métier de son contenu. Une clé auto-générée par le producteur ne peut pas valoir racine indépendante. Ne pas pousser vers GitHub, modifier les secrets, le cloud, G00 ou les règles existantes sur la seule base de ce ZIP.
 
 La commande de signature n'est pas une commande de test à faire lancer au Project Owner : c'est un point d'exécution réservé au workflow de gouvernance après son admission.
+
+
+## V61 audit de sécurité du pont (PR #22)
+
+Le code candidat doit rester non exécutable en émission tant que les véritables objets approuvés et l'environnement protégé n'existent pas. Les vérifications supplémentaires sur la branche de revue imposent désormais : GitHub `workflow_dispatch` sur `main` protégé, cohérence exacte des chemins d'enveloppes et de la source canonique sur Windows, concordance des profils QC02/QC03, et pour chacun des 22 outils les états `TRUSTED`, `CURRENT`, `PASS`, `TRUSTED` avec identité et empreinte de provenance déclarées. Aucun de ces états déclarés ne dispense du contrôle ultérieur des **octets de preuve réels** par QC03 sur l'hôte.
+
+Le workflow contient un contrôle préalable des trois sources approuvées et sérialise les émissions. Il reste **sans source approuvée, sans environnement protégé, sans secret Ed25519 gouverné et sans preuve de reviewer indépendant**. Aucun label `APPROVED` ne doit être appliqué aux candidats V48 par le producteur. Une approbation de la PR Git ne remplace jamais une approbation des exigences métiers ni une qualification QC06 indépendante.
+
+**Note d'interface** : les chemins `authority_envelope_ref` doivent apparaître dans les objets exacts signés. Modifier ces champs après signature invalide l'empreinte QC02/QC03. L'administrateur de confiance provisionne le pin Ed25519 séparément du paquet; la clé privée ne doit jamais être récupérée localement par ce projet.

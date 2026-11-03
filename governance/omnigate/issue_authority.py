@@ -71,6 +71,17 @@ def main():
         raise ValueError('REQUIREMENT_CONTRACT_NOT_OWNER_APPROVED_CURRENT')
     if contract.get('requirement_source_sha256', '').lower() != sha(content):
         raise ValueError('APPROVED_SOURCE_TO_QC02_BINDING_INVALID')
+    required_host_paths = {
+        'source': r'C:\ProgramData\ECTOS\governance\omni_current_authorized_inputs\canonical_requirements.json',
+        'qc02_envelope': r'C:\ProgramData\ECTOS\governance\omni_current_authorized_inputs\QC02_APPROVAL_ENVELOPE.json',
+        'qc03_envelope': r'C:\ProgramData\ECTOS\governance\omni_current_authorized_inputs\QC03_APPROVAL_ENVELOPE.json',
+    }
+    if contract.get('requirement_source_ref') != required_host_paths['source']:
+        raise ValueError('GOVERNED_SOURCE_HOST_PATH_NOT_BOUND')
+    if contract.get('authority_envelope_ref') != required_host_paths['qc02_envelope']:
+        raise ValueError('QC02_AUTHORITY_ENVELOPE_HOST_PATH_NOT_BOUND')
+    if registry.get('authority_envelope_ref') != required_host_paths['qc03_envelope']:
+        raise ValueError('QC03_AUTHORITY_ENVELOPE_HOST_PATH_NOT_BOUND')
     if len(contract.get('requirements', [])) != 11 or len(registry.get('tools', [])) != 22:
         raise ValueError('EXPECTED_CONTRACT_TOOL_UNIVERSE_INVALID')
     if len({x.get('control_id') for x in registry['tools']}) != 22:
@@ -79,6 +90,39 @@ def main():
     req_ids = {id for p in contract['requirements'] for id in [p['positive_control_id'], *p['negative_control_ids']]}
     if ids != req_ids:
         raise ValueError('QC02_QC03_CONTROL_SET_DISAGREEMENT')
+    if os.environ.get('GITHUB_EVENT_NAME') != 'workflow_dispatch':
+        raise ValueError('GOVERNANCE_WORKFLOW_EVENT_REQUIRED')
+    if os.environ.get('GITHUB_REPOSITORY') != 'yannicklabuthie-code/ECTOS-Engineering':
+        raise ValueError('WRONG_GOVERNANCE_REPOSITORY')
+    if os.environ.get('GITHUB_REF_PROTECTED') != 'true':
+        raise ValueError('GITHUB_REF_PROTECTION_NOT_PROVEN')
+    # Declared confidence inside the candidate is necessary but never sufficient:
+    # the independent host pin and every native tool-provenance receipt remain required.
+    required_states = {
+        'tool_trust_state': 'TRUSTED',
+        'tool_currentness_state': 'CURRENT',
+        'host_trust_state': 'TRUSTED',
+        'tool_target_fit': 'PASS',
+    }
+    for tool in registry['tools']:
+        control_id = tool['control_id']
+        for field, expected in required_states.items():
+            if tool.get(field) != expected:
+                raise ValueError('QC03_TOOL_NOT_ATTESTED:' + control_id + ':' + field)
+        for field in ('tool_sha256', 'script_sha256', 'tool_provenance_sha256'):
+            value = tool.get(field)
+            if not isinstance(value, str) or len(value) != 64 or any(c not in '0123456789abcdefABCDEF' for c in value):
+                raise ValueError('QC03_TOOL_DIGEST_INVALID:' + control_id + ':' + field)
+        if not tool.get('tool_provenance_ref') or not tool.get('host_id'):
+            raise ValueError('QC03_TOOL_PROVENANCE_UNBOUND:' + control_id)
+    # Validate the functional vs native-host execution profiles without conflating them.
+    by_control = {t['control_id']: t for t in registry['tools']}
+    for prop in contract['requirements']:
+        for control_id in [prop['positive_control_id'], *prop['negative_control_ids']]:
+            tool = by_control[control_id]
+            for field in ('platform_profile', 'runtime_profile', 'qualification_profile', 'execution_profile'):
+                if prop.get(field) != tool.get(field):
+                    raise ValueError('QC02_QC03_PROFILE_MISMATCH:' + control_id + ':' + field)
     # The signature is produced only with a preexisting governance key held in a
     # protected GitHub environment. Never create keys or enroll trust here.
     key = Ed25519PrivateKey.from_private_bytes(base64.b64decode(required_env('OMNI_ED25519_KEY_SEED_B64'), validate=True))
