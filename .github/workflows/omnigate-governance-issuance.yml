@@ -44,7 +44,8 @@ jobs:
           APPROVED_QC02_CANONICAL_SHA256: ${{ vars.APPROVED_QC02_CANONICAL_SHA256 }}
           APPROVED_QC03_CANONICAL_SHA256: ${{ vars.APPROVED_QC03_CANONICAL_SHA256 }}
           GOVERNANCE_APPROVED_ISSUER_ID: ${{ vars.GOVERNANCE_APPROVED_ISSUER_ID }}
-        run: python governance/omnigate/issue_authority.py
+          GOVERNANCE_APPROVED_TARGET_SHA256: ${{ vars.GOVERNANCE_APPROVED_TARGET_SHA256 }}
+        run: python governance/omnigate/issue_authority_universal_candidate.py
       - uses: actions/attest@v4
         with:
           subject-path: signed_authority/*.json
