@@ -45,6 +45,81 @@ def required_env(name):
     return value
 
 
+QC03_DOMAIN = b'ECTOS-OMNIGATE-QC03-INDEPENDENT-PROVENANCE-V01\n'
+
+def verify_independent_qc03_attestations(registry, attestation, *, key_hex, key_sha256,
+                                        issuer_id, revoked_approval_ids, governance_key_sha256):
+    """Fail-closed: independently signed whole-register provenance proof (not a producer claim)."""
+    from datetime import datetime, timezone
+    if not isinstance(attestation, dict) or set(attestation) != {
+        'schema', 'target_sha256', 'issuer_id', 'issuer_role', 'approval_id',
+        'not_before', 'expires_at', 'decision', 'tools', 'signature_b64'
+    }:
+        raise ValueError('QC03_INDEPENDENT_ATTESTATION_SCHEMA_INVALID')
+    if attestation['schema'] != 'ECTOS_QC03_INDEPENDENT_PROVENANCE_V01':
+        raise ValueError('QC03_INDEPENDENT_ATTESTATION_WRONG_SCHEMA')
+    if attestation['decision'] != 'APPROVED':
+        raise ValueError('QC03_INDEPENDENT_DECISION_NOT_APPROVED')
+    if attestation['issuer_role'] != 'QC03_INDEPENDENT_PROVENANCE_AUTHORITY':
+        raise ValueError('QC03_INDEPENDENT_ISSUER_ROLE_INVALID')
+    if attestation['issuer_id'] != issuer_id or issuer_id == os.environ.get('GOVERNANCE_APPROVED_ISSUER_ID'):
+        raise ValueError('QC03_INDEPENDENT_ISSUER_NOT_DISTINCT')
+    if not isinstance(revoked_approval_ids, list) or not all(isinstance(x, str) for x in revoked_approval_ids):
+        raise ValueError('QC03_REVOCATION_LIST_INVALID')
+    if not isinstance(attestation['approval_id'], str) or not attestation['approval_id'] or attestation['approval_id'] in revoked_approval_ids:
+        raise ValueError('QC03_APPROVAL_REVOKED_OR_MISSING')
+    try:
+        start = datetime.fromisoformat(attestation['not_before'].replace('Z','+00:00'))
+        end = datetime.fromisoformat(attestation['expires_at'].replace('Z','+00:00'))
+        now = datetime.now(timezone.utc)
+        if start.tzinfo is None or end.tzinfo is None or not start <= now < end:
+            raise ValueError('QC03_ATTESTATION_OUT_OF_TIME_WINDOW')
+    except (KeyError, TypeError, AttributeError):
+        raise ValueError('QC03_ATTESTATION_TIME_INVALID')
+    if attestation['target_sha256'] != TARGET or registry.get('target_package_sha256') != TARGET:
+        raise ValueError('QC03_INDEPENDENT_TARGET_MISMATCH')
+    observed = attestation['tools']
+    if not isinstance(observed, list) or len(observed) != len(registry.get('tools', [])):
+        raise ValueError('QC03_ATTESTATION_CONTROL_COUNT')
+    registered = {}
+    for tool in registry['tools']:
+        cid = tool['control_id']
+        registered[cid] = {k:tool.get(k) for k in (
+            'control_id', 'tool_sha256', 'script_sha256',
+            'tool_provenance_sha256', 'tool_provenance_ref', 'host_id')}
+    seen = set()
+    for item in observed:
+        if not isinstance(item, dict) or set(item) != set(next(iter(registered.values()))) | {'decision'}:
+            raise ValueError('QC03_ATTESTATION_TOOL_SCHEMA_INVALID')
+        cid = item['control_id']
+        if not isinstance(cid,str) or cid in seen or cid not in registered:
+            raise ValueError('QC03_ATTESTATION_CONTROL_DUPLICATE_OR_UNKNOWN')
+        seen.add(cid)
+        if item['decision'] != 'APPROVED':
+            raise ValueError('QC03_ATTESTATION_NON_APPROVAL')
+        if {k:item.get(k) for k in registered[cid]} != registered[cid]:
+            raise ValueError('QC03_ATTESTATION_TOOL_BINDING_MISMATCH:' + cid)
+    if seen != set(registered):
+        raise ValueError('QC03_ATTESTATION_CONTROL_SET_MISMATCH')
+    try:
+        key = bytes.fromhex(key_hex)
+    except (TypeError, ValueError):
+        raise ValueError('QC03_INDEPENDENT_PUBLIC_KEY_INVALID')
+    if len(key) != 32 or sha(key) != key_sha256.lower() or sha(key) == governance_key_sha256.lower():
+        raise ValueError('QC03_INDEPENDENT_PIN_INVALID_OR_COLLIDING')
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
+    unsigned = {k:v for k,v in attestation.items() if k != 'signature_b64'}
+    try:
+        sig = base64.b64decode(attestation['signature_b64'], validate=True)
+        Ed25519PublicKey.from_public_bytes(key).verify(sig, QC03_DOMAIN + canonical(unsigned))
+    except Exception as exc:
+        from cryptography.exceptions import InvalidSignature
+        if isinstance(exc, (ValueError, TypeError, InvalidSignature)):
+            raise ValueError('QC03_INDEPENDENT_SIGNATURE_INVALID') from exc
+        raise
+    return True
+
+
 def main():
     if len(TARGET) != 64 or any(c not in '0123456789abcdef' for c in TARGET):
         raise ValueError('GOVERNANCE_TARGET_DIGEST_NOT_PINNED')
@@ -127,6 +202,19 @@ def main():
             for field in ('platform_profile', 'runtime_profile', 'qualification_profile', 'execution_profile'):
                 if prop.get(field) != tool.get(field):
                     raise ValueError('QC02_QC03_PROFILE_MISMATCH:' + control_id + ':' + field)
+    independent_path = pathlib.Path('authority_inputs/QC03_INDEPENDENT_PROVENANCE_ATTESTATIONS.json')
+    independent_bytes = independent_path.read_bytes()
+    if sha(independent_bytes) != required_env('APPROVED_QC03_ATTESTATION_SHA256').lower():
+        raise ValueError('QC03_INDEPENDENT_ATTESTATION_BYTES_NOT_APPROVED')
+    attest = read_strict(independent_path)
+    revoked = json.loads(required_env('QC03_REVOKED_APPROVAL_IDS_JSON'))
+    verify_independent_qc03_attestations(
+        registry, attest,
+        key_hex=required_env('QC03_INDEPENDENT_PUBLIC_KEY_HEX'),
+        key_sha256=required_env('QC03_INDEPENDENT_PUBLIC_KEY_SHA256'),
+        issuer_id=required_env('QC03_APPROVED_ISSUER_ID'),
+        revoked_approval_ids=revoked,
+        governance_key_sha256=required_env('APPROVED_PUBLIC_KEY_SHA256'))
     # The signature is produced only with a preexisting governance key held in a
     # protected GitHub environment. Never create keys or enroll trust here.
     key = Ed25519PrivateKey.from_private_bytes(base64.b64decode(required_env('OMNI_ED25519_KEY_SEED_B64'), validate=True))

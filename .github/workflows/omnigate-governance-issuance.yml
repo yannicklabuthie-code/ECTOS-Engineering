@@ -31,6 +31,7 @@ jobs:
           test -f authority_inputs/canonical_requirements.json
           test -f authority_inputs/QC02_APPROVED_REQUIREMENTS.json
           test -f authority_inputs/QC03_APPROVED_TOOL_REGISTRY.json
+          test -f authority_inputs/QC03_INDEPENDENT_PROVENANCE_ATTESTATIONS.json
           # A checkout cannot establish authority by itself. Exact approved
           # SHA pins and the separately provisioned trust root are required.
           # GitHub collaborator review is not a historical UAC prerequisite.
@@ -40,6 +41,11 @@ jobs:
         env:
           OMNI_ED25519_KEY_SEED_B64: ${{ secrets.OMNI_ED25519_KEY_SEED_B64 }}
           APPROVED_PUBLIC_KEY_SHA256: ${{ vars.APPROVED_PUBLIC_KEY_SHA256 }}
+          APPROVED_QC03_ATTESTATION_SHA256: ${{ vars.APPROVED_QC03_ATTESTATION_SHA256 }}
+          QC03_INDEPENDENT_PUBLIC_KEY_HEX: ${{ vars.QC03_INDEPENDENT_PUBLIC_KEY_HEX }}
+          QC03_INDEPENDENT_PUBLIC_KEY_SHA256: ${{ vars.QC03_INDEPENDENT_PUBLIC_KEY_SHA256 }}
+          QC03_APPROVED_ISSUER_ID: ${{ vars.QC03_APPROVED_ISSUER_ID }}
+          QC03_REVOKED_APPROVAL_IDS_JSON: ${{ vars.QC03_REVOKED_APPROVAL_IDS_JSON }}
           APPROVED_SOURCE_SHA256: ${{ vars.APPROVED_SOURCE_SHA256 }}
           APPROVED_QC02_CANONICAL_SHA256: ${{ vars.APPROVED_QC02_CANONICAL_SHA256 }}
           APPROVED_QC03_CANONICAL_SHA256: ${{ vars.APPROVED_QC03_CANONICAL_SHA256 }}
