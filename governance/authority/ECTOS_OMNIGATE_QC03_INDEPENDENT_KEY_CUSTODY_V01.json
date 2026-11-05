@@ -1,0 +1,51 @@
+{
+  "schema": "ECTOS_OMNIGATE_QC03_INDEPENDENT_KEY_CUSTODY_DESIGNATION_V01",
+  "status": "OWNER_CUSTODIAN_DESIGNATED_KEY_CUSTODY_NOT_YET_PROVEN",
+  "owner_decision_date": "2026-11-05",
+  "authority_source": "https://github.com/yannicklabuthie-code/ECTOS-Engineering/issues/27",
+  "owner_role": "YANICK_PROJECT_OWNER",
+  "designated_key_custodian_agent": "ECTOS_INDEPENDENT_QUALIFIER",
+  "custodian_role": "QC03_INDEPENDENT_PROVENANCE_AUTHORITY",
+  "scope": {
+    "qualification_package": "OMNIGATE_V88",
+    "qualification_package_sha256": "15E0B1D1AF7151C0FFA6F25712DC03BF71C73785D094CBC4C935CA0909E8CFFE",
+    "qualification_target": "METAMORPHOSE_G00",
+    "qualification_target_sha256": "27E816C70D428FD2FEEC2E1FC71CD77D9CB1731B4A454FB9ABD4F0A3B45C57CF",
+    "control_count": 22
+  },
+  "custody_rules": {
+    "private_key_access": "EXCLUSIVE_TO_AUTHORIZED_INDEPENDENT_CUSTODIAN_EXECUTION_ENVIRONMENT",
+    "producer_access": "FORBIDDEN",
+    "main_access_to_private_key": "FORBIDDEN",
+    "github_source_or_issue_private_key_storage": "FORBIDDEN",
+    "public_key_and_pin_registration": "REQUIRED_BEFORE_ACCEPTING_ATTESTATIONS",
+    "key_usage": "QC03_INDEPENDENT_PROVENANCE_SIGNATURES_ONLY_UNLESS_SEPARATELY_AUTHORIZED",
+    "independence_and_operator_identity": "POSITIVE_EVIDENCE_REQUIRED_BEFORE_SIGNING",
+    "rotation_revocation_and_audit": "REQUIRED",
+    "future_packages": "REUSE_AGENT_ROLE_ONLY_WITH_PACKAGE_SPECIFIC_SCOPE_INDEPENDENCE_AND_CURRENT_KEY_TRUST"
+  },
+  "cryptographic_profile": {
+    "algorithm": "Ed25519",
+    "canonical_attestation_schema": "ECTOS_QC03_INDEPENDENT_PROVENANCE_V01",
+    "approved_issuer_id": "ECTOS_INDEPENDENT_QUALIFIER",
+    "required_issuer_role": "QC03_INDEPENDENT_PROVENANCE_AUTHORITY",
+    "key_identifier": "PENDING_PROVISIONING",
+    "public_key_hex": "NOT_PROVISIONED",
+    "public_key_sha256": "NOT_PROVISIONED",
+    "private_key_location": "NOT_ESTABLISHED",
+    "custody_receipt": "NOT_ISSUED",
+    "signed_22_tool_attestation": "NOT_ISSUED",
+    "v17_verification": "NOT_EXECUTED_ON_REAL_ATTESTATION"
+  },
+  "separation": {
+    "governance_issuer_must_differ": true,
+    "producer_must_not_sign": true,
+    "qualification_independence": "NOT_YET_PROVEN",
+    "main_admission": "RESERVED_TO_MAIN",
+    "no_cloud_mutation": true
+  },
+  "retrospective": {
+    "state": "DEFERRED_BY_OWNER_UNTIL_OMNIGATE_QUALIFICATION_CLOSED",
+    "goal": "Compare historical ECTOS-POC qualification mechanism with OMNIGATE V88 authority and signing path; produce systemic lessons and reusable qualification playbook; no premature new campaign."
+  }
+}

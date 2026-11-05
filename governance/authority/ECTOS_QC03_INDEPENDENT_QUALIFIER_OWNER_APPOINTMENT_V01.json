@@ -1,0 +1,27 @@
+﻿{
+    "schema":  "ECTOS_OWNER_SCOPED_INDEPENDENT_AUTHORITY_APPOINTMENT_V01",
+    "status":  "OWNER_ROLE_DESIGNATION_GRANTED_KEY_AND_ATTESTATION_PENDING",
+    "owner":  "YANICK_PROJECT_OWNER",
+    "decision_reference":  "https://github.com/yannicklabuthie-code/ECTOS-Engineering/issues/27",
+    "decision_date":  "2026-11-05",
+    "appointed_agent":  "ECTOS_INDEPENDENT_QUALIFIER",
+    "appointed_role":  "QC03_INDEPENDENT_PROVENANCE_AUTHORITY",
+    "initial_package":  "OMNIGATE_V88",
+    "package_sha256":  "15E0B1D1AF7151C0FFA6F25712DC03BF71C73785D094CBC4C935CA0909E8CFFE",
+    "target_product":  "METAMORPHOSE_G00",
+    "target_sha256":  "27E816C70D428FD2FEEC2E1FC71CD77D9CB1731B4A454FB9ABD4F0A3B45C57CF",
+    "recurrence":  "REUSABLE_FOR_FUTURE_PACKAGES_WITH_EXACT_PER_PACKAGE_SCOPE_AND_INDEPENDENCE_PROOF",
+    "approved_key_id":  "NOT_PROVISIONED",
+    "approved_public_key_pin":  "NOT_PROVISIONED",
+    "attestation_signature":  "NOT_ISSUED",
+    "independence_proof":  "REQUIRED_PER_TARGET",
+    "producer_self_attestation":  "FORBIDDEN",
+    "governance_issuer_collision":  "FORBIDDEN",
+    "main_admission":  "RESERVED_TO_MAIN",
+    "cloud_deployment":  "NOT_AUTHORIZED",
+    "authorized_next_action":  "PROVISION_INDEPENDENT_KEY_CUSTODY_AND_VERIFY_OPERATOR_INDEPENDENCE",
+    "related_prs":  [
+                        24,
+                        26
+                    ]
+}
